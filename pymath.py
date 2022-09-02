@@ -1,7 +1,6 @@
 import cmath
 from fractions import Fraction
 import math
-import numpy as np
 from random import *
 """
 import CoolProp.CoolProp as cp
@@ -19,15 +18,20 @@ import scipy as sp
 from scipy.constants import *
 """
 
-from numpy import matrix
-from numpy.linalg import *
+try:
+    import numpy as np
+    from numpy import matrix
+    from numpy.linalg import *
+except:
+    print("Warning: Error importing NumPy. Some features may not work as intended")
+
 from cmath import *
 from math import *
 
 #print("Using pymath")
 
 #Universal constants:   ------------------------------------------------------------------------------------------
-pi = math.pi                    #Circle constant pi (unitless)
+pi = math.pi                    #Circle constant pi (unit-less)
 pi2 = pi**2                     #pi^2
 pi3 = pi**3                     #pi^3
 c = 299_792_458                 #Speed of light (m/s) - exact
@@ -36,29 +40,29 @@ c3 = c**3                       #Speed of light cubed c^3 (m^3 / s^3)
 c4 = c**4                       #Speed of light to the fourth power c^4 (m^4 / s^4)
 me = 9.109_383_701_5e-31        #Mass of electron (kg)
 mp = 1.672_621_923_69e-27       #Mass of proton (kg)
-mn = 1.674_927_498_04e-27       #Mass of nuetron (kg)
+mn = 1.674_927_498_04e-27       #Mass of neutron (kg)
 mHe = 6.644_657_335_7e-27       #Mass of alpha particle ^4He^2+ (kg)
 e = 1.602_176_634e-19           #Elementary charge (C) - exact
 Na = 6.022_140_76e23            #Avogadro constant (1 / mol)
 h = 6.626_070_15e-34            #Planck's constant (m^2 kg/s) - exact
 hbar = h / (2*pi)               #Reduced Planck constant (m^2 kg/s)
-kB = 1.380_649e-23              #Boltzman constant (J / K) - exact
+kB = 1.380_649e-23              #Boltzmann constant (J / K) - exact
 u0 = 4 * pi * 10**-7            #Vacuum permeability AKA Magnetic constant mu_not (H/m)
-e0 = 1 / (u0 * c2)              #Vaccum permittivity epsilon_not (F / m)
+e0 = 1 / (u0 * c2)              #Vacuum permittivity epsilon_not (F / m)
 k = 1 / (4 * pi * e0)           #Coulomb constant (N * m^2 / C^2)
 G = 6.674_30e-11                #Gravitational constant (m^3 / kg s^2)
 g = 9.81                        #Acceleration due to gravity (m / s^2)
 uB = e * hbar / (2 * me)        #Bohr magneton mu_B (J / T)
 uN = e * hbar / (2 * mp)        #Nuclear magneton mu_N (J/T)
-H0 = 2.333_361e-18              #Hubble constant aprox = 72 [km/s] / Mpc  (1/s) - inexact
+H0 = 2.333_361e-18              #Hubble constant approx = 72 [km/s] / Mpc  (1/s) - inexact
 msun = 1.988_47e30              #Mass of sun (kg)
 F = Na * e                      #Faraday constant (C / mol)
-Z0 = u0 * c                     #Characteristic impedance of vacuum or Impedence of free space (Ohms)
+Z0 = u0 * c                     #Characteristic impedance of vacuum or Impedance of free space (Ohms)
 R = Na * kB                     #Molar gas constant AKA Universal gas constant (J / K mol)
-alpha = e**2 / (2 * e0 * h * c)                     #Fine-structure consant alpha (unitless)
+alpha = e**2 / (2 * e0 * h * c)                     #Fine-structure constant alpha (unit-less)
 a0 = 4 * pi * e0 * hbar**2 / (me * e**2)            #Bohr radius a_not (m)
 Rinf = alpha**2 * me * c / (2 * h)                  #Rydberg constant R_infinity (1 / m)
-sigma = 2 * pi**5 * kB**4 / (15 * h**3 * c2)        #Stefan-Boltzman constant (W / m^2 K^4)
+sigma = 2 * pi**5 * kB**4 / (15 * h**3 * c2)        #Stefan-Boltzmann constant (W / m^2 K^4)
 
 Rair = 287.05                   #Individual Gas Constant of Air [J / K kg]
 Rwater = 461.52                 #Individual Gas Constant of Water Vapor [J / K kg]
@@ -70,7 +74,7 @@ RCO2 = 118.92                   #Individual Gas Constant of Carbon Dioxide CO2 [
 #Conversion Factors:    ------------------------------------------------------------------------------------------
 zepto = 1e-21                   #SI Small Prefixes
 atto = 1e-18
-fempto = 1e-15
+femto = 1e-15
 pico = 1e-12
 nano = 1e-9
 micro = 1e-6
@@ -170,7 +174,7 @@ lbin = lbf * IN                 #Pound force * inch to Newtons * meter ([N * m] 
 kipft = kip * ft                #Kilo pound force * feet to Newtons * meter ([N * m] / [kip * ft])
 kipin = kip * IN                #Kilo pound force * inch to Newtons * meter ([N * m] / [kip * in])
 barn = 1e-28                    #Barn to m^2 conversion (m^2 / b)
-fb = fempto * barn              #Fempto Barn to m^2 conversion (m^2 / fb)
+fb = femto * barn               #Femto Barn to m^2 conversion (m^2 / fb)
 
 #Constant Aliases:    --------------------------------------------------------------------------------------------
 m_e = me
@@ -199,11 +203,11 @@ RCarbonDioxide, RCarbon_Dioxide, RcarbonDioxide, Rcarbon_Dioxide, Rcarbondioxide
 
 Zepto, zm, zs = zepto, zepto, zepto
 Atto, am = atto, atto                           #'as' is reserved word in python
-Fempto, fm, fs = fempto, fempto, fempto
+Femto, fm, fs, fempto, Fempto = (femto,)*5
 Pico, pm, ps = pico, pico, pico
 Nano, nm, ns, ppb, PPB, ppB = nano, nano, nano, nano, nano, nano
 Micro, mum, mus, mu_m, mu_s, muC, muc, muF, muf, muA, um, us, uC, uc, uF, uf, uA, ppm, PPM, ppM = micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro
-Milli, mm, ms, mA, mJ, mF, mf, mC, mv, mV = milli, milli, milli, milli, milli, milli, milli, milli, milli, milli            #Warning: potential conflict with ma = mass of alpha particle != mA
+Milli, mm, ms, mA, mJ, mF, mf, mC, mv, mV, gram = milli, milli, milli, milli, milli, milli, milli, milli, milli, milli, milli            #Warning: potential conflict with ma = mass of alpha particle != mA
 Centi, cm, cs = centi, centi, centi
 Hecto, hm, hs = hecto, hecto, hecto
 Kilo, km, ks, kPa, kpa, kW, kw, kJ, kj, Mg, kN, kn, kohm, thousand = kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo
