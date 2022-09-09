@@ -45,7 +45,13 @@ mHe = 6.644_657_335_7e-27       #Mass of alpha particle ^4He^2+ (kg)
 e = 1.602_176_634e-19           #Elementary charge (C) - exact
 Na = 6.022_140_76e23            #Avogadro constant (1 / mol)
 h = 6.626_070_15e-34            #Planck's constant (m^2 kg/s) - exact
+h2 = h**2                       #Planck's constant squared (m^2 kg/s)^2
+h3 = h**3                       #Planck's constant cubed (m^2 kg/s)^3
+h4 = h**4                       #Planck's constant to the fourth power (m^2 kg/s)^4
 hbar = h / (2*pi)               #Reduced Planck constant (m^2 kg/s)
+hbar2 = hbar**2                 #Reduced Planck constant squared (m^2 kg/s)^2
+hbar3 = hbar**3                 #Reduced Planck constant cubed (m^2 kg/s)^3
+hbar4 = hbar**4                 #Reduced Planck constant to the fourth power (m^2 kg/s)^4
 kB = 1.380_649e-23              #Boltzmann constant (J / K) - exact
 u0 = 4 * pi * 10**-7            #Vacuum permeability AKA Magnetic constant mu_not (H/m)
 e0 = 1 / (u0 * c2)              #Vacuum permittivity epsilon_not (F / m)
@@ -555,7 +561,13 @@ def var(arr, population=False):
 def popvar(arr):
     return np.var(arr)
 
+#n choose r . Number of combinations (order doesn't matter) of r items chosen from n options
+def nCr(n, r):
+    return factorial(n) / (factorial(n-r) * factorial(r))
 
+#n permute r . Number of permutations (order matters) of r items from list of n options
+def nPr(n, r):
+    return factorial(n) / factorial(n-r)
 
 #Given an arbritrary number of days, returns the number of people required for Probability[two people share the same birthday] >= 0.5   
 def birthdayProblem(days=365):
@@ -563,6 +575,7 @@ def birthdayProblem(days=365):
 
 
 #Function and Lambda Aliases
+fact = factorial
 deg, Deg, Degrees, degreesMode, degreesmode, DegreesMode, DegreesMode, degMode, degmode = degrees, degrees, degrees, degrees, degrees, degrees, degrees, degrees, degrees
 rad, Rad, Radians, radiansMode, radiansmode, Radiansmode, RadiansMode, radMode, radmode = radians, radians, radians, radians, radians, radians, radians, radians, radians
 arcsin, sininverse, sininv = asin, asin, asin
