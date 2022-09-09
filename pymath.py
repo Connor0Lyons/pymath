@@ -374,6 +374,12 @@ def tanr(x):
 
 #Trig Functions that check whether in degree mode or radian mode, and give warnings 
 def sin(x):
+    #if x is a complex number, will calculate result in radians regardless
+    if(isinstance(x, complex)):
+        if(degreesFlag):
+            print("Warning: Complex number detected but in degree mode, sinr(x) calculated anyway. Use sind(x) if that is what you intended")
+        return sinr(x)
+
     if(degreesFlag):
         # Throws warning if in degree mode and x is near a multiple of pi/180
         if( (abs(x* 180/pi - round(x * 180/pi) ) / floatDelta < 1 ) ):
@@ -386,6 +392,12 @@ def sin(x):
     return sinr(x)
 
 def cos(x):
+    #if x is a complex number, will calculate result in radians regardless
+    if(isinstance(x, complex)):
+        if(degreesFlag):
+            print("Warning: Complex number detected but in degree mode, cosr(x) calculated anyway. Use cosd(x) if that is what you intended")
+        return cosr(x)
+
     if(degreesFlag):
         # Throws warning if in degree mode and x is near a multiple of pi/180
         if( (abs(x* 180/pi - round(x * 180/pi) ) / floatDelta < 1 ) ):
@@ -398,6 +410,12 @@ def cos(x):
     return cosr(x)
 
 def tan(x):
+    #if x is a complex number, will calculate result in radians regardless
+    if(isinstance(x, complex)):
+        if(degreesFlag):
+            print("Warning: Complex number detected but in degree mode, tanr(x) calculated anyway. Use tand(x) if that is what you intended")
+        return tanr(x)
+
     if(degreesFlag):
         # Throws warning if in degree mode and x is near a multiple of pi/180
         if( (abs(x* 180/pi - round(x * 180/pi) ) / floatDelta < 1 ) ):
@@ -442,7 +460,7 @@ cos2 = lambda x: cos(x)**2
 tan2 = lambda x: sin(x)**2
 sec2 = lambda x: cos(x)**-2
 csc2 = lambda x: sin(x)**-2
-cot2 = lambda x: tan(x)**-2
+cot2 = lambda x: tan(x)**-2 
 
 def ln(x):
     try:
@@ -543,13 +561,16 @@ def integral_f(f, initial_step_size):
     return accumulator
 """
 
+
 #Returns sample standard deviation by default
 def std(arr, population=False):
+    """Returns std dev of sample"""
     if(population):
         return np.std(arr,ddof=1)
     return np.std(arr)
 
 def popstd(arr):
+    """Returns population std dev"""
     return np.std(arr)
 
 #Returns sample variance by default
