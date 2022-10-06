@@ -281,7 +281,7 @@ In4, inch4, inches4, iN4, inn4, IN4 = in4, in4, in4, in4, in4, in4
 feet, Ft = ft, ft
 feet2, Ft2 = ft2, ft2
 feet3, Ft3 = ft3, ft3
-yard, yards =  yd, yd
+yds, yard, yards =  yd, yd, yd
 Mi, miles, mile = mi, mi, mi
 Mi2, sqmi, SqMi, sqMi = mi2, mi2, mi2, mi2
 parsec, Pc = pc, pc
@@ -754,8 +754,6 @@ def eig(mat):
     Args:
         mat (np.matrix): 
     """
-    if(not np):
-        print("NumPy not imported properly - eig() does not exist")
     
     eigs = np.linalg.eig(mat)
     eigval = eigs[0]
