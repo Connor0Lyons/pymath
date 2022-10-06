@@ -382,20 +382,27 @@ def floatComparision(float1, float2, rel_tol=floatDeltaPercent):
     
     
 
-def quad(a1, b1, c1):
+def quad(a, b, c):
+    """Quadratic formula find solutions to: a x^2 + bx + c = 0
+
+    Args:
+        a (float): 
+        b (float): 
+        c (float): 
+    """
     global ans, ans1, ans2
 
-    discriminant = b1 ** 2 - 4 * a1 * c1
+    discriminant = b ** 2 - 4 * a * c
     
     if discriminant == 0:
-        ans1 = -b1 / (2 * a1)
-        -b1 / (2 * a1)
+        ans1 = -b / (2 * a)
+        -b / (2 * a)
         ans.insert(0, ans1)
         print(ans1)
         return
         
-    ans1 = (-b1 + sqrt(discriminant) ) / (2 * a1)
-    ans2 = (-b1 - sqrt(discriminant) ) / (2 * a1)
+    ans1 = (-b + sqrt(discriminant) ) / (2 * a)
+    ans2 = (-b - sqrt(discriminant) ) / (2 * a)
     ans.insert(0, ans1)
     ans.insert(0, ans2)
     print(ans1)
@@ -403,7 +410,7 @@ def quad(a1, b1, c1):
     return
 
 def sqrt(x):
-    if(isinstance(x, complex)):
+    if(isinstance(x, complex) or x < 0):
         return cmath.sqrt(x)
     return math.sqrt(x)
     
