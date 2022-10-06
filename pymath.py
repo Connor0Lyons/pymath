@@ -18,6 +18,7 @@ try:
     #from scipy.constants import *
     from scipy.optimize import fsolve
 except:
+    fsolve = lambda *args: print("SciPy not imported properly, fsolve function not found")
     print("Warning: Error importing SciPy. Some features may not work as intended")
 
 try:
@@ -753,6 +754,9 @@ def eig(mat):
     Args:
         mat (np.matrix): 
     """
+    if(not np):
+        print("NumPy not imported properly - eig() does not exist")
+    
     eigs = np.linalg.eig(mat)
     eigval = eigs[0]
     for i in range(len(eigval)):
@@ -790,7 +794,7 @@ def represent(x, deltaPercent = 0.000_1):
         print(f"{i[0]:<30} : {f'{i[1]:.8f}':^16} : {f'{i[2]:12.9}':>12} ")
 
 #Function and Lambda Aliases
-root, roots = sp.optimize.fsolve, sp.optimize.fsolve
+root, roots = fsolve, fsolve
 isclose, isClose, floatcomparsion, floatcomp = floatComparision, floatComparision, floatComparision, floatComparision
 fact = factorial
 deg, Deg, Degrees, degreesMode, degreesmode, DegreesMode, DegreesMode, degMode, degmode = degrees, degrees, degrees, degrees, degrees, degrees, degrees, degrees, degrees
