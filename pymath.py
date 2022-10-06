@@ -13,10 +13,12 @@ unit = pint.UnitRegistry()
 u = unit
 """
 
-"""
-import scipy as sp
-from scipy.constants import *
-"""
+try:
+    import scipy as sp
+    #from scipy.constants import *
+    from scipy.optimize import fsolve
+except:
+    print("Warning: Error importing SciPy. Some features may not work as intended")
 
 try:
     import numpy as np
@@ -68,6 +70,7 @@ F = Na * e                      #Faraday constant [C / mol]
 Z0 = u0 * c                     #Characteristic impedance of vacuum or Impedance of free space [Ohms]
 R = Na * kB                     #Molar gas constant AKA Universal gas constant [J / K mol]
 ln2 = math.log(2)               #Natural logarithm of 2 [unit-less]
+phi = (1+sqrt(5))/2             #Golden ratio [unit-less]
 alpha = e**2 / (2 * e0 * h * c)                     #Fine-structure constant alpha [unit-less]
 a0 = 4 * pi * e0 * hbar**2 / (me * e**2)            #Bohr radius a_not [m]
 Rinf = alpha**2 * me * c / (2 * h)                  #Rydberg constant R_infinity [1 / m]
@@ -355,22 +358,28 @@ degreesFlag = False                         #Default in Radians Mode
 floatDeltaPercent = nano                           #Accepatable percent error for floating point number comparisions
 floatDeltaAbs = femto
 
-def floatComparision(float1, float2):
-    """returns true if percent error between 2 floats is less than acceptable percent error (floatDelta)
+# def floatComparision(float1, float2):
+#     """returns true if percent error between 2 floats is less than acceptable percent error (floatDelta)
 
-    Args:
-        float1 (_type_): _description_
-        float2 (_type_): _description_
+#     Args:
+#         float1 (_type_): _description_
+#         float2 (_type_): _description_
 
-    Returns:
-        _type_: _description_
-    """
-    global floatDeltaAbs, floatDeltaPercent
-    absDiff = abs(float1 - float2) 
-    if(absDiff < floatDeltaPercent * float1 and absDiff < floatDeltaPercent * float2):
-        return True
-    #edge case: float1 ~= float2 ~= 0 -> return true if absolute val of both less than floatDeltaAbs
-    return (abs(float1) < floatDeltaAbs and abs(float2) < floatDeltaAbs)
+#     Returns:
+#         _type_: _description_
+#     """
+#     global floatDeltaAbs, floatDeltaPercent
+#     absDiff = abs(float1 - float2) 
+#     if(absDiff < floatDeltaPercent * float1 and absDiff < floatDeltaPercent * float2):
+#         return True
+#     #edge case: float1 ~= float2 ~= 0 -> return true if absolute val of both less than floatDeltaAbs
+#     return (abs(float1) < floatDeltaAbs and abs(float2) < floatDeltaAbs)
+
+def floatComparision(float1, float2, rel_tol=floatDeltaPercent):
+    global floatDeltaAbs
+    return math.isclose(float1, float2, rel_tol=rel_tol) or (abs(float1) < floatDeltaAbs and abs(float2) < floatDeltaAbs) 
+    
+    
 
 def quad(a1, b1, c1):
     global ans, ans1, ans2
@@ -738,7 +747,51 @@ def printfunction(f, start, end, stepSize, outputResolution = 4):
         print(f"{x :{format}}  :  {f(x) :9.{outputResolution}f} ")
         x += stepSize
 
+def eig(mat):
+    """np.linalg.eig redefinition - prints eigenvalues and eigenvectors in better format
+
+    Args:
+        mat (np.matrix): 
+    """
+    eigs = np.linalg.eig(mat)
+    eigval = eigs[0]
+    for i in range(len(eigval)):
+        print(f"λ{i+1} = {eigval[i]}")
+    print()
+    print("Eigenvector Matrix (ans):")
+    global ans
+    print(ans := eigs[1])
+    
+def represent(x, deltaPercent = 0.000_1):
+    exactPercent = 1e-18
+    candidateList = []  #List of pair tuples with near but not exact representations, and the absolute distance to x
+    constList = {1 : "1", pi: "pi", sqrt(2) : "sqrt(2)", sqrt(3) : "sqrt(3)"}
+    for const in constList.keys():
+        val = x / const
+        checkedRatios = {0}     # Used to remove non reduced fractions, ie 2/4 when 1/2 has already been checked
+        # for loop searches for fraction with denominator [1,200]
+        for i in range(1, 401):
+            if(round(val * i) / i in checkedRatios):
+                continue
+            # Checks if i is a viable denominator
+            if( isclose(x, const * round(val * i) / i, rel_tol=deltaPercent ) ):
+                # if exact match, print it and stop searching
+                if( isclose(x, const * round(val * i) / i, exactPercent) ):
+                    print(f"Found match: \n{constList[const]} * { round(val * i) } / {i}")
+                    return
+                else:
+                    checkedRatios.add(round(val * i) / i)
+                    candidateList.append((f"{constList[const]} * { round(val * i) } / {i}" , const * round(val * i) / i , abs(x - const * round(val * i) / i )))
+    
+    print("Did not find exact representation, here are closest matches:")
+    candidateList.sort(key = lambda pair: pair[2])    #sort candidate list by smallest to largest distance
+    print(f"{'True input':<30} : {f'{x:.8f}':^16}") 
+    for i in candidateList:
+        print(f"{i[0]:<30} : {f'{i[1]:.8f}':^16} : {f'{i[2]:12.9}':>12} ")
+
 #Function and Lambda Aliases
+root, roots = sp.optimize.fsolve, sp.optimize.fsolve
+isclose, isClose, floatcomparsion, floatcomp = floatComparision, floatComparision, floatComparision, floatComparision
 fact = factorial
 deg, Deg, Degrees, degreesMode, degreesmode, DegreesMode, DegreesMode, degMode, degmode = degrees, degrees, degrees, degrees, degrees, degrees, degrees, degrees, degrees
 rad, Rad, Radians, radiansMode, radiansmode, Radiansmode, RadiansMode, radMode, radmode = radians, radians, radians, radians, radians, radians, radians, radians, radians
