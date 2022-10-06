@@ -9,7 +9,7 @@
 - Misc other functions I find useful
 
 ## Use:
-With python3 installed, your terminal/shell of choice to execute the following command(s)
+With python3 installed, use your terminal/shell of choice to execute the following command(s)
 ```bash
 cd [Directory where pymath.py is located]
 python3 -i pymath.py
