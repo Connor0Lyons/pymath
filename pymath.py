@@ -80,6 +80,9 @@ ln2 = math.log(2)               # Natural logarithm of 2 [unit-less]
 sqrt2 = math.sqrt(2)            # Square root of 2 [unit-less]
 sqrt3 = math.sqrt(3)            # Square root of 3 [unit-less]
 phi = (1 + math.sqrt(5)) / 2    # Golden ratio [unit-less]
+sigmax = matrix("0 1; 1 0")     # Pauli spin matrix x [unit-less]
+sigmay = matrix("0 -1j; 1j 0")  # Pauli spin matrix y [unit-less]
+sigmaz = matrix("1 0; 0 -1")    # Pauli spin matrix z [unit-less]
 alpha = e**2 / (2 * e0 * h * c)                     # Fine-structure constant alpha [unit-less]
 a0 = 4 * pi * e0 * hbar**2 / (me * e**2)            # Bohr radius a_not [m]
 Rinf = alpha**2 * me * c / (2 * h)                  # Rydberg constant R_infinity [1 / m]
@@ -166,7 +169,7 @@ tsp = 4.92892159375 * mL        # US customary fluid teaspoon
 tbsp = 14.78676478125 * mL      # US customary fluid tablespoon
 floz = 29.5735295625 * mL       # US customary fluid ounce to m^3 conversion [m^3 / fl oz]
 cup = 236.5882365 * mL          # US customary fluid cup to m^3 conversion (= 8 * floz) [m^3 / fl oz]
-pint = 	473.176473 * mL         # US pint to m^3 conversion (= 16 * floz) [m^3 / pint]
+pint = 	473.176473 * mL         # US pint to m^3 conversion (= 16 * floz) [m^3 / pint]                  # Warning: potential conflict with point != pt
 quart = 0.000946352946          # US quart to m^3 conversion (= 32 * floz) [m^3 / quart] 
 gallon = 0.003785411784         # US gallon to m^3 conversion (= 128 * floz) [m^3 / gal]
 lbm = 0.453_592_37              # Pound to kilogram conversion [kg / lbm]
@@ -205,7 +208,9 @@ gin = 9.806_65 / IN             # Acceleration due to gravity [in / s^2]     - N
 slug = 14.593902937             # Slug to kilogram conversion [kg / slug]
 story = 3.3                     # Story to meter conversion [m / story]
 stoke = 1e-4                    # Stoke to pascal * second conversion [[Pa * s] / St ]
-point =  127 / 36 * 1e-4        # Point to meter conversion [m / pt]
+point =  127 / 36 * 1e-4        # Point to meter conversion [m / point]                         # Warning: potential conflict with pt = pint != point
+mmH2O = 9.8066501               # Millimeters of water to pascal conversion (using rho_water = 1 kg / L)  [Pa / mmH2O]
+inH2O = 249.08891               # Inches of water to pascal conversion (using rho_water = 1 kg / L)  [Pa / inH2O]
 
 # Material constants:    -------------------------------------------------------------------------------------------
 Rair = 287.05                   # Individual Gas Constant of Air [J / K kg]
@@ -263,6 +268,9 @@ Z_0, z0, z_0 = Z0, Z0, Z0
 Rbar, rbar, gasconst, gasconstant = R, R, R, R
 rt2 = sqrt2
 rt3 = sqrt3
+sigx, sigma1, sig1 = sigmax, sigmax, sigmax
+sigy, sigma2, sig2 = sigmay, sigmay, sigmay
+sigz, sigmaz, sigz = sigmaz, sigmaz, sigmaz
 a_0 = a0
 R_inf = Rinf
 
@@ -272,7 +280,7 @@ Femto, fm, fs, fempto, Fempto = (femto,)*5
 Pico, pm, ps = pico, pico, pico
 Nano, nm, ns, ppb, PPB, ppB = nano, nano, nano, nano, nano, nano
 Micro, mum, mus, mu_m, mu_s, muC, muc, muF, muf, muA, um, us, uC, uc, uF, uf, uA, ppm, PPM, ppM = micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro
-Milli, mm, ms, mA, mJ, mF, mf, mC, mv, mV, gram, cP, cp,  = milli, milli, milli, milli, milli, milli, milli, milli, milli, milli, milli, milli, milli            # Warning: potential conflict with ma = mass of alpha particle != mA
+Milli, mm, ms, mA, mJ, mF, mf, mC, mv, mV, gram, cP, cp, centipoise = milli, milli, milli, milli, milli, milli, milli, milli, milli, milli, milli, milli, milli, milli            # Warning: potential conflict with ma = mass of alpha particle != mA
 Centi, cm, cs = centi, centi, centi
 poise, Poise = deci, deci
 deka
@@ -316,6 +324,7 @@ A, AA, Angstrom = angstrom, angstrom, angstrom
 kips, Kips, Kip, klbf, KIP, KIPS, = kip, kip, kip, kip, kip, kip
 liters, l, L, Liter, lit, Lit = liter, liter, liter, liter, liter, liter
 ml = mL
+patm, Patm = atm, atm
 PSI = psi
 BTU, Btu = btu, btu
 HP, Hp, horsepower = hp, hp, hp
@@ -342,6 +351,8 @@ Barn, b = barn, barn
 fB = fb
 torr = Torr
 mmhg = mmHg
+mmh2o, mmH2o, mmH20, mmh20, mmwater, mmWater = mmH2O, mmH2O, mmH2O, mmH2O, mmH2O, mmH2O
+inh2o, inH2o, inH20, inh20, inwater, inWater, innh2o, innH2o, innH20, innh20, innwater, innWater = inH2O, inH2O, inH2O, inH2O, inH2O, inH2O, inH2O, inH2O, inH2O, inH2O, inH2O, inH2O
 dyn, Dyne = dyne, dyne
 statC, statc, Fr, fr, franklin, esu = statcoulomb, statcoulomb, statcoulomb, statcoulomb, statcoulomb, statcoulomb
 gimp, gimperial, gcust, gcus, gcustomary = gft, gft, gft, gft, gft
@@ -362,7 +373,8 @@ pCarbonDioxide, pCarbon_Dioxide, pcarbonDioxide, pcarbon_Dioxide, pcarbondioxide
 muAir, uair, uAir = muair, muair, muair
 muWater, uwater, uWater = muwater, muwater, muwater
 
-
+nuAir, vair, vAir = nuair, nuair, nuair
+nuWater, vwater, vWater = nuwater, nuwater, nuwater
 
 EAl = EAluminum
 EAluminum2014 = EAl2014 
@@ -655,15 +667,17 @@ def norm(array1:tuple):
         sum += np.conj(i) * i    
     return math.sqrt(sum.real)
 
-# Integrates function/lamda expression f in interval (a, b) using equal step sizes and trapezoid summation
-# Example use: int(lambda x : 5 * x**2 + 10, 0, 5)
-def int(f, a, b):
-    steps = 1_000_000
-    deltaX = (b-a)/steps
+def integral(f, start, end, steps = 1_000_000):
+    """ Integrates function/lamda expression f in interval (start, end) using equal step sizes and trapezoid summation
+        
+        Example use: integral(lambda x : 5 * x**2 + 10, 0, 5)
+    """
+    deltaX = (end-start)/steps
     sum = 0
-    for i in range(steps):
-        sum += deltaX * (f(a) + f(a+deltaX) ) / 2
-        a += deltaX
+    x = start
+    for i in range(int(steps)):
+        sum += deltaX * (f(x) + f(x+deltaX) ) / 2
+        x += deltaX
     return sum
 
 """ 
@@ -785,7 +799,7 @@ def printfunction(f, start, end, stepSize = nan, steps = 50, outputResolution = 
     if(isnan(stepSize)):
         stepSize = (end - start) / steps
     x = start
-    inputResolution = max(0, ceil(-log10(stepSize)))     # resoultion = number of decimal places needed to format x, minimum of 0
+    inputResolution = max(0, ceil(-log10(abs(stepSize))))     # resoultion = number of decimal places needed to format x, minimum of 0
     inputSize = (inputResolution > 0) + 1 + floor(max(log10(abs(start) + (start == 0))+ (start < 0), log10(abs(end) + (end == 0)) + (end < 0)))
     format = f"{inputSize+inputResolution}.{inputResolution}f"
     while (x < end or floatComparision(x, end)):
@@ -818,7 +832,7 @@ def represent(input, deltaPercent = 0.000_1, denom = 200, output=30):
     """
     exactPercent = 1e-18
     candidateList = []  # List of pair tuples with near but not exact representations, and the absolute distance to input
-    constList = {1 : "1", pi : "pi", sqrt(2) : "sqrt(2)", sqrt(3) : "sqrt(3)", sqrt(5) : "sqrt(5)"}
+    constList = {1 : "1", pi : "pi", sqrt(2) : "sqrt(2)", sqrt(3) : "sqrt(3)", sqrt(5) : "sqrt(5)", exp(1) : "exp(1)", 1 - exp(-1): "(1 - exp(-1))"}
     for const in constList.keys():
         val = input / const
         checkedRatios = {0}     # Used to remove non reduced fractions, ie. 2/4 when 1/2 has already been checked
@@ -889,9 +903,9 @@ def props(prop1: str, val1, prop2: str, val2, fluid: str, molFlag=False):
     
     proplst = [prop1, prop2]
     vallst = [val1, val2]
-    #for loop to add functionality to CP such as ability to input specific volume
+    # for loop to add functionality to CP such as ability to input specific volume
     for i in [0,1]:
-        #Specific Volume
+        # Specific Volume
         if(proplst[i] in ["v", "V", "Vol", "vol"]):
             proplst[i] = 'D'
             vallst[i] = 1 / vallst[i]
@@ -974,7 +988,7 @@ def plot(xAxis: str, xInitial: float, xFinal: float, yAxis: str, constParam: str
     
     plt.figure()  # create a new figure
     
-    #Give the x axis a descriptive label
+    # Give the x axis a descriptive label
     
     Txunit = "K"
     
@@ -1043,7 +1057,7 @@ def plot(xAxis: str, xInitial: float, xFinal: float, yAxis: str, constParam: str
         xFinal = xFinal**-1
         deltaX = (xFinal - xInitial) / steps
     
-    #Give y-axis a descriptive label
+    # Give y-axis a descriptive label
     
     Tyunit = "K"
     
@@ -1149,6 +1163,24 @@ def plot(xAxis: str, xInitial: float, xFinal: float, yAxis: str, constParam: str
     plt.plot(xplt, yplt)
     plt.show()
 
+def int(*args, **kwargs):
+    """Casts to int if given single input, computes integral if given multiple inputs 
+        
+        Warning: runs eval on unsanitized string inputs
+    """
+    if(len(args) == 1 and len(kwargs) == 0):
+        x = args[0]
+        if(isinstance(x, str)):
+            return eval(x).__int__()
+        if(isinstance(x * 1.0, float)):
+            return x.__int__()
+        if(isinstance(x, complex)):
+            return (x.real).__int__()
+        
+        
+    return integral(*args, **kwargs)
+        
+        
 
 # Function and Lambda Aliases
 root, roots = fsolve, fsolve
@@ -1175,7 +1207,7 @@ R2c, R2C, r2C = r2c, r2c, r2c
 R2f, R2F, r2F = r2f, r2f, r2f
 InnerProduct, innerproduct, Innerproduct, inprod, inproduct, braket, BraKet, Braket, dotproduct, dotProduct, dotprod, dotProd, dot = innerprod, innerprod, innerprod, innerprod, innerprod, innerprod, innerprod, innerprod, innerprod, innerprod, innerprod, innerprod, innerprod
 magnitude, mag = norm, norm
-integral, integrate = int, int
+integrate = integral            # int is also (sort of) aliased to integral
 stdDev, stddev, StdDev, standardDeviation = std, std, std, std
 popstdDev, popstddev, popStdDev, populationStddev, populationStdDev, populationStd, populationstd, populationstandardDeviation, populationStandardDeviation = popstd, popstd, popstd, popstd, popstd, popstd, popstd, popstd, popstd
 variance = var
