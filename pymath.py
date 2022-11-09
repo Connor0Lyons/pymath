@@ -1165,18 +1165,20 @@ def plot(xAxis: str, xInitial: float, xFinal: float, yAxis: str, constParam: str
 
 def int(*args, **kwargs):
     """Casts to int if given single input, computes integral if given multiple inputs 
-        
-        Warning: runs eval on unsanitized string inputs
     """
     if(len(args) == 1 and len(kwargs) == 0):
         x = args[0]
         if(isinstance(x, str)):
-            return eval(x).__int__()
+            return float(x).__int__()
         if(isinstance(x * 1.0, float)):
             return x.__int__()
         if(isinstance(x, complex)):
             return (x.real).__int__()
-        
+        # Check if unknown object has built cast to int function
+        try: 
+            x.__int__()
+        except:
+            x.__index__()
         
     return integral(*args, **kwargs)
         
