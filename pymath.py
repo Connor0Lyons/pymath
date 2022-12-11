@@ -1,7 +1,22 @@
+import time
+# total = 0
+
+
+# start = time.time()
 import cmath
+# end = time.time(); total += end - start; print(f"cmath time = {end - start}")
+
+# start = time.time()
 from fractions import Fraction
+# end = time.time(); total += end - start; print(f"fraction time = {end - start}")
+
+# start = time.time()
 import math
+# end = time.time(); total += end - start; print(f"math time = {end - start}")
+
+# start = time.time()
 from random import *
+# end = time.time(); total += end - start; print(f"random time = {end - start}")
 
 # import matplotlib.pyplot as plt
 
@@ -9,11 +24,14 @@ from random import *
 # unit = pint.UnitRegistry()
 # u = unit
 
+# start = time.time()
 try:
     import CoolProp.CoolProp as CP
 except:
     print("Warning: Error importing CoolProp. Some features may not work as intended")
+# end = time.time(); total += end - start; print(f"CoolProp time = {end - start}")
 
+# start = time.time()
 try:
     import scipy as sp
     # from scipy.constants import *
@@ -21,7 +39,9 @@ try:
 except:
     fsolve = lambda *args: print("SciPy not imported properly, fsolve function not found")
     print("Warning: Error importing SciPy. Some features may not work as intended")
+# end = time.time(); total += end - start; print(f"scipy time = {end - start}")
 
+# start = time.time()
 try:
     import numpy as np
     from numpy import matrix
@@ -32,12 +52,19 @@ try:
 except:
     outer = lambda *args: print("NumPy not imported properly, outer function not found")
     cross = lambda *args: print("NumPy not imported properly, cross function not found")
+    matrix = lambda *args: print("NumPy not imported properly, matrix constructor not found")
     print("Warning: Error importing NumPy. Some features may not work as intended")
+# end = time.time(); total += end - start; print(f"numpy time = {end - start}")
 
+# start = time.time()
 from cmath import *
-from math import *
+# end = time.time(); total += end - start; print(f"cmath* time = {end - start}")
 
-# print("Using pymath")
+# start = time.time()
+from math import *
+# end = time.time(); total += end - start; print(f"math* time = {end - start}")
+
+# start = time.time()
 
 # Unless noted otherwise, units are in terms of official SI units: second [s], meter [m], kilogram [kg], ampere [A], kelvin [K], mole [mol], and candela [cd]
 
@@ -320,7 +347,7 @@ Mi2, sqmi, SqMi, sqMi = mi2, mi2, mi2, mi2
 parsec, Pc = pc, pc
 megaparsec, MegaParsec, mpc, MPc, megaParsec = Mpc, Mpc, Mpc, Mpc, Mpc
 lightyear, Lightyear, Ly = ly, ly, ly
-A, AA, Angstrom = angstrom, angstrom, angstrom
+A, AA, Angstrom, Ao = angstrom, angstrom, angstrom, angstrom
 kips, Kips, Kip, klbf, KIP, KIPS, = kip, kip, kip, kip, kip, kip
 liters, l, L, Liter, lit, Lit = liter, liter, liter, liter, liter, liter
 ml = mL
@@ -343,7 +370,7 @@ cal = calorie
 Cal, Calorie = kcal, kcal
 Rps, RPS = rps, rps
 Rpm, RPM = rpm, rpm
-lbfft, ftlb, ftlbf = lbft, lbft, lbft
+lbfft, ftlb, ftlbf, ftlbs, lbsft = lbft, lbft, lbft, lbft, lbft
 lbfin, lbinn, lbfinn, lbIn, lbfIn, lbIN, lbfIN, lbinch, lbfinch, inlb, innlb, inlbf, innlbf = lbin, lbin, lbin, lbin, lbin, lbin, lbin, lbin, lbin, lbin, lbin, lbin, lbin
 ftkip, Kipft = kipft, kipft
 Kipin, Kipinn, kipinn, kipIn, kipIN, kipinch, inKip, inkip, innkip, Inkip = kipin, kipin, kipin, kipin, kipin, kipin, kipin, kipin, kipin, kipin
@@ -368,6 +395,7 @@ RCarbonDioxide, RCarbon_Dioxide, RcarbonDioxide, Rcarbon_Dioxide, Rcarbondioxide
 PAir, rhoair, rhoAir = pair, pair, pair
 pWater, ph2o, pH2o, pH2O, pH20, ph20, rhoWater, rhowater, rhoH2O, rhoH2o, rhoh2o = pwater, pwater, pwater, pwater, pwater, pwater, pwater, pwater, pwater, pwater, pwater
 pO2, po2, pOxygen, rhoO2, rhooxygen, rhoOxygen = poxygen, poxygen, poxygen, poxygen, poxygen, poxygen
+pN2, pNitrogen, rhoN2, rhoNitrogen, rhonitrogen = pnitrogen, pnitrogen, pnitrogen, pnitrogen, pnitrogen
 pCarbonDioxide, pCarbon_Dioxide, pcarbonDioxide, pcarbon_Dioxide, pcarbondioxide, pcarbon_dioxide, pco2, pCo2, pC02, rhoCO2, rhoCarbonDioxide, rhocarbondioxide, rhoCarbondioxide = pCO2, pCO2, pCO2, pCO2, pCO2, pCO2, pCO2, pCO2, pCO2, pCO2, pCO2, pCO2, pCO2
 
 muAir, uair, uAir = muair, muair, muair
@@ -401,6 +429,10 @@ ans2 = 0
 degreesFlag = False                         # Default in Radians Mode
 floatDeltaPercent = nano                           # Accepatable percent error for floating point number comparisions
 floatDeltaAbs = femto
+
+# end = time.time(); total += end - start; print(f"constants time = {end - start}")
+
+# start = time.time()
 
 # def floatComparision(float1, float2):
 #     """returns true if percent error between 2 floats is less than acceptable percent error (floatDelta)
@@ -1163,6 +1195,7 @@ def plot(xAxis: str, xInitial: float, xFinal: float, yAxis: str, constParam: str
     plt.plot(xplt, yplt)
     plt.show()
 
+
 def int(*args, **kwargs):
     """Casts to int if given single input, computes integral if given multiple inputs 
     """
@@ -1219,3 +1252,7 @@ sing = singularity
 printFunction, printfun, printFun, plotFun, plotfun = printfunction, printfunction, printfunction, printfunction, printfunction
 representation = represent
 thermoPlot, cpPlot, CPPlot = plot, plot, plot
+
+# end = time.time(); total += end - start; print(f"functions time = {end - start}")
+
+# print(f"total time = {total}")
