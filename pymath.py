@@ -1000,7 +1000,6 @@ def represent(input, deltaPercent = 0.000_1, denom = 200, output=30, paramFuncti
         if (count >= output):
             break 
         
-import CoolProp.CoolProp as CP
 
 def props(prop1: str, val1, prop2: str, val2, fluid: str, molFlag=False):
     """ Wrapper function for extracting data from CoolProp.
@@ -1376,7 +1375,7 @@ sing = singularity
 printFunction, printfun, printFun, plotFun, plotfun = printfunction, printfunction, printfunction, printfunction, printfunction
 eigen = eig
 representation = represent
-coolpropPlot, coolPropPlot, CoolPropPlot, CoolpropPlot, cpPlot, CPPlot = thermoPlot, thermoPlot, thermoPlot, thermoPlot, thermoPlot, thermoPlot
+coolpropPlot, coolPropPlot, CoolPropPlot, CoolpropPlot, cpPlot, CPPlot, plot = thermoPlot, thermoPlot, thermoPlot, thermoPlot, thermoPlot, thermoPlot, thermoPlot
 
 # end = time.time(); total += end - start; print(f"functions time = {end - start}")
 
