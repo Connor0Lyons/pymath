@@ -1,7 +1,6 @@
 import time
 # total = 0
 
-
 # start = time.time()
 import cmath
 # end = time.time(); total += end - start; print(f"cmath time = {end - start}")
@@ -72,6 +71,7 @@ from math import *
 pi = math.pi                    # Circle constant pi [unit-less]
 pi2 = pi**2                     # pi^2
 pi3 = pi**3                     # pi^3
+ipi = pi * 1j                   # pi * sqrt(-1) 
 c = 299_792_458                 # Speed of light [m/s] - exact
 c2 = c**2                       # Speed of light squared c^2 [m^2 / s^2]
 c3 = c**3                       # Speed of light cubed c^3 [m^3 / s^3]
@@ -81,7 +81,7 @@ mp = 1.672_621_923_69e-27       # Mass of proton [kg]
 mn = 1.674_927_498_04e-27       # Mass of neutron [kg]
 mHe = 6.644_657_335_7e-27       # Mass of alpha particle ^4He^2+ [kg]
 e = 1.602_176_634e-19           # Elementary charge [C] - exact
-Na = 6.022_140_76e23            # Avogadro constant [1 / mol]
+Na = 6.022_140_76e23            # Avogadro constant [1 / mol] - exact
 h = 6.626_070_15e-34            # Planck's constant [m^2 kg/s] - exact
 h2 = h**2                       # Planck's constant squared [m^2 kg/s]^2
 h3 = h**3                       # Planck's constant cubed [m^2 kg/s]^3
@@ -100,6 +100,7 @@ uB = e * hbar / (2 * me)        # Bohr magneton mu_B [J / T]
 uN = e * hbar / (2 * mp)        # Nuclear magneton mu_N [J/T]
 H0 = 2.333_361e-18              # Hubble constant approx = 72 [km / s * Mpc]  = _ [1 / s] - inexact
 msun = 1.988_47e30              # Mass of sun [kg]
+rsun = 6.95700e8                # Radius of sun [m]
 F = Na * e                      # Faraday constant [C / mol]
 Z0 = u0 * c                     # Characteristic impedance of vacuum or Impedance of free space [Ohms]
 R = Na * kB                     # Molar gas constant AKA Universal gas constant [J / K mol]
@@ -114,6 +115,9 @@ alpha = e**2 / (2 * e0 * h * c)                     # Fine-structure constant al
 a0 = 4 * pi * e0 * hbar**2 / (me * e**2)            # Bohr radius a_not [m]
 Rinf = alpha**2 * me * c / (2 * h)                  # Rydberg constant R_infinity [1 / m]
 sigma = 2 * pi**5 * kB**4 / (15 * h**3 * c2)        # Stefan-Boltzmann constant [W / m^2 K^4]
+
+true = True
+false = False
 
 # Conversion Factors:    ------------------------------------------------------------------------------------------
 zepto = 1e-21                   # SI Small Prefixes
@@ -176,6 +180,8 @@ au = 149_597_870_700            # Astronomical unit to meter [m / au]
 pc =  3.085_677_581_28e16       # Parsec to meter   [m / Pc]
 Mpc = 1e6 * pc                  # Mega parsecs to meter [m / MPc]
 ly = c * 365.25 * day           # Lightyear to meter [m / ly]
+lightday = c * day              # Lightday to meter [m / ly]
+lighthour = c * hr              # Lighthour to meter [m / ly]
 mach = 340.5                    # one Mach (approx., at 15 C, 1 atm] in meters per second [[m/s] / mach]
 angstrom = 1e-10                # Angstrom to meters [m / A]
 lbf = 4.448_221_6               # Pound force to Newtons conversion [N / lbf]
@@ -186,6 +192,7 @@ bar = 100_000                   # bar to pascal conversion [pa / bar] = [[N / m^
 atm = 101_325                   # standard atmosphere to pascal conversion [[N / m^2] / atm]
 psi = lbf / in2                 # Pounds per square inch to pascal [pa / psi] = [[N / m^2] / [lbf / in^2]]
 ksi = kilo * psi                # Kips per square inch to pascal [pa / ksi] = [[N / m^2] / [kilolbf / in^2]]
+Msi = mega * psi                # Million pounds per square inch to pascal [pa / Msi] = [[N / m^2] / [kilolbf / in^2]]
 btu = 1_055.055_852_6           # British thermal unit to Joules conversion [J / btu]
 therm = btu * 100_000           # therm to Joules conversion [J / therm]
 ton = 2000 * lbf                # Ton to newton conversion [N/ ton]
@@ -251,6 +258,20 @@ pwater = 998.19                 # Density of water at 20C 1atm [kg / m^3]
 poxygen = 1.314                 # Density of oxygen at 20C 1atm [kg / m^3]
 pnitrogen = 1.16                # Density of nitrogen at 20C 1atm [kg / m^3]
 pCO2 = 1.815                    # Density of CO2 at 20C 1atm [kg / m^3]
+pAl6061 = 2700                  # Density of Aluminum 6061 [kg / m^3]
+pSteel = 7900                   # Density of Steel (general) [kg / m^3]         
+
+cpair = 1006.14                 # Constant pressure specific heat of air at 20C 1atm [J / K kg]
+cpwater = 4184.05               # Constant pressure specific heat of water at 20C 1atm [J / K kg]
+cpoxygen =  918.95              # Constant pressure specific heat of oxygen at 20C 1atm [J / K kg]
+cpnitrogen =  1041.34           # Constant pressure specific heat of nitrogen at 20C 1atm [J / K kg]
+cpCO2 = 846.05                  # Constant pressure specific heat of CO2 at 20C 1atm [J / K kg]
+
+cvair = 717.67                  # Constant volume specific heat of air at 20C 1atm [J / K kg]
+cvwater = 4156.68               # Constant volume specific heat of water at 20C 1atm [J / K kg]
+cvoxygen = 657.72               # Constant volume specific heat of oxygen at 20C 1atm [J / K kg]
+cvnitrogen = 743.07             # Constant volume specific heat of nitrogen at 20C 1atm [J / K kg]
+cvCO2 = 652.45                  # Constant volume specific heat of CO2 at 20C 1atm [J / K kg]
 
 muair = 18.13e-6                # Dynamic Viscosity of air at 20C [Pa s]
 muwater = 0.0010005             # Dynamic Viscosity of water at 20C [Pa s]
@@ -276,7 +297,18 @@ EHighStrengthConcrete = 29.0 * giga     # Elastic modulus of High Strength Concr
 EDouglasFir = 13.1 * giga       # Elastic modulus of wood structural grade Douglas Fir [Pa] 
 EWhiteSpruce = 9.65 * giga      # Elastic modulus of wood structural grade White Spruce [Pa] 
 
+GAl6061 = 26 * giga             # Shear modulus of Aluminum 6061 [Pa]
+GSteel = 80 * giga              # Shear modulus of Steel (general) [Pa]            
+
+SyAl6061 = 276 * mega           # Tensile yield strength of Aluminum 6061 [Pa]
+
+vAl6061 =  0.33                 # Poisson's ratio of Aluminum 6061 [unitless]
+vSteel = 0.25                   # Poisson's ratio of Steel (general) [unitless]
+
+
 # Constant Aliases:    --------------------------------------------------------------------------------------------
+jpi, pii, pij = ipi, ipi, ipi 
+lightsec = c
 m_e = me
 m_p = mp
 m_n = mn
@@ -291,6 +323,7 @@ e_0, epsilon_not, epsilon_0, eps_0, eps0 = e0, e0, e0, e0, e0
 u_B, muB, mu_B = uB, uB, uB
 u_N, muN, mu_N = uN, uN, uN
 mSun, m_sun, m_Sun = msun, msun, msun
+rSun, r_sun, r_Sun, Rsun, RSun, R_sun, R_Sun = rsun, rsun, rsun, rsun, rsun, rsun, rsun
 Z_0, z0, z_0 = Z0, Z0, Z0
 Rbar, rbar, gasconst, gasconstant = R, R, R, R
 rt2 = sqrt2
@@ -304,17 +337,17 @@ R_inf = Rinf
 Zepto, zm, zs = zepto, zepto, zepto
 Atto, am = atto, atto                           # 'as' is reserved word in python
 Femto, fm, fs, fempto, Fempto = (femto,)*5
-Pico, pm, ps = pico, pico, pico
-Nano, nm, ns, ppb, PPB, ppB = nano, nano, nano, nano, nano, nano
+Pico, pm, ps, pF = pico, pico, pico, pico
+Nano, nm, ns, ppb, PPB, ppB, nF = nano, nano, nano, nano, nano, nano, nano
 Micro, mum, mus, mu_m, mu_s, muC, muc, muF, muf, muA, um, us, uC, uc, uF, uf, uA, ppm, PPM, ppM = micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro, micro
 Milli, mm, ms, mA, mJ, mF, mf, mC, mv, mV, gram, cP, cp, centipoise = milli, milli, milli, milli, milli, milli, milli, milli, milli, milli, milli, milli, milli, milli            # Warning: potential conflict with ma = mass of alpha particle != mA
 Centi, cm, cs = centi, centi, centi
 poise, Poise = deci, deci
 deka
 Hecto, hm, hs = hecto, hecto, hecto
-Kilo, km, ks, kPa, kpa, kW, kw, kJ, kj, Mg, kN, kn, kohm, thousand = kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo
-Mega, Mm, Ms, MPa, MPA, Mpa, MW, MJ, Mj, Gg, km2, Mohm, million, mil = mega, mega, mega, mega, mega, mega, mega, mega, mega, mega, mega, mega, mega, mega
-Giga, Gm, Gs, GPa, GPA, Gpa, gpa, GW, Gw, gw, GJ, Gj, gj, km3, billion, bil = giga, giga, giga, giga, giga, giga, giga, giga, giga, giga, giga, giga, giga, giga, giga, giga
+Kilo, km, ks, kPa, kpa, kW, kw, kJ, kj, Mg, kN, kn, kohm, kHz, khz, thousand = kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo
+Mega, Mm, Ms, MPa, MPA, Mpa, MW, MJ, Mj, Gg, km2, Mohm, million, mil, MHz, Mhz = mega, mega, mega, mega, mega, mega, mega, mega, mega, mega, mega, mega, mega, mega, mega, mega
+Giga, Gm, Gs, GPa, GPA, Gpa, gpa, GW, Gw, gw, GJ, Gj, gj, km3, billion, bil, GHz, Ghz, ghz, gHz = giga, giga, giga, giga, giga, giga, giga, giga, giga, giga, giga, giga, giga, giga, giga, giga, giga, giga, giga, giga
 Tera, Tm, Ts, km4, trillion = tera, tera, tera, tera, tera
 Peta, Pm, Ps, quadrillion = peta, peta, peta, peta
 Exa, Em, Es, quintillion = exa, exa, exa, exa
@@ -347,12 +380,16 @@ Mi2, sqmi, SqMi, sqMi = mi2, mi2, mi2, mi2
 parsec, Pc = pc, pc
 megaparsec, MegaParsec, mpc, MPc, megaParsec = Mpc, Mpc, Mpc, Mpc, Mpc
 lightyear, Lightyear, Ly = ly, ly, ly
+lightd = lightday
+lighthr, lighthrs = lighthour, lighthour
 A, AA, Angstrom, Ao = angstrom, angstrom, angstrom, angstrom
 kips, Kips, Kip, klbf, KIP, KIPS, = kip, kip, kip, kip, kip, kip
 liters, l, L, Liter, lit, Lit = liter, liter, liter, liter, liter, liter
 ml = mL
 patm, Patm = atm, atm
 PSI = psi
+kpsi = ksi
+Mpsi = Msi
 BTU, Btu = btu, btu
 HP, Hp, horsepower = hp, hp, hp
 FlOz, Floz = floz, floz
@@ -364,6 +401,7 @@ degR, degr, degF, degf, Fahrenheit, fahrenheit, fahr, fahren  = rankine, rankine
 mh, mWhr, mwhr, mWh, mwh, mAhr, mAhr, mAh, mAh, mWH, mwH, mAHr, mAHr, mAH, mAH = mhr, mhr, mhr, mhr, mhr, mhr, mhr, mhr, mhr, mhr, mhr, mhr, mhr, mhr, mhr
 kh, kWhr, kwhr, kWh, kwh, kAhr, kAhr, kAh, kAh, kWH, kwH, kAHr, kAHr, kAH, kAH = khr, khr, khr, khr, khr, khr, khr, khr, khr, khr, khr, khr, khr, khr, khr
 Mh, MWhr, Mwhr, MWh, Mwh, MAhr, MAhr, MAh, MAh, MWH, MwH, MAHr, MAHr, MAH, MAH = Mhr, Mhr, Mhr, Mhr, Mhr, Mhr, Mhr, Mhr, Mhr, Mhr, Mhr, Mhr, Mhr, Mhr, Mhr
+cc = cm3
 cSt, cst, centistoke = mm2, mm2, mm2
 Cel, cel, Celsius, Celcius, celcius, = celsius, celsius, celsius, celsius, celsius
 cal = calorie
@@ -390,6 +428,7 @@ St, st = stoke, stoke
 RAir = Rair
 RWater, Rh2o, RH2o, RH2O, RH20, Rh20 = Rwater, Rwater, Rwater, Rwater, Rwater, Rwater
 RO2, Ro2, ROxygen = Roxygen, Roxygen, Roxygen
+RN2, RNitrogen = Rnitrogen, Rnitrogen
 RCarbonDioxide, RCarbon_Dioxide, RcarbonDioxide, Rcarbon_Dioxide, Rcarbondioxide, Rcarbon_dioxide, Rco2, RCo2, RC02, rc02 = RCO2, RCO2, RCO2, RCO2, RCO2, RCO2, RCO2, RCO2, RCO2, RCO2
 
 PAir, rhoair, rhoAir = pair, pair, pair
@@ -397,6 +436,20 @@ pWater, ph2o, pH2o, pH2O, pH20, ph20, rhoWater, rhowater, rhoH2O, rhoH2o, rhoh2o
 pO2, po2, pOxygen, rhoO2, rhooxygen, rhoOxygen = poxygen, poxygen, poxygen, poxygen, poxygen, poxygen
 pN2, pNitrogen, rhoN2, rhoNitrogen, rhonitrogen = pnitrogen, pnitrogen, pnitrogen, pnitrogen, pnitrogen
 pCarbonDioxide, pCarbon_Dioxide, pcarbonDioxide, pcarbon_Dioxide, pcarbondioxide, pcarbon_dioxide, pco2, pCo2, pC02, rhoCO2, rhoCarbonDioxide, rhocarbondioxide, rhoCarbondioxide = pCO2, pCO2, pCO2, pCO2, pCO2, pCO2, pCO2, pCO2, pCO2, pCO2, pCO2, pCO2, pCO2
+pal6061, rhoAl6061, rhoal6061, pAl6, pAl60 = pAl6061, pAl6061, pAl6061, pAl6061, pAl6061
+pSt, rhoSteel, rhoSt, psteel = pSteel, pSteel, pSteel, pSteel
+
+cpAir = cpair
+cpWater, cph2o, cpH2o, cpH2O, cpH20, cph20 = cpwater, cpwater, cpwater, cpwater, cpwater, cpwater
+cpO2, cpo2, cpOxygen = cpoxygen, cpoxygen, cpoxygen
+cpN2, cpNitrogen = cpnitrogen, cpnitrogen
+cpCarbonDioxide, cpCarbon_Dioxide, cpcarbonDioxide, cpcarbon_Dioxide, cpcarbondioxide, cpcarbon_dioxide, cpco2, cpCo2, cpC02, = cpCO2, cpCO2, cpCO2, cpCO2, cpCO2, cpCO2, cpCO2, cpCO2, cpCO2
+
+cvAir = cvair
+cvWater, cvh2o, cvH2o, cvH2O, cvH20, cvh20 = cvwater, cvwater, cvwater, cvwater, cvwater, cvwater
+cvO2, cvo2, cvOxygen = cvoxygen, cvoxygen, cvoxygen
+cvN2, cvNitrogen = cvnitrogen, cvnitrogen
+cvCarbonDioxide, cvCarbon_Dioxide, cvcarbonDioxide, cvcarbon_Dioxide, cvcarbondioxide, cvcarbon_dioxide, cvco2, cvCo2, cvC02= cvCO2, cvCO2, cvCO2, cvCO2, cvCO2, cvCO2, cvCO2, cvCO2, cvCO2
 
 muAir, uair, uAir = muair, muair, muair
 muWater, uwater, uWater = muwater, muwater, muwater
@@ -413,7 +466,7 @@ ECu = ECopper
 EBrass
 EBronze
 EFe = EIron
-ESt = ESteel
+ESt, Est, Esteel = ESteel, ESteel, ESteel
 ESS, ESs, Ess = EStainlessSteel, EStainlessSteel, EStainlessSteel
 ENi = ENickel
 ETiAlloy, ETi6Al4V, ETiAlV = ETitaniumAlloy, ETitaniumAlloy, ETitaniumAlloy
@@ -422,7 +475,15 @@ EHSConcrete = EHighStrengthConcrete
 EDouglasFir
 EWhiteSpruce
 
-# Intra Program Variables
+GAl6061
+GSt = GSteel
+
+SyAl6061
+
+vAl6061
+vSt, nuSteel, nuSt = vSteel, vSteel, vSteel
+
+# Intra Program Variables:    --------------------------------------------------------------------------------------------
 ans = [0]
 ans1 = 0
 ans2 = 0
@@ -433,6 +494,8 @@ floatDeltaAbs = femto
 # end = time.time(); total += end - start; print(f"constants time = {end - start}")
 
 # start = time.time()
+
+# Function Definitions:    --------------------------------------------------------------------------------------------
 
 # def floatComparision(float1, float2):
 #     """returns true if percent error between 2 floats is less than acceptable percent error (floatDelta)
@@ -635,7 +698,17 @@ def ln(x):
         return cmath.log(x)
     return math.log(x)
     
-def exp(x):
+def exp(x=1):
+    """Returns e^x
+    If x = 1j*theta, theta will be converted from degrees to radians if degreesFlag = true
+    exp() will return exp(1) = 2.718281828459045
+
+    Args:
+        x (_type_, optional): Defaults to 1.
+
+    Returns:
+        _type_: _description_
+    """
     if(isinstance(x, complex)):
         if(x.real == 0):
             if(degreesFlag):
@@ -735,13 +808,18 @@ def integral_f(f, initial_step_size):
     return accumulator
 """
 
+def mean(arr, weights=None):
+    if(weights == None):
+        return np.mean(arr)
+    return np.average(arr, weights= weights)
 
 # Returns sample standard deviation by default
-def std(arr, population=False):
+def std(arr, population=False, weights=None):
     """Returns std dev of sample"""
     if(population):
-        return np.std(arr,ddof=1)
-    return np.std(arr)
+        return np.std(arr)
+    return np.std(arr,ddof=1)
+
 
 def popstd(arr):
     """Returns population std dev"""
@@ -835,7 +913,10 @@ def printfunction(f, start, end, stepSize = nan, steps = 50, outputResolution = 
     inputSize = (inputResolution > 0) + 1 + floor(max(log10(abs(start) + (start == 0))+ (start < 0), log10(abs(end) + (end == 0)) + (end < 0)))
     format = f"{inputSize+inputResolution}.{inputResolution}f"
     while (x < end or floatComparision(x, end)):
-        print(f"{x :{format}}  :  {f(x) :9.{outputResolution}f} ")
+        try:
+            print(f"{x :{format}}  :  { f(x) :9.{outputResolution}f} ")
+        except (ZeroDivisionError):
+            print(f"{x :{format}}  :  {nan :9.{outputResolution}f} ")
         x += stepSize
 
 def eig(mat):
@@ -854,56 +935,83 @@ def eig(mat):
     global ans
     print(ans := eigs[1])
     
-def represent(input, deltaPercent = 0.000_1, denom = 200, output=30):
+    
+#TODO: small numbers still don't work - 1e-3 = no match
+#TODO: implement other functions - sin, cos, tan, log10, lg, exp, 1/x
+#TODO: function too good at finding representations - some are ridiculous
+def represent(input, deltaPercent = 0.000_1, denom = 200, output=30, paramFunction=nan, paramCoef=nan):
     """Finds the math representation of input  (ie. determines if input can be represented as a fraction of pi) 
 
     Args:
         input (_type_): _description_
         deltaPercent (_type_, optional): Minium percent error for a number to be flagged as a near match. Defaults to 0.000_1.
         denom (_type_, optional): Max denominator that function will check. Defaults to 200.
+        output (int, optional): Max number of candidates to output. Defaults to 30
+        paramFunction (string, optional): 
     """
     exactPercent = 1e-18
-    candidateList = []  # List of pair tuples with near but not exact representations, and the absolute distance to input
+    candidateList = []  # List of canditate tuples with near but not exact representations. candidate = (str representation, candidateValue, abs(inputValue - candiateValue) )
     constList = {1 : "1", pi : "pi", sqrt(2) : "sqrt(2)", sqrt(3) : "sqrt(3)", sqrt(5) : "sqrt(5)", exp(1) : "exp(1)", 1 - exp(-1): "(1 - exp(-1))"}
-    for const in constList.keys():
-        val = input / const
-        checkedRatios = {0}     # Used to remove non reduced fractions, ie. 2/4 when 1/2 has already been checked
-        
-        # for loop searches for fraction with denominator [1,denom] , [1,200] by default
-        for i in range(1, denom+1):
-            if( (round(val * i) / i) in checkedRatios):
-                continue
-        
-            # Checks if i is a viable denominator
-            if( isclose(input, const * round(val * i) / i, rel_tol=deltaPercent ) ):
-                # if exact match, print it and stop searching
-                if( isclose(input, const * round(val * i) / i, rel_tol=exactPercent) ):
-                    print(f"Found match: \n{constList[const]} * { round(val * i) } / {i}")
-                    return
-        
-                else:
-                    checkedRatios.add(round(val * i) / i)
-                    candidateList.append((f"{constList[const]} * { round(val * i) } / {i}" , const * round(val * i) / i , abs(input - const * round(val * i) / i )))
-    
+    functionList = {lambda x: x : "{candidate}", lambda x : x**2 : "sqrt({candidate})", lambda x : exp(x) : "ln({candidate})"}
+    functionInverseList = {"{candidate}" : lambda x: x, "sqrt({candidate})": lambda x: sqrt(x), "ln({candidate})" : lambda x: ln(x) }
+    maxRepLen = 0
+    candidate = ""
+    for function in functionList.keys():
+        val1 = function(input)
+        functionInverse = functionInverseList[functionList[function]]
+        for const in constList.keys():
+            val2 = val1 / const
+            checkedRatios = {0}     # Used to remove non reduced fractions, ie. 2/4 when 1/2 has already been checked
+            
+            # for loop searches for fraction with denominator [1,denom] , [1,200] by default
+            for i in range(1, denom+1):
+                if( (round(val2 * i) / i) in checkedRatios):
+                    continue
+            
+                # Checks if i is a viable denominator
+                if( isclose(input, functionInverse(const * round(val2 * i) / i ), rel_tol=deltaPercent ) ):
+                    # if exact match, print it and stop searching
+                    if( isclose(input, functionInverse(const * round(val2 * i) / i ), rel_tol=exactPercent) ):
+                        if(const == 1):
+                            candidate = f"{round(val2 * i)}{f' / {i}' if (i != 1) else ''}"
+                        else:
+                            candidate = f"{constList[const]}{f' * {round(val2 * i)}' if (round(val2 * i) != 1) else ''}{f' / {i}' if (i != 1) else ''}"
+                        print("Found match: \n" + eval(f'f\"{functionList[function]}\"'))
+                        return
+            
+                    else:
+                        checkedRatios.add(round(val2 * i) / i)
+                        if(const == 1):
+                            candidate = f"{round(val2 * i)}{f' / {i}' if (i != 1) else ''}"
+                        else:
+                            candidate = f"{constList[const]}{f' * {round(val2 * i)}' if (round(val2 * i) != 1) else ''}{f' / {i}' if (i != 1) else ''}"
+                        candidateList.append((eval(f"f'{functionList[function]}'") , functionInverse(const * round(val2 * i) / i) , abs(input - functionInverse(const * round(val2 * i) / i ))))    
+                        maxRepLen = max(maxRepLen, len(eval(f"f'{functionList[function]}'")))
+                        
     print("Did not find exact representation, here are closest matches:")
-    candidateList.sort(key = lambda pair: pair[2])    # sort candidate list by smallest to largest distance
+    candidateList.sort(key = lambda candidate: candidate[2])    # sort candidate list by smallest to largest distance
     inputSize = len(str(input))
     inputResolution = len(str(input)) - 1 - max(0, floor(log10(input)))
-    print(f"{'True input':<30} : {f'{input:{inputSize+2}.{inputResolution}f}':^{inputSize+2}}") 
+    print(f"{'True input':<{maxRepLen+1}} : {f'{input:{inputSize+2}.{inputResolution}f}':^{inputSize+2}}") 
     count = 0
-    for i in candidateList:
-        print(f"{i[0]:<30} : {f'{i[1]:{inputSize+2}.{inputResolution}f}':^{inputSize+2}}  :  {f'{i[2]:g}':<12} ")
+    for candidate in candidateList:
+        print(f"{candidate[0]:<{maxRepLen+1}} : {f'{candidate[1]:{inputSize+2}.{inputResolution}f}':^{inputSize+2}}  :  {f'{candidate[2]:g}':<12} ")
         count += 1
         if (count >= output):
             break 
         
+import CoolProp.CoolProp as CP
 
 def props(prop1: str, val1, prop2: str, val2, fluid: str, molFlag=False):
     """ Wrapper function for extracting data from CoolProp.
     Adds functionality enabling user to input specific volume as a fluid property.
-        
+    
+    Patch 1/24/23: fluid can now be listed as first or last parameter
+        i.e. props("T", 300, "P", 100_000, "water") === props("water", "T", 300, "P", 100_000)
+    
     # Examples:
     # props("T", 300, "P", 100_000, "water")
+    # props("T", 300, "P", 100_000, "water", molFlag=True)  # Outputs molar specific properties instead of mass specific properties
     # props("T", 400, "D", 996.556340388, "water")
     # props("P", 100000, "T", 400, "air")
     # props("T", 300, "v", 0.001003455559, "CO2")
@@ -915,6 +1023,7 @@ def props(prop1: str, val1, prop2: str, val2, fluid: str, molFlag=False):
         prop2 (str): _description_
         val2 (_type_): _description_
         fluid (str): _description_
+        molFlag (bool, optional): Toggles whether to output mass specific properties (False, default) or molar specific properties (True) 
         
     Valid CP inputs: 
     'P' = Pressure [Pa]
@@ -930,6 +1039,15 @@ def props(prop1: str, val1, prop2: str, val2, fluid: str, molFlag=False):
     Full Fluid List:
     1-Butene, Acetone, Air, Ammonia, Argon, Benzene, CarbonDioxide, CarbonMonoxide, CarbonylSulfide, cis-2-Butene, CycloHexane, Cyclopentane, CycloPropane, D4, D5, D6, Deuterium, Dichloroethane, DiethylEther, DimethylCarbonate, DimethylEther, Ethane, Ethanol, EthylBenzene, Ethylene, EthyleneOxide, Fluorine, HeavyWater, Helium, HFE143m, Hydrogen, HydrogenChloride, HydrogenSulfide, IsoButane, IsoButene, Isohexane, Isopentane, Krypton, m-Xylene, MD2M, MD3M, MD4M, MDM, Methane, Methanol, MethylLinoleate, MethylLinolenate, MethylOleate, MethylPalmitate, MethylStearate, MM, n-Butane, n-Decane, n-Dodecane, n-Heptane, n-Hexane, n-Nonane, n-Octane, n-Pentane, n-Propane, n-Undecane, Neon, Neopentane, Nitrogen, NitrousOxide, Novec649, o-Xylene, OrthoDeuterium, OrthoHydrogen, Oxygen, p-Xylene, ParaDeuterium, ParaHydrogen, Propylene, Propyne, R11, R113, R114, R115, R116, R12, R123, R1233zd(E), R1234yf, R1234ze(E), R1234ze(Z), R124, R1243zf, R125, R13, R134a, R13I1, R14, R141b, R142b, R143a, R152A, R161, R21, R218, R22, R227EA, R23, R236EA, R236FA, R245ca, R245fa, R32, R365MFC, R40, R404A, R407C, R41, R410A, R507A, RC318, SES36, SulfurDioxide, SulfurHexafluoride, Toluene, trans-2-Butene, Water, Xenon  
     """
+    # Checks if user put fluid before properties, and corrects the variables, ie. props("water", "T", 300, "P", 100_000) 
+    if(type(val1) == str and type(fluid) != str):
+        # prop1, val1, prop2, val2, fluid
+        tempFluid =  prop1
+        prop1 = val1
+        val1 = prop2
+        prop2 = val2
+        val2 = fluid
+        fluid = tempFluid
     
     print(f"\t Input:  {fluid} :  {prop1} = {val1}  ;  {prop2} = {val2} \n")
     
@@ -979,7 +1097,7 @@ def props(prop1: str, val1, prop2: str, val2, fluid: str, molFlag=False):
     # print(" =  ", CP.PropsSI('', prop1, val1, prop2, val2, fluid) )
 
 
-def plot(xAxis: str, xInitial: float, xFinal: float, yAxis: str, constParam: str, constParamVal: float, fluid: str, title: str = ""):
+def thermoPlot(xAxis: str, xInitial: float, xFinal: float, yAxis: str, constParam: str, constParamVal: float, fluid: str, title: str = ""):
     """ Wrapper function for creating plots with Matplotlib and CoolProp.
     
     Will attempt to look at xAxis and yAxis labels and use non base-SI units if present within [] brackets
@@ -988,9 +1106,9 @@ def plot(xAxis: str, xInitial: float, xFinal: float, yAxis: str, constParam: str
         - Warning - uses python eval() on unsanitized string inputs
     
     # Examples:
-    plot("Temp", 300, 400, "P", "D", 900, "CO2")      # Plots pressure vs temperature of CO2 at constant density 900 kg/m^3 from 300K to 400K
-    plot("T", 300, 400, "P", "D", 900, "CO2", "Pressure vs temperature of CO2 at 900 kg/m^3")      # Plots pressure vs temperature of CO2 at constant density 900 kg/m^3 from 300K to 400K, and adds title to graph
-    plot("Pressure [MPa]", 2*Mpa, 80*Mpa, "Density [kg / liter]", "T", 300, "CO2")    # Plots density (in units kg / liter) vs (pressure in units of MPa) of CO2 at constant temperatrue 300 K from 2 MPa to 80 MPa
+    thermoPlot("Temp", 300, 400, "P", "D", 900, "CO2")      # Plots pressure vs temperature of CO2 at constant density 900 kg/m^3 from 300K to 400K
+    thermoPlot("T", 300, 400, "P", "D", 900, "CO2", "Pressure vs temperature of CO2 at 900 kg/m^3")      # Plots pressure vs temperature of CO2 at constant density 900 kg/m^3 from 300K to 400K, and adds title to graph
+    thermoPlot("Pressure [MPa]", 2*Mpa, 80*Mpa, "Density [kg / liter]", "T", 300, "CO2")    # Plots density (in units kg / liter) vs (pressure in units of MPa) of CO2 at constant temperatrue 300 K from 2 MPa to 80 MPa
 
     Args:
         xAxis (str): Label for x-axis - can use standard CoolProp labels if plotting in SI (for instance, xAxis="P" will default to x axis label "Pressure [Pa]")
@@ -1201,10 +1319,12 @@ def int(*args, **kwargs):
     """
     if(len(args) == 1 and len(kwargs) == 0):
         x = args[0]
+        if(isinstance(x, __builtins__.int)):
+           return x
+        if(isinstance(x, float)):
+            return x.__int__()
         if(isinstance(x, str)):
             return float(x).__int__()
-        if(isinstance(x * 1.0, float)):
-            return x.__int__()
         if(isinstance(x, complex)):
             return (x.real).__int__()
         # Check if unknown object has built cast to int function
@@ -1214,10 +1334,13 @@ def int(*args, **kwargs):
             x.__index__()
         
     return integral(*args, **kwargs)
-        
-        
 
-# Function and Lambda Aliases
+# Angular Frequency to Frequency conversions
+w2f = lambda w: w / tau 
+f2w = lambda f: f * tau 
+        
+        
+# Function Aliases:    --------------------------------------------------------------------------------------------
 root, roots = fsolve, fsolve
 outerProd, outerprod, outerProduct, outerproduct = outer, outer, outer, outer
 crossprod, crossProd, crossProduct, crossproduct = cross, cross, cross, cross
@@ -1242,7 +1365,8 @@ R2c, R2C, r2C = r2c, r2c, r2c
 R2f, R2F, r2F = r2f, r2f, r2f
 InnerProduct, innerproduct, Innerproduct, inprod, inproduct, braket, BraKet, Braket, dotproduct, dotProduct, dotprod, dotProd, dot = innerprod, innerprod, innerprod, innerprod, innerprod, innerprod, innerprod, innerprod, innerprod, innerprod, innerprod, innerprod, innerprod
 magnitude, mag = norm, norm
-integrate = integral            # int is also (sort of) aliased to integral
+integrate = integral            # int is also (sort of) aliased to integral - see int documentation
+average, avg = mean, mean
 stdDev, stddev, StdDev, standardDeviation = std, std, std, std
 popstdDev, popstddev, popStdDev, populationStddev, populationStdDev, populationStd, populationstd, populationstandardDeviation, populationStandardDeviation = popstd, popstd, popstd, popstd, popstd, popstd, popstd, popstd, popstd
 variance = var
@@ -1250,8 +1374,9 @@ populationVariance, popvariance, popVariance = popvar, popvar, popvar
 birthdayproblem, birthdayparadox, birthdayParadox, generalizedBirthdayProblem = birthdayProblem, birthdayProblem, birthdayProblem, birthdayProblem
 sing = singularity
 printFunction, printfun, printFun, plotFun, plotfun = printfunction, printfunction, printfunction, printfunction, printfunction
+eigen = eig
 representation = represent
-thermoPlot, cpPlot, CPPlot = plot, plot, plot
+coolpropPlot, coolPropPlot, CoolPropPlot, CoolpropPlot, cpPlot, CPPlot = thermoPlot, thermoPlot, thermoPlot, thermoPlot, thermoPlot, thermoPlot
 
 # end = time.time(); total += end - start; print(f"functions time = {end - start}")
 
