@@ -14,7 +14,8 @@ import math
 # end = time.time(); total += end - start; print(f"math time = {end - start}")
 
 # start = time.time()
-from random import *
+import random
+# from random import *
 # end = time.time(); total += end - start; print(f"random time = {end - start}")
 
 # import matplotlib.pyplot as plt
@@ -34,9 +35,11 @@ except:
 try:
     import scipy as sp
     # from scipy.constants import *
-    from scipy.optimize import fsolve
+    # from scipy.optimize import fsolve
+    import scipy.special
+    import scipy.optimize as opt
 except:
-    fsolve = lambda *args: print("SciPy not imported properly, fsolve function not found")
+    # fsolve = lambda *args: print("SciPy not imported properly, fsolve function not found")
     print("Warning: Error importing SciPy. Some features may not work as intended")
 # end = time.time(); total += end - start; print(f"scipy time = {end - start}")
 
@@ -112,8 +115,9 @@ sigmax = matrix("0 1; 1 0")     # Pauli spin matrix x [unit-less]
 sigmay = matrix("0 -1j; 1j 0")  # Pauli spin matrix y [unit-less]
 sigmaz = matrix("1 0; 0 -1")    # Pauli spin matrix z [unit-less]
 alpha = e**2 / (2 * e0 * h * c)                     # Fine-structure constant alpha [unit-less]
-a0 = 4 * pi * e0 * hbar**2 / (me * e**2)            # Bohr radius a_not [m]
-Rinf = alpha**2 * me * c / (2 * h)                  # Rydberg constant R_infinity [1 / m]
+a0 = 4 * pi * e0 * hbar**2 / (me * e**2)            # Bohr radius a_not [, Room]
+Roo = alpha**2 * me * c / (2 * h)                  # Rydberg constant for large atoms R_infinity [1 / m]
+RH = Roo * mp / (me + mp)                          # Rydberg constant for Hydrogen [1 / m]         # Warning: potential conflict with individual molar gas constant for hydrogen (not implemented)
 sigma = 2 * pi**5 * kB**4 / (15 * h**3 * c2)        # Stefan-Boltzmann constant [W / m^2 K^4]
 
 true = True
@@ -209,7 +213,7 @@ gallon = 0.003785411784         # US gallon to m^3 conversion (= 128 * floz) [m^
 lbm = 0.453_592_37              # Pound to kilogram conversion [kg / lbm]
 oz = lbm / 16                   # International avoirdupois ounce to kg conversion [kg / oz]
 rankine = 5/9                   # Rankine t conversion [K / R = C / F]
-arcmin = radians(1/60)          # Arc Minute to Radians conversion [rad / arcmin]
+arcmin = pi / (180 * 60)        # Arc Minute to Radians conversion [rad / arcmin]
 arcsec = arcmin / 60            # Arc Second to Radians conversion [rad / arcsec]
 mhr = milli * hr                # milli hours to seconds [s / mhr ]
 khr = kilo * hr                 # kilo hours to seconds [s / khr ]
@@ -245,6 +249,21 @@ stoke = 1e-4                    # Stoke to pascal * second conversion [[Pa * s] 
 point =  127 / 36 * 1e-4        # Point to meter conversion [m / point]                         # Warning: potential conflict with pt = pint != point
 mmH2O = 9.8066501               # Millimeters of water to pascal conversion (using rho_water = 1 kg / L)  [Pa / mmH2O]
 inH2O = 249.08891               # Inches of water to pascal conversion (using rho_water = 1 kg / L)  [Pa / inH2O]
+nauticalMile = 1852             # Nautical miles to meters conversion [m / NM]
+knot = nauticalMile / hr        # Knot to meters per second conversion [m/s / knot]
+thou = IN / 1000                # Thousandth of an inch to meters conversion [m / thou] == [m / mil]
+
+# Imperial Machine Screw Sizes [ANSI Units]
+screw0  = 0.0600
+screw1  = 0.0730
+screw2  = 0.0860
+screw3  = 0.0990
+screw4  = 0.1120
+screw5  = 0.1250
+screw6  = 0.1380
+screw8  = 0.1640
+screw10 = 0.1900
+screw12 = 0.2160
 
 # Material constants:    -------------------------------------------------------------------------------------------
 Rair = 287.05                   # Individual Gas Constant of Air [J / K kg]
@@ -252,6 +271,7 @@ Rwater = 461.52                 # Individual Gas Constant of Water Vapor [J / K 
 Roxygen = 259.84                # Individual Gas Constant of Oxygen O2 [J / K kg]
 Rnitrogen = 296.80              # Individual Gas Constant of Nitrogen N2 [J / K kg]
 RCO2 = 118.92                   # Individual Gas Constant of Carbon Dioxide CO2 [J / K kg] 
+                                                                                                # Warning: Potential conflict with RH = Hydrogen Rydberg Constant != Individual gas constant of Hydrogen
 
 pair = 1.204                    # Density of air at 20C 1atm [kg / m^3]
 pwater = 998.19                 # Density of water at 20C 1atm [kg / m^3]
@@ -277,7 +297,12 @@ muair = 18.13e-6                # Dynamic Viscosity of air at 20C [Pa s]
 muwater = 0.0010005             # Dynamic Viscosity of water at 20C [Pa s]
 
 nuair = 15.06e-6                # Kinematic Viscosity of air at 20C [m^2 / s]
-nuwater = 1.0023e-6             # Kinematic Viscosity of air at 20C [m^2 / s]
+nuwater = 1.0023e-6             # Kinematic Viscosity of water at 20C [m^2 / s]
+
+kair = 25.87e-3                 # Thermal conductivity of air at 20C 1 bar [W / m K]
+kwater = 0.59803                # Thermal conductivity of water at 20C 1 bar [W / m K]
+
+Prair = 0.7309                  # Prandtl number of air at 20C 1atm []
 
 EAluminum = 69 * giga           # Elastic modulus of Aluminum [Pa] 
 EAl2014 = 73.1 * giga           # Elastic modulus of Aluminum 2014-T6 [Pa] 
@@ -332,7 +357,8 @@ sigx, sigma1, sig1 = sigmax, sigmax, sigmax
 sigy, sigma2, sig2 = sigmay, sigmay, sigmay
 sigz, sigmaz, sigz = sigmaz, sigmaz, sigmaz
 a_0 = a0
-R_inf = Rinf
+R_inf, Rinf, R_oo = Roo, Roo, Roo
+R_H = RH                                                # Warning: potential conflict with individual molar gas constant for hydrogen (not implemented)
 
 Zepto, zm, zs = zepto, zepto, zepto
 Atto, am = atto, atto                           # 'as' is reserved word in python
@@ -346,7 +372,7 @@ poise, Poise = deci, deci
 deka
 Hecto, hm, hs = hecto, hecto, hecto
 Kilo, km, ks, kPa, kpa, kW, kw, kJ, kj, Mg, kN, kn, kohm, kHz, khz, thousand = kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo, kilo
-Mega, Mm, Ms, MPa, MPA, Mpa, MW, MJ, Mj, Gg, km2, Mohm, million, mil, MHz, Mhz = mega, mega, mega, mega, mega, mega, mega, mega, mega, mega, mega, mega, mega, mega, mega, mega
+Mega, Mm, Ms, MPa, MPA, Mpa, MW, MJ, Mj, Gg, km2, Mohm, million, MHz, Mhz = mega, mega, mega, mega, mega, mega, mega, mega, mega, mega, mega, mega, mega, mega, mega
 Giga, Gm, Gs, GPa, GPA, Gpa, gpa, GW, Gw, gw, GJ, Gj, gj, km3, billion, bil, GHz, Ghz, ghz, gHz = giga, giga, giga, giga, giga, giga, giga, giga, giga, giga, giga, giga, giga, giga, giga, giga, giga, giga, giga, giga
 Tera, Tm, Ts, km4, trillion = tera, tera, tera, tera, tera
 Peta, Pm, Ps, quadrillion = peta, peta, peta, peta
@@ -409,7 +435,7 @@ Cal, Calorie = kcal, kcal
 Rps, RPS = rps, rps
 Rpm, RPM = rpm, rpm
 lbfft, ftlb, ftlbf, ftlbs, lbsft = lbft, lbft, lbft, lbft, lbft
-lbfin, lbinn, lbfinn, lbIn, lbfIn, lbIN, lbfIN, lbinch, lbfinch, inlb, innlb, inlbf, innlbf = lbin, lbin, lbin, lbin, lbin, lbin, lbin, lbin, lbin, lbin, lbin, lbin, lbin
+lbfin, lbinn, lbfinn, lbIn, lbfIn, lbIN, lbfIN, lbinch, lbfinch, inlb, innlb, inlbf, innlbf, inlbs, lbsin = lbin, lbin, lbin, lbin, lbin, lbin, lbin, lbin, lbin, lbin, lbin, lbin, lbin, lbin, lbin
 ftkip, Kipft = kipft, kipft
 Kipin, Kipinn, kipinn, kipIn, kipIN, kipinch, inKip, inkip, innkip, Inkip = kipin, kipin, kipin, kipin, kipin, kipin, kipin, kipin, kipin, kipin
 Barn, b = barn, barn
@@ -424,6 +450,20 @@ gimp, gimperial, gcust, gcus, gcustomary = gft, gft, gft, gft, gft
 ginn, ginch, ginches, gIN, gIn = gin, gin, gin, gin, gin
 stories, floors = story, story
 St, st = stoke, stoke
+NM, NMi, nmi = nauticalMile, nauticalMile, nauticalMile
+Knot, knots = knot, knot
+Thou, thous, mil, mils, Mils, Mil, MIL = thou, thou, thou, thou, thou, thou, thou
+
+bolt0  = screw0 
+bolt1  = screw1 
+bolt2  = screw2 
+bolt3  = screw3 
+bolt4  = screw4 
+bolt5  = screw5 
+bolt6  = screw6 
+bolt8  = screw8 
+bolt10 = screw10
+bolt12 = screw12
 
 RAir = Rair
 RWater, Rh2o, RH2o, RH2O, RH20, Rh20 = Rwater, Rwater, Rwater, Rwater, Rwater, Rwater
@@ -459,7 +499,7 @@ nuWater, vwater, vWater = nuwater, nuwater, nuwater
 
 EAl = EAluminum
 EAluminum2014 = EAl2014 
-EAluminum6061 = EAl6061
+EAluminum6061, E6061 = EAl6061, EAl6061
 ECastIronGray, EIronGray, EGrayIron = EGrayCastIron, EGrayCastIron, EGrayCastIron
 ECastIronMalleable, EIronMalleable, EMalleableIron = EMalleableCastIron, EMalleableCastIron, EMalleableCastIron
 ECu = ECopper
@@ -478,7 +518,7 @@ EWhiteSpruce
 GAl6061
 GSt = GSteel
 
-SyAl6061
+Sy6061 = SyAl6061 
 
 vAl6061
 vSt, nuSteel, nuSt = vSteel, vSteel, vSteel
@@ -514,9 +554,9 @@ floatDeltaAbs = femto
 #     # edge case: float1 ~= float2 ~= 0 -> return true if absolute val of both less than floatDeltaAbs
 #     return (abs(float1) < floatDeltaAbs and abs(float2) < floatDeltaAbs)
 
-def floatComparision(float1, float2, rel_tol=floatDeltaPercent):
-    global floatDeltaAbs
-    return math.isclose(float1, float2, rel_tol=rel_tol) or (abs(float1) < floatDeltaAbs and abs(float2) < floatDeltaAbs) 
+def floatComparision(float1, float2, rel_tol=floatDeltaPercent, abs_tol=floatDeltaAbs):
+    # global floatDeltaAbs
+    return math.isclose(float1, float2, rel_tol=rel_tol) or (abs(float1) < abs_tol and abs(float2) < abs_tol) 
     
 def quad(a, b, c):
     """Quadratic formula find solutions to: a x^2 + bx + c = 0
@@ -724,7 +764,7 @@ def lg(x):
 
 E = lambda x : 10**x
 
-sci = lambda x : f"{x : .4e}"       # Formats input in scientiific notation with 4 decimal places
+sci = lambda x : f"{x:.4e}"       # Formats input in scientiific notation with 4 decimal places
 
 # Temperature conversion functions
 
@@ -758,7 +798,7 @@ def factor(num: int):
 def frac(num: float):
     return Fraction(num).limit_denominator()
 
-det = lambda mat : np.linalg.det(mat)
+# det = lambda mat : np.linalg.det(mat)         
 
 def innerprod(array1:tuple, array2:tuple):
     sum = 0
@@ -1086,6 +1126,7 @@ def props(prop1: str, val1, prop2: str, val2, fluid: str, molFlag=False):
     
     print("Constant-pressure specific heat c_p [J/kg/K] =  ", CP.PropsSI('Cpmass', prop1, val1, prop2, val2, fluid) )
     print("Constant-volume specific heat c_v [J/kg/K] =  ", CP.PropsSI('Cvmass', prop1, val1, prop2, val2, fluid) )
+    print("Specific Heat Ratio c_p / c_v [] =  ", CP.PropsSI('Cpmass', prop1, val1, prop2, val2, fluid)  / CP.PropsSI('Cvmass', prop1, val1, prop2, val2, fluid) )
     print("Specific Molar Gas Consant R [J/kg/K] =  ", CP.PropsSI('gas_constant', prop1, val1, prop2, val2, fluid) / CP.PropsSI('molarmass', prop1, val1, prop2, val2, fluid) )
     print()
     
@@ -1093,6 +1134,10 @@ def props(prop1: str, val1, prop2: str, val2, fluid: str, molFlag=False):
     print("Isobaric expansion coefficent [1/K] =  ", CP.PropsSI('isobaric_expansion_coefficient', prop1, val1, prop2, val2, fluid) )
     print("Isothermal compressibility [1/Pa] =  ", CP.PropsSI('isothermal_compressibility', prop1, val1, prop2, val2, fluid) )
     print()
+    
+    print("Speed of sound [m/s] =  ", CP.PropsSI('speed_of_sound', prop1, val1, prop2, val2, fluid) )
+    print()
+    
     # print(" =  ", CP.PropsSI('', prop1, val1, prop2, val2, fluid) )
 
 
@@ -1150,7 +1195,7 @@ def thermoPlot(xAxis: str, xInitial: float, xFinal: float, yAxis: str, constPara
             Txunit = units
         else:
             xscale = 1/eval(units)
-        print('yscale = ', xscale)
+        print('xscale = ', xscale)
     
     xvolflag = False
     
@@ -1205,6 +1250,8 @@ def thermoPlot(xAxis: str, xInitial: float, xFinal: float, yAxis: str, constPara
         xInitial = xInitial**-1
         xFinal = xFinal**-1
         deltaX = (xFinal - xInitial) / steps
+    else:
+        plt.xlabel(xAxis)
     
     # Give y-axis a descriptive label
     
@@ -1271,7 +1318,8 @@ def thermoPlot(xAxis: str, xInitial: float, xFinal: float, yAxis: str, constPara
             plt.ylabel(yAxis)
         yvolflag = True
         yAxis = 'D'
-    
+    else:
+        plt.ylabel(yAxis)
     
     for i in range(steps):
         xStep = i * deltaX + xInitial
@@ -1289,11 +1337,11 @@ def thermoPlot(xAxis: str, xInitial: float, xFinal: float, yAxis: str, constPara
     if(Txunit != "K"):
         for i in range(steps):
             if("c" in Txunit.lower()):
-                xplt[i] = k2c(yplt[i])
+                xplt[i] = k2c(xplt[i])
             if("r" in Txunit.lower()):
-                xplt[i] = k2r(yplt[i])
+                xplt[i] = k2r(xplt[i])
             if("f" in Txunit.lower()):
-                xplt[i] = k2f(yplt[i])
+                xplt[i] = k2f(xplt[i])
     
     if(Tyunit != "K"):
         for i in range(steps):
@@ -1318,6 +1366,8 @@ def int(*args, **kwargs):
     """
     if(len(args) == 1 and len(kwargs) == 0):
         x = args[0]
+        if(isinstance(x, bool)):
+            return 1 if x else 0
         if(isinstance(x, __builtins__.int)):
            return x
         if(isinstance(x, float)):
@@ -1326,21 +1376,319 @@ def int(*args, **kwargs):
             return float(x).__int__()
         if(isinstance(x, complex)):
             return (x.real).__int__()
-        # Check if unknown object has built cast to int function
+        # Check if unknown object has builtin cast to int function
         try: 
-            x.__int__()
+            return x.__int__()
         except:
-            x.__index__()
+            return x.__index__()
         
     return integral(*args, **kwargs)
 
 # Angular Frequency to Frequency conversions
 w2f = lambda w: w / tau 
 f2w = lambda f: f * tau 
+
+def bessel(order, arg, out=None):
+    """Bessel function of the first kind of real order and complex argument
+
+    Args:
+        order (array_like): 
+        arg (array_like): 
+        out (ndarray, optional): Optional output array for the function values
+    """
+    return sp.special.jv(order,arg,out)
+
+def j0(arg, out=None):    
+    """Bessel function of the first kind of order 0.
+
+    Args:
+        arg (array_like): 
+        out (ndarray, optional): optional output array for function values. Defaults to None.
+    """
+    return sp.special.j0(arg, out)
         
+def j1(arg, out=None):    
+    """Bessel function of the first kind of order 1.
+
+    Args:
+        arg (array_like): 
+        out (ndarray, optional): optional output array for function values. Defaults to None.
+    """
+    return sp.special.j1(arg, out)
+
+# Complementary Error Function
+# erfc = lambda n: 1 - 2 / sqrt(pi) * int(lambda u: exp(-u**2), 0, n)
+def erf(arg, out=None):
+    """Returns the error function of complex argument.
+        It is defined as 2/sqrt(pi)*integral(exp(-t**2), t=0..z).
+         erf(x) = 2 / sqrt(pi) * integral_0 ^x exp(-t**2) dt
         
+    Args:
+        arg (array_like): 
+        out (ndarray, optional): optional output array for function values. Defaults to None.
+    """
+    return sp.special.erf(arg, out)
+
+def erfc(arg, out=None):
+    """Returns the error function of complex argument.
+        It is defined as 1 - 2/sqrt(pi)*integral(exp(-t**2), t=0..z).
+         erfc(x) = 1 - 2 / sqrt(pi) * integral_0 ^x exp(-t**2) dt
+         erfc(x) = 1 - erf(x)
+        
+    Args:
+        arg (array_like): 
+        out (ndarray, optional): optional output array for function values. Defaults to None.
+    """
+    return sp.special.erfc(arg, out)
+      
+
+def fsolve(func, x0, args=(), fprime=None, full_output=0,
+           col_deriv=0, xtol=1.49012e-8, maxfev=0, band=None,
+           epsfcn=None, factor=100, diag=None):
+    """
+    Find root of a function given starting guess.
+    Return the roots of the (non-linear) equations defined by
+    ``func(x) = 0`` given a starting estimate.
+    
+    Parameters
+    ----------
+    func : callable ``f(x, *args)``
+        A function that takes at least one (possibly vector) argument,
+        and returns a value of the same length.
+    x0 : ndarray
+        The starting estimate for the roots of ``func(x) = 0``.
+    args : tuple, optional
+        Any extra arguments to `func`.
+    fprime : callable ``f(x, *args)``, optional
+        A function to compute the Jacobian of `func` with derivatives
+        across the rows. By default, the Jacobian will be estimated.
+    full_output : bool, optional
+        If True, return optional outputs.
+    col_deriv : bool, optional
+        Specify whether the Jacobian function computes derivatives down
+        the columns (faster, because there is no transpose operation).
+    xtol : float, optional
+        The calculation will terminate if the relative error between two
+        consecutive iterates is at most `xtol`.
+    maxfev : int, optional
+        The maximum number of calls to the function. If zero, then
+        ``100*(N+1)`` is the maximum where N is the number of elements
+        in `x0`.
+    band : tuple, optional
+        If set to a two-sequence containing the number of sub- and
+        super-diagonals within the band of the Jacobi matrix, the
+        Jacobi matrix is considered banded (only for ``fprime=None``).
+    epsfcn : float, optional
+        A suitable step length for the forward-difference
+        approximation of the Jacobian (for ``fprime=None``). If
+        `epsfcn` is less than the machine precision, it is assumed
+        that the relative errors in the functions are of the order of
+        the machine precision.
+    factor : float, optional
+        A parameter determining the initial step bound
+        (``factor * || diag * x||``). Should be in the interval
+        ``(0.1, 100)``.
+    diag : sequence, optional
+        N positive entries that serve as a scale factors for the
+        variables.
+    Returns
+    -------
+    x : ndarray
+        The solution (or the result of the last iteration for
+        an unsuccessful call).
+    infodict : dict
+        A dictionary of optional outputs with the keys:
+        ``nfev``
+            number of function calls
+        ``njev``
+            number of Jacobian calls
+        ``fvec``
+            function evaluated at the output
+        ``fjac``
+            the orthogonal matrix, q, produced by the QR
+            factorization of the final approximate Jacobian
+            matrix, stored column wise
+        ``r``
+            upper triangular matrix produced by QR factorization
+            of the same matrix
+        ``qtf``
+            the vector ``(transpose(q) * fvec)``
+    ier : int
+        An integer flag.  Set to 1 if a solution was found, otherwise refer
+        to `mesg` for more information.
+    mesg : str
+        If no solution is found, `mesg` details the cause of failure.
+    See Also
+    --------
+    root : Interface to root finding algorithms for multivariate
+           functions. See the ``method='hybr'`` in particular.
+    Notes
+    -----
+    ``fsolve`` is a wrapper around MINPACK's hybrd and hybrj algorithms.
+    Examples
+    --------
+    Find a solution to the system of equations:
+    ``x0*cos(x1) = 4,  x1*x0 - x1 = 5``.
+    >>> import numpy as np
+    >>> from scipy.optimize import fsolve
+    >>> def func(x):
+    ...     return [x[0] * np.cos(x[1]) - 4,
+    ...             x[1] * x[0] - x[1] - 5]
+    >>> root = fsolve(func, [1, 1])
+    >>> root
+    array([6.50409711, 0.90841421])
+    >>> np.isclose(func(root), [0.0, 0.0])  # func(root) should be almost 0.0.
+    array([ True,  True])
+    """
+    return opt.fsolve(func, x0, args, fprime, full_output, col_deriv, xtol, maxfev, band, epsfcn, factor, diag)
+
+#TODO: Sometimes returns duplicate values.
+def roots(func, leftBound=-10_000, rightBound=10_000, numberOfRoots = nan, iterations = 1_000, repetitions = 1, hardCodedFlag = True):
+    """Finds all roots of a function within specified range using fsolve
+
+    Args:
+        func (): single parameter function
+        leftBound (_type_, optional): Defaults to -10_000.
+        rightBound (_type_, optional): Defaults to 10_000.
+        numberOfRoots (_type_, optional): Defaults to nan.
+        iterations (int, optional): Iterations per recursion. Defaults to 1_000.
+        repetitions (int, optional): Number of times algorithm repeats. Defaults to 1.
+        hardCodedFlag (bool, optional): Flag for whether or not the algorithm will try hard coded guesses. Defaults to True.
+
+    Returns:
+        _type_: _description_
+    """
+    if (numberOfRoots == nan):
+        numberOfRoots = iterations + 1
+    
+    # For reasons, it makes sense to temporarily include the leftBound and rightBound in the rootsFound array even if they are not true roots. They may not be defined for the function, so putting in try/except blocks.
+    try:
+        if(not isClose(func(leftBound), 0)):
+            numberOfRoots += 1
+    except:
+        pass
+    try:
+        if(not isClose(func(leftBound), 0)):
+            numberOfRoots += 1
+    except:
+        pass
+    
+    rootsFound = [leftBound, rightBound]
+    r = 0
+    
+    # In order to increase effectiveness of the algorithm, I'm hard coding some numbers in to be used as guesses
+    if(hardCodedFlag):
+       hardCodedGuesses = [-100, -50, -10, -5, -2, -1, 0, 1, 2, 5, 10, 50, 100]
+    else:
+        hardCodedGuesses = []
+    # To keep track of whether the program has iterated through the hard coded values yet or not
+    # hardCodedFlag = True
+    guess = 0
+    
+    # Adding a few iterations to solve edge case when all hard coded guesses are out of range and specified iterations number is less than 
+    for i in range(iterations + len(hardCodedGuesses)):
+        if(len(rootsFound) >= numberOfRoots):
+                break
+        
+        if (hardCodedFlag):
+            # First try hard coded guesses
+            # Ensure that hard coded guess is within specified range
+            while (guess < len(hardCodedGuesses) and (hardCodedGuesses[guess] < leftBound or hardCodedGuesses[guess] > rightBound)):
+                guess += 1
+            if (guess >= len(hardCodedGuesses)):
+                hardCodedFlag = false
+                continue
+            sol, info, ier, msg = fsolve(func, hardCodedGuesses[guess], full_output=True)
+            r = sol[0]
+            guess += 1
+        else:
+            # After trying all hard coded guesses, try uniform random numbers within specified range
+            randTemp = random.uniform(leftBound, rightBound)
+            sol, info, ier, msg = fsolve(func, randTemp, full_output=True)
+            r = sol[0]
+
+        # when fsolve can't find a root, it returns a number anyway. Ensure that r is an actual root. (ier == 1)
+        if (ier == 1):
+            if ((r > rightBound) or (r < leftBound)):
+                continue
+            
+            # Ensure no duplicates in rootsFound
+            flag = false
+            for x in rootsFound:
+                if (isClose(x,r)):
+                    flag = true
+                    # Check if r is a better estimate than x
+                    if(abs(func(r)) < abs(func(x)) ):
+                        rootsFound.remove(x)
+                        rootsFound.append(r)
+                    break
+            
+            if(not flag):
+                # print(5)
+                rootsFound.append(r)
+            # print(f"{rootsFound = }")
+            
+            
+                
+    rootsFound.sort() 
+    for i in range(repetitions):
+        if(len(rootsFound) == 2):
+            return rootsFound
+        secondIterations = ceil(iterations / len(rootsFound))
+        # secondIterations = iterations 
+        j = 0
+        while (j < len(rootsFound) - 1):
+            moreRoots = roots(func, leftBound=rootsFound[j], rightBound=rootsFound[j+1], numberOfRoots = numberOfRoots - len(rootsFound), iterations= secondIterations, repetitions=0, hardCodedFlag=False)
+            # print(f"{rootsFound[j] = } , {rootsFound[j+1] = }")
+            # print(f"{moreRoots = }")
+            # print()
+            for k in range(1, len(moreRoots) - 1):
+                rootsFound.append(moreRoots[k])
+            rootsFound.sort()
+            # print(f"\t Sorted {rootsFound = }")
+            j+=1
+        
+        try:
+            func(rootsFound[0])
+            if(not isClose(fsolve(func, rootsFound[0])[0], rootsFound[0])):
+                rootsFound.remove(rootsFound[0])
+        except:
+            rootsFound.remove(rootsFound[0])
+        try:
+            func(rootsFound[-1])
+            if(not isClose(fsolve(func, rootsFound[-1])[0], rootsFound[-1])):
+                rootsFound.remove(rootsFound[-1])
+        except:
+            rootsFound.remove(rootsFound[-1])
+
+    return rootsFound
+
+
+def boltChart():
+    print(f"screw0 \t :  {screw0:.4f}") 
+    print(f"screw1 \t :  {screw1:.4f}") 
+    print(f"screw2 \t :  {screw2:.4f}") 
+    print(f"screw3 \t :  {screw3:.4f}") 
+    print(f"screw4 \t :  {screw4:.4f}") 
+    print(f"screw5 \t :  {screw5:.4f}") 
+    print(f"screw6 \t :  {screw6:.4f}") 
+    print(f"screw8 \t :  {screw8:.4f}") 
+    print(f"screw10\t :  {screw10:.4f}")
+    print(f"screw12\t :  {screw12:.4f}")
+    i = 1/4
+    while (i < 1):
+        print(f"{frac(i)}\t :  {i:.4f}")
+        i += 1/16
+    
+def printList(arr, decimals = 4, format=">{maxDigits}.{decimals}f"):
+    maxDigits = 2 + decimals + max(0, floor(log10(abs(max(arr))))+ int(max < 0), floor(log10(abs(min(arr))))+ int(min < 0) ) 
+    format = eval('f\"' + format + '\"')
+    for i in arr:
+        print(f"{i:{format}}")
+
+
 # Function Aliases:    --------------------------------------------------------------------------------------------
-root, roots = fsolve, fsolve
+# root, roots = fsolve, fsolve
 outerProd, outerprod, outerProduct, outerproduct = outer, outer, outer, outer
 crossprod, crossProd, crossProduct, crossproduct = cross, cross, cross, cross
 isclose, isClose, floatcomparsion, floatcomp = floatComparision, floatComparision, floatComparision, floatComparision
@@ -1376,7 +1724,9 @@ printFunction, printfun, printFun, plotFun, plotfun = printfunction, printfuncti
 eigen = eig
 representation = represent
 coolpropPlot, coolPropPlot, CoolPropPlot, CoolpropPlot, cpPlot, CPPlot, plot = thermoPlot, thermoPlot, thermoPlot, thermoPlot, thermoPlot, thermoPlot, thermoPlot
-
+jn, Jn, jv, Jv, bessel1, firstBessel = bessel, bessel, bessel, bessel, bessel, bessel
+J0 = j0
+J1 = j1
 # end = time.time(); total += end - start; print(f"functions time = {end - start}")
 
 # print(f"total time = {total}")
