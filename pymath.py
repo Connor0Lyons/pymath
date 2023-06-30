@@ -1542,8 +1542,7 @@ def fsolve(func, x0, args=(), fprime=None, full_output=0,
     """
     return opt.fsolve(func, x0, args, fprime, full_output, col_deriv, xtol, maxfev, band, epsfcn, factor, diag)
 
-#TODO: Sometimes returns duplicate values.
-def roots(func, leftBound=-10_000, rightBound=10_000, numberOfRoots = nan, iterations = 1_000, repetitions = 1, hardCodedFlag = True):
+def roots(func, leftBound=-10_000, rightBound=10_000, numberOfRoots = nan, iterations = 1_000, repetitions = 2, hardCodedFlag = True):
     """Finds all roots of a function within specified range using fsolve
 
     Args:
@@ -1558,6 +1557,8 @@ def roots(func, leftBound=-10_000, rightBound=10_000, numberOfRoots = nan, itera
     Returns:
         _type_: _description_
     """
+    # Don't look too closely at this code, I am not proud of it
+    
     if (numberOfRoots == nan):
         numberOfRoots = iterations + 1
     
@@ -1581,8 +1582,8 @@ def roots(func, leftBound=-10_000, rightBound=10_000, numberOfRoots = nan, itera
        hardCodedGuesses = [-100, -50, -10, -5, -2, -1, 0, 1, 2, 5, 10, 50, 100]
     else:
         hardCodedGuesses = []
+        
     # To keep track of whether the program has iterated through the hard coded values yet or not
-    # hardCodedFlag = True
     guess = 0
     
     # Adding a few iterations to solve edge case when all hard coded guesses are out of range and specified iterations number is less than 
@@ -1624,28 +1625,32 @@ def roots(func, leftBound=-10_000, rightBound=10_000, numberOfRoots = nan, itera
                     break
             
             if(not flag):
-                # print(5)
                 rootsFound.append(r)
-            # print(f"{rootsFound = }")
-            
-            
                 
     rootsFound.sort() 
+    # Repeat algorithm with upper/lower bounds set to found roots to find roots between roots
     for i in range(repetitions):
+        # No need to repeat, no roots found between upper and lower bound
         if(len(rootsFound) == 2):
             return rootsFound
+        # Divide iterations up evenly among each range so algorithm doesn't take too long
         secondIterations = ceil(iterations / len(rootsFound))
-        # secondIterations = iterations 
         j = 0
         while (j < len(rootsFound) - 1):
+            # Successive reptitions of algorithm sometimes improve the guess of the root value and therefore may generate duplicates 
+            # Remove duplicate by removing both values and generating a better guess from their average
+            if(isClose(rootsFound[j], rootsFound[j+1], rel_tol=1e-7)):
+                r = (rootsFound[j] + rootsFound[j+1])/2
+                print(r)
+                print(rootsFound)
+                rootsFound.remove(rootsFound[j])
+                rootsFound[j] = fsolve(func, r)[0]
+                rootsFound.sort()
+                continue
             moreRoots = roots(func, leftBound=rootsFound[j], rightBound=rootsFound[j+1], numberOfRoots = numberOfRoots - len(rootsFound), iterations= secondIterations, repetitions=0, hardCodedFlag=False)
-            # print(f"{rootsFound[j] = } , {rootsFound[j+1] = }")
-            # print(f"{moreRoots = }")
-            # print()
             for k in range(1, len(moreRoots) - 1):
                 rootsFound.append(moreRoots[k])
             rootsFound.sort()
-            # print(f"\t Sorted {rootsFound = }")
             j+=1
         
         try:
@@ -1660,6 +1665,18 @@ def roots(func, leftBound=-10_000, rightBound=10_000, numberOfRoots = nan, itera
                 rootsFound.remove(rootsFound[-1])
         except:
             rootsFound.remove(rootsFound[-1])
+            
+    # Final pass through to improve guesses
+    for i in range(len(rootsFound)):
+        rootsFound[i] = fsolve(func, rootsFound[i])[0]
+
+    # Remove any last duplicates generated in last step
+    i = 0
+    while (i < len(rootsFound) - 1):
+        if(isClose(rootsFound[i], rootsFound[i+1], rel_tol=1e-7)):
+            rootsFound.remove(rootsFound[i])
+            continue
+        i += 1
 
     return rootsFound
 
