@@ -51,10 +51,13 @@ try:
     from numpy.linalg import *
     from numpy import outer
     from numpy import cross
+    from numpy import sort
+    from numpy import sort_complex
 except:
     outer = lambda *args: print("NumPy not imported properly, outer function not found")
     cross = lambda *args: print("NumPy not imported properly, cross function not found")
     matrix = lambda *args: print("NumPy not imported properly, matrix constructor not found")
+    sort = lambda *args: print("NumPy not imported properly, sort function not found. Maybe try list(arr).sort() instead.")
     print("Warning: Error importing NumPy. Some features may not work as intended")
 # end = time.time(); total += end - start; print(f"numpy time = {end - start}")
 
@@ -156,8 +159,8 @@ yobi = 2**80                    #--------------------
 MeV = e * 10**6                 # MeV conversion factor [J / MeV]
 amu = 1.660_539_066_6e-27       # Atomic mass unit AMU conversion factor [kg / AMU] 
 mol = Na                        # Mol to molecules conversion factor [molecules / mol]
-min = 60                        # Time conversion [s / min]
-hr = 60 * min                   # Time conversion [s / hr]
+minute = 60                     # Time conversion [s / min]                    
+hr = 60 * minute                # Time conversion [s / hr]
 day = 24 * hr                   # Time conversion [s / day]
 week = 7 * day                  # Time conversion [s / week]
 month = 365 / 12 * day          # Time conversion [s / month]
@@ -331,7 +334,7 @@ vAl6061 =  0.33                 # Poisson's ratio of Aluminum 6061 [unitless]
 vSteel = 0.25                   # Poisson's ratio of Steel (general) [unitless]
 
 
-# Constant Aliases:    --------------------------------------------------------------------------------------------
+# Constant Aliases:    ----------------------------------------------------------------------------------------------------------------------------------------
 jpi, pii, pij = ipi, ipi, ipi 
 lightsec = c
 m_e = me
@@ -388,6 +391,7 @@ Ei, EiB, Eib, eib, EB, exabyte, exaB     = exbi, exbi, exbi, exbi, exbi, exbi, e
 Zi, ZiB, Zib, zib, ZB, zettabyte, zettaB = zebi, zebi, zebi, zebi, zebi, zebi, zebi
 Yi, YiB, Yib, yib, YB, yottabyte, yottaB = yobi, yobi, yobi, yobi, yobi, yobi, yobi
 
+minutes = minute            # Note: min is also aliased to minute as a callableInt so it can also be used as the builtin minimum function.
 hrs, hour, hours, Whr, Wh, Ahr, Ah = hr, hr, hr, hr, hr, hr, hr
 days = day
 weeks, Week, Weeks = week, week, week
@@ -523,7 +527,7 @@ Sy6061 = SyAl6061
 vAl6061
 vSt, nuSteel, nuSt = vSteel, vSteel, vSteel
 
-# Intra Program Variables:    --------------------------------------------------------------------------------------------
+# Intra Program Variables:    ----------------------------------------------------------------------------------------------------------------------------------------
 ans = [0]
 ans1 = 0
 ans2 = 0
@@ -535,7 +539,32 @@ floatDeltaAbs = femto
 
 # start = time.time()
 
-# Function Definitions:    --------------------------------------------------------------------------------------------
+
+# Class Definitions:    ----------------------------------------------------------------------------------------------------------------------------------------
+
+class callableInt(__builtins__.int):
+    """ Class designed to be able to be used as both an int and a function. 
+    I recognize that this is kinda stupid and terrible practice in the "real world", but for this script specifically it has some utility.
+    
+    Example: min = callableInt(minute, __builtins__.min)        # min can be used as both an alias for minute and to find the minimum element in an arraylike
+    """
+    def __new__(cls, value, function):
+        return super(callableInt, cls).__new__(cls, value)
+    
+    def __init__(self, value, function):
+        self.function = function
+    
+    def __call__(self, *args, **kwargs):
+        return self.function(*args, **kwargs)
+    
+
+
+# Object Definitions:    ----------------------------------------------------------------------------------------------------------------------------------------
+
+min = callableInt(minute, __builtins__.min)         # min can be used as both an alias for minute and to find the minimum element in an arraylike
+
+
+# Function Definitions:    ----------------------------------------------------------------------------------------------------------------------------------------
 
 # def floatComparision(float1, float2):
 #     """returns true if percent error between 2 floats is less than acceptable percent error (floatDelta)
@@ -559,7 +588,7 @@ def floatComparision(float1, float2, rel_tol=floatDeltaPercent, abs_tol=floatDel
     return math.isclose(float1, float2, rel_tol=rel_tol) or (abs(float1) < abs_tol and abs(float2) < abs_tol) 
     
 def quad(a, b, c):
-    """Quadratic formula find solutions to: a x^2 + bx + c = 0
+    """Quadratic formula find solutions to: a x^2 + b x + c = 0
 
     Args:
         a (float): 
@@ -1079,7 +1108,7 @@ def props(prop1: str, val1, prop2: str, val2, fluid: str, molFlag=False):
     1-Butene, Acetone, Air, Ammonia, Argon, Benzene, CarbonDioxide, CarbonMonoxide, CarbonylSulfide, cis-2-Butene, CycloHexane, Cyclopentane, CycloPropane, D4, D5, D6, Deuterium, Dichloroethane, DiethylEther, DimethylCarbonate, DimethylEther, Ethane, Ethanol, EthylBenzene, Ethylene, EthyleneOxide, Fluorine, HeavyWater, Helium, HFE143m, Hydrogen, HydrogenChloride, HydrogenSulfide, IsoButane, IsoButene, Isohexane, Isopentane, Krypton, m-Xylene, MD2M, MD3M, MD4M, MDM, Methane, Methanol, MethylLinoleate, MethylLinolenate, MethylOleate, MethylPalmitate, MethylStearate, MM, n-Butane, n-Decane, n-Dodecane, n-Heptane, n-Hexane, n-Nonane, n-Octane, n-Pentane, n-Propane, n-Undecane, Neon, Neopentane, Nitrogen, NitrousOxide, Novec649, o-Xylene, OrthoDeuterium, OrthoHydrogen, Oxygen, p-Xylene, ParaDeuterium, ParaHydrogen, Propylene, Propyne, R11, R113, R114, R115, R116, R12, R123, R1233zd(E), R1234yf, R1234ze(E), R1234ze(Z), R124, R1243zf, R125, R13, R134a, R13I1, R14, R141b, R142b, R143a, R152A, R161, R21, R218, R22, R227EA, R23, R236EA, R236FA, R245ca, R245fa, R32, R365MFC, R40, R404A, R407C, R41, R410A, R507A, RC318, SES36, SulfurDioxide, SulfurHexafluoride, Toluene, trans-2-Butene, Water, Xenon  
     """
     # Checks if user put fluid before properties, and corrects the variables, ie. props("water", "T", 300, "P", 100_000) 
-    if(type(val1) == str and type(fluid) != str):
+    if(isinstance(val1, str) and isinstance(fluid, str)):
         # prop1, val1, prop2, val2, fluid
         tempFluid =  prop1
         prop1 = val1
@@ -1698,13 +1727,33 @@ def boltChart():
         i += 1/16
     
 def printList(arr, decimals = 4, format=">{maxDigits}.{decimals}f"):
-    maxDigits = 2 + decimals + max(0, floor(log10(abs(max(arr))))+ int(max < 0), floor(log10(abs(min(arr))))+ int(min < 0) ) 
-    format = eval('f\"' + format + '\"')
-    for i in arr:
-        print(f"{i:{format}}")
+    """Print arraylike of items. If the arraylike contains only ints and floats, then formatting will be done automatically by default.
+    
+    Warning - uses python eval() on unsanitized string input for format parameter.
+
+    Args:
+        arr (arraylike): 
+        decimals (int, optional): _description_. Defaults to 4.
+        format (str, optional): Format string for printing numbers if arr contains only ints and floats. maxDigits is automatically computed and is equal to the maximum string length of numbers in arr. Defaults to ">{maxDigits}.{decimals}f".
+    """
+    
+    # Test if all elements of list are numbers
+    if(all(isinstance(n, __builtins__.int) or isinstance(n, float) for n in arr)):
+        # If all the elements are ints, don't print any decimals
+        if ( all(isinstance(n, __builtins__.int) for n in arr)):
+            decimals = 0
+        maxDigits = 1 + (decimals > 0) + decimals + max(0, floor(log10(abs(max(arr)))) + (max(arr) < 0), floor(log10(abs(min(arr)))) + (min(arr) < 0) ) 
+        format = eval('f\"' + format + '\"')
+        for i in arr:
+            print(f"{i:{format}}")   
+    else:
+        for i in arr:
+            print(i)
 
 
-# Function Aliases:    --------------------------------------------------------------------------------------------
+
+# Function Aliases:    ----------------------------------------------------------------------------------------------------------------------------------------
+minimum = __builtins__.min
 # root, roots = fsolve, fsolve
 outerProd, outerprod, outerProduct, outerproduct = outer, outer, outer, outer
 crossprod, crossProd, crossProduct, crossproduct = cross, cross, cross, cross
@@ -1744,6 +1793,8 @@ coolpropPlot, coolPropPlot, CoolPropPlot, CoolpropPlot, cpPlot, CPPlot, plot = t
 jn, Jn, jv, Jv, bessel1, firstBessel = bessel, bessel, bessel, bessel, bessel, bessel
 J0 = j0
 J1 = j1
+printlist, printTable, printtable, printMatrix, printMat, printArr, printarr, printArray, printarray = printList, printList, printList, printList, printList, printList, printList, printList, printList
+
 # end = time.time(); total += end - start; print(f"functions time = {end - start}")
 
 # print(f"total time = {total}")
