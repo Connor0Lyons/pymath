@@ -1,22 +1,19 @@
 import time
-# total = 0
+from time import sleep
 
-# start = time.time()
+import builtins
+
 import cmath
-# end = time.time(); total += end - start; print(f"cmath time = {end - start}")
 
-# start = time.time()
+import fractions
 from fractions import Fraction
-# end = time.time(); total += end - start; print(f"fraction time = {end - start}")
 
-# start = time.time()
 import math
-# end = time.time(); total += end - start; print(f"math time = {end - start}")
+from math import isclose
+from math import factorial
 
-# start = time.time()
 import random
-# from random import *
-# end = time.time(); total += end - start; print(f"random time = {end - start}")
+from random import random as rand
 
 # import matplotlib.pyplot as plt
 
@@ -24,26 +21,34 @@ import random
 # unit = pint.UnitRegistry()
 # u = unit
 
-# start = time.time()
+import threading
+from threading import Timer
+
+import decimal
+
 try:
     import CoolProp.CoolProp as CP
-except:
+except(ModuleNotFoundError):
     print("Warning: Error importing CoolProp. Some features may not work as intended")
-# end = time.time(); total += end - start; print(f"CoolProp time = {end - start}")
 
-# start = time.time()
 try:
     import scipy as sp
     # from scipy.constants import *
     # from scipy.optimize import fsolve
     import scipy.special
     import scipy.optimize as opt
-except:
-    # fsolve = lambda *args: print("SciPy not imported properly, fsolve function not found")
+    from scipy.optimize import fsolve
+    from scipy.special import erf
+    from scipy.special import erfc
+    from scipy.special import j0
+    from scipy.special import j1
+    from scipy.special import jv
+    from scipy.integrate import dblquad as iint
+    from scipy.special import ndtri as invnorm
+except(ModuleNotFoundError):
+    fsolve = lambda *args: print("SciPy not imported properly, fsolve function not found")
     print("Warning: Error importing SciPy. Some features may not work as intended")
-# end = time.time(); total += end - start; print(f"scipy time = {end - start}")
 
-# start = time.time()
 try:
     import numpy as np
     from numpy import matrix
@@ -51,25 +56,30 @@ try:
     from numpy.linalg import *
     from numpy import outer
     from numpy import cross
+    from numpy import kron
     from numpy import sort
     from numpy import sort_complex
-except:
+    from numpy import std as popstd
+    # TODO Fix popvar
+    from numpy import var as popvar
+    from numpy import median
+    from numpy import identity
+except(ModuleNotFoundError):
     outer = lambda *args: print("NumPy not imported properly, outer function not found")
     cross = lambda *args: print("NumPy not imported properly, cross function not found")
     matrix = lambda *args: print("NumPy not imported properly, matrix constructor not found")
     sort = lambda *args: print("NumPy not imported properly, sort function not found. Maybe try list(arr).sort() instead.")
     print("Warning: Error importing NumPy. Some features may not work as intended")
-# end = time.time(); total += end - start; print(f"numpy time = {end - start}")
 
-# start = time.time()
+try:
+    import pandas as pd
+except(ModuleNotFoundError):
+    print("Warning: Error importing pandas. Some features may not work as intended")
+
 from cmath import *
-# end = time.time(); total += end - start; print(f"cmath* time = {end - start}")
 
-# start = time.time()
 from math import *
-# end = time.time(); total += end - start; print(f"math* time = {end - start}")
 
-# start = time.time()
 
 # Unless noted otherwise, units are in terms of official SI units: second [s], meter [m], kilogram [kg], ampere [A], kelvin [K], mole [mol], and candela [cd]
 
@@ -98,13 +108,13 @@ hbar3 = hbar**3                 # Reduced Planck constant cubed [m^2 kg/s]^3
 hbar4 = hbar**4                 # Reduced Planck constant to the fourth power [m^2 kg/s]^4
 kB = 1.380_649e-23              # Boltzmann constant [J / K] - exact
 u0 = 4 * pi * 10**-7            # Vacuum permeability AKA Magnetic constant mu_not [H/m]
-e0 = 1 / (u0 * c2)              # Vacuum permittivity epsilon_not [F / m]
-k = 1 / (4 * pi * e0)           # Coulomb constant [N * m^2 / C^2)]
+e0 = 1 / (u0 * c2)              # Vacuum permittivity epsilon_not [F / m] = [C^2 / N m^2] = [A^2 s^4 / kg m^3]
+k = 1 / (4 * pi * e0)           # Coulomb constant [N m^2 / C^2)]
 G = 6.674_30e-11                # Gravitational constant [m^3 / kg s^2]
 g = 9.806_65                    # Acceleration due to gravity [m / s^2]
 uB = e * hbar / (2 * me)        # Bohr magneton mu_B [J / T]
 uN = e * hbar / (2 * mp)        # Nuclear magneton mu_N [J/T]
-H0 = 2.333_361e-18              # Hubble constant approx = 72 [km / s * Mpc]  = _ [1 / s] - inexact
+H0 = 2.333_361e-18              # Hubble constant approx = 72 [km / s Mpc]  = _ [1 / s] - inexact
 msun = 1.988_47e30              # Mass of sun [kg]
 rsun = 6.95700e8                # Radius of sun [m]
 F = Na * e                      # Faraday constant [C / mol]
@@ -114,17 +124,51 @@ ln2 = math.log(2)               # Natural logarithm of 2 [unit-less]
 sqrt2 = math.sqrt(2)            # Square root of 2 [unit-less]
 sqrt3 = math.sqrt(3)            # Square root of 3 [unit-less]
 phi = (1 + math.sqrt(5)) / 2    # Golden ratio [unit-less]
-sigmax = matrix("0 1; 1 0")     # Pauli spin matrix x [unit-less]
-sigmay = matrix("0 -1j; 1j 0")  # Pauli spin matrix y [unit-less]
-sigmaz = matrix("1 0; 0 -1")    # Pauli spin matrix z [unit-less]
 alpha = e**2 / (2 * e0 * h * c)                     # Fine-structure constant alpha [unit-less]
-a0 = 4 * pi * e0 * hbar**2 / (me * e**2)            # Bohr radius a_not [, Room]
-Roo = alpha**2 * me * c / (2 * h)                  # Rydberg constant for large atoms R_infinity [1 / m]
-RH = Roo * mp / (me + mp)                          # Rydberg constant for Hydrogen [1 / m]         # Warning: potential conflict with individual molar gas constant for hydrogen (not implemented)
+a0 = 4 * pi * e0 * hbar**2 / (me * e**2)            # Bohr radius a_not [m]
+Roo = alpha**2 * me * c / (2 * h)                   # Rydberg constant for large atoms R_infinity [1 / m]
+RH = Roo * mp / (me + mp)                           # Rydberg constant for Hydrogen [1 / m]         # Warning: potential conflict with individual molar gas constant for hydrogen (not implemented)
+Ry = h * c * Roo                                    # Rydberg Unit of energy [J]
 sigma = 2 * pi**5 * kB**4 / (15 * h**3 * c2)        # Stefan-Boltzmann constant [W / m^2 K^4]
 
 true = True
 false = False
+
+
+# Matrices / Quantum Gates
+sigmax = matrix("0 1; 1 0")             # Pauli spin matrix x [unit-less]
+sigmay = matrix("0 -1j; 1j 0")          # Pauli spin matrix y [unit-less]
+sigmaz = matrix("1 0; 0 -1")            # Pauli spin matrix z [unit-less]
+H = matrix("1. 1.; 1. -1.") / sqrt(2)   # First Order Hadamard Matrix
+H2 = kron(H, H)                         # Second Order Hadamard Matrix
+H3 = kron(H, H2)                        # Third Order Hadamard Matrix
+CX = matrix([[1., 0., 0., 0.],          # Controlled X Gate
+             [0., 1., 0., 0.],
+             [0., 0., 0., 1.],
+             [0., 0., 1., 0.]])
+CY = matrix([[1., 0.,  0., 0.],         # Controlled Y Gate
+             [0., 1.,  0., 0.],
+             [0., 0.,  0, -1j],
+             [0., 0., +1j, 0.]])
+CZ = matrix([[1., 0., 0., 0.],          # Controlled Z Gate
+             [0., 1., 0., 0.],
+             [0., 0., 1., 0.],
+             [0., 0., 0, -1.]])
+zp = matrix("1. ; 0.")                  # Pauli +Z Basis Representation of Spin 1/2 +Z ket 
+zn = matrix("0. ; 1.")                  # Pauli +Z Basis Representation of Spin 1/2 -Z ket
+xp = matrix("1. ; 1.") / sqrt(2)        # Pauli +Z Basis Representation of Spin 1/2 +X ket
+xn = matrix("1. ; -1.") / sqrt(2)       # Pauli +Z Basis Representation of Spin 1/2 -X ket
+yp = matrix("1. ; 1j") / sqrt(2)        # Pauli +Z Basis Representation of Spin 1/2 +Y ket
+yn = matrix("1. ; -1j") / sqrt(2)       # Pauli +Z Basis Representation of Spin 1/2 -Y ket
+I2 = identity(2)                        # 2x2 Identity Matrix  - Note:Type = numpy.ndarray, which is compatible with but distinct from numpy.matrix
+I3 = identity(3)                        # 3x3 Identity Matrix  - Note:Type = numpy.ndarray, which is compatible with but distinct from numpy.matrix
+I4 = identity(4)                        # 4x4 Identity Matrix  - Note:Type = numpy.ndarray, which is compatible with but distinct from numpy.matrix
+SWAP = matrix([[1., 0., 0., 0.],        # Matrix representation of SWAP gate
+               [0., 0., 1., 0.],
+               [0., 1., 0., 0.],
+               [0., 0., 0., 1.]])
+CSWAP = identity(8); CSWAP[5,5] = 0; CSWAP[5,6] = 1; CSWAP[6,6] = 0; CSWAP[6,5] = 1      # Matrix representation of Controlled SWAP gate  - Note:Type = numpy.ndarray, which is compatible with but distinct from numpy.matrix
+CCNOT = identity(8); CCNOT[6,6] = 0; CCNOT[6,7] = 1; CCNOT[7,7] = 0; CCNOT[7,6] = 1      # Matrix representation of Controlled Controlled NOT gate (AKA Toffoli gate) - Note:Type = numpy.ndarray, which is compatible with but distinct from numpy.matrix
 
 # Conversion Factors:    ------------------------------------------------------------------------------------------
 zepto = 1e-21                   # SI Small Prefixes
@@ -255,6 +299,8 @@ inH2O = 249.08891               # Inches of water to pascal conversion (using rh
 nauticalMile = 1852             # Nautical miles to meters conversion [m / NM]
 knot = nauticalMile / hr        # Knot to meters per second conversion [m/s / knot]
 thou = IN / 1000                # Thousandth of an inch to meters conversion [m / thou] == [m / mil]
+ipm = IN / minute               # Inch per minute [ [m / s] / [in / min]]
+sfm = ft / minute               # Surface feet per minute [ [m / s] / [ft / min]]
 
 # Imperial Machine Screw Sizes [ANSI Units]
 screw0  = 0.0600
@@ -269,47 +315,49 @@ screw10 = 0.1900
 screw12 = 0.2160
 
 # Material constants:    -------------------------------------------------------------------------------------------
-Rair = 287.05                   # Individual Gas Constant of Air [J / K kg]
-Rwater = 461.52                 # Individual Gas Constant of Water Vapor [J / K kg]
-Roxygen = 259.84                # Individual Gas Constant of Oxygen O2 [J / K kg]
-Rnitrogen = 296.80              # Individual Gas Constant of Nitrogen N2 [J / K kg]
+RAir = 287.05                   # Individual Gas Constant of Air [J / K kg]
+RWater = 461.52                 # Individual Gas Constant of Water Vapor [J / K kg]
+ROxygen = 259.84                # Individual Gas Constant of Oxygen O2 [J / K kg]
+RNitrogen = 296.80              # Individual Gas Constant of Nitrogen N2 [J / K kg]
 RCO2 = 118.92                   # Individual Gas Constant of Carbon Dioxide CO2 [J / K kg] 
                                                                                                 # Warning: Potential conflict with RH = Hydrogen Rydberg Constant != Individual gas constant of Hydrogen
+rhoAir = 1.204                  # Density of air at 20C 1atm [kg / m^3]
+rhoWater = 998.19               # Density of water at 20C 1atm [kg / m^3]
+rhoOxygen = 1.314               # Density of oxygen at 20C 1atm [kg / m^3]
+rhoNitrogen = 1.16              # Density of nitrogen at 20C 1atm [kg / m^3]
+rhoCO2 = 1.815                  # Density of CO2 at 20C 1atm [kg / m^3]
+rhoAl6061 = 2700                # Density of Aluminum 6061 [kg / m^3]
+rhoAl3003 = 2730                # Density of Aluminum 3003 [kg / m^3]
+rhoSteel = 7900                 # Density of Steel (general) [kg / m^3]         
+rhoBP1 = 1860                   # Maximum density of lunar regolith simulant BP-1 [kg / m^3]         
 
-pair = 1.204                    # Density of air at 20C 1atm [kg / m^3]
-pwater = 998.19                 # Density of water at 20C 1atm [kg / m^3]
-poxygen = 1.314                 # Density of oxygen at 20C 1atm [kg / m^3]
-pnitrogen = 1.16                # Density of nitrogen at 20C 1atm [kg / m^3]
-pCO2 = 1.815                    # Density of CO2 at 20C 1atm [kg / m^3]
-pAl6061 = 2700                  # Density of Aluminum 6061 [kg / m^3]
-pSteel = 7900                   # Density of Steel (general) [kg / m^3]         
-
-cpair = 1006.14                 # Constant pressure specific heat of air at 20C 1atm [J / K kg]
-cpwater = 4184.05               # Constant pressure specific heat of water at 20C 1atm [J / K kg]
-cpoxygen =  918.95              # Constant pressure specific heat of oxygen at 20C 1atm [J / K kg]
-cpnitrogen =  1041.34           # Constant pressure specific heat of nitrogen at 20C 1atm [J / K kg]
+cpAir = 1006.14                 # Constant pressure specific heat of air at 20C 1atm [J / K kg]
+cpWater = 4184.05               # Constant pressure specific heat of water at 20C 1atm [J / K kg]
+cpOxygen = 918.95               # Constant pressure specific heat of oxygen at 20C 1atm [J / K kg]
+cpNitrogen = 1041.34            # Constant pressure specific heat of nitrogen at 20C 1atm [J / K kg]
 cpCO2 = 846.05                  # Constant pressure specific heat of CO2 at 20C 1atm [J / K kg]
 
-cvair = 717.67                  # Constant volume specific heat of air at 20C 1atm [J / K kg]
-cvwater = 4156.68               # Constant volume specific heat of water at 20C 1atm [J / K kg]
-cvoxygen = 657.72               # Constant volume specific heat of oxygen at 20C 1atm [J / K kg]
-cvnitrogen = 743.07             # Constant volume specific heat of nitrogen at 20C 1atm [J / K kg]
+cvAir = 717.67                  # Constant volume specific heat of air at 20C 1atm [J / K kg]
+cvWater = 4156.68               # Constant volume specific heat of water at 20C 1atm [J / K kg]
+cvOxygen = 657.72               # Constant volume specific heat of oxygen at 20C 1atm [J / K kg]
+cvNitrogen = 743.07             # Constant volume specific heat of nitrogen at 20C 1atm [J / K kg]
 cvCO2 = 652.45                  # Constant volume specific heat of CO2 at 20C 1atm [J / K kg]
 
-muair = 18.13e-6                # Dynamic Viscosity of air at 20C [Pa s]
-muwater = 0.0010005             # Dynamic Viscosity of water at 20C [Pa s]
+muAir = 18.13e-6                # Dynamic Viscosity of air at 20C [Pa s]
+muWater = 0.0010005             # Dynamic Viscosity of water at 20C [Pa s]
 
-nuair = 15.06e-6                # Kinematic Viscosity of air at 20C [m^2 / s]
-nuwater = 1.0023e-6             # Kinematic Viscosity of water at 20C [m^2 / s]
+nuAir = 15.06e-6                # Kinematic Viscosity of air at 20C [m^2 / s]
+nuWater = 1.0023e-6             # Kinematic Viscosity of water at 20C [m^2 / s]
 
-kair = 25.87e-3                 # Thermal conductivity of air at 20C 1 bar [W / m K]
-kwater = 0.59803                # Thermal conductivity of water at 20C 1 bar [W / m K]
+kAir = 25.87e-3                 # Thermal conductivity of air at 20C 1 bar [W / m K]
+kWater = 0.59803                # Thermal conductivity of water at 20C 1 bar [W / m K]
 
-Prair = 0.7309                  # Prandtl number of air at 20C 1atm []
+PrAir = 0.7309                  # Prandtl number of air at 20C 1atm []
 
 EAluminum = 69 * giga           # Elastic modulus of Aluminum [Pa] 
 EAl2014 = 73.1 * giga           # Elastic modulus of Aluminum 2014-T6 [Pa] 
 EAl6061 = 68.9 * giga           # Elastic modulus of Aluminum 6061-T6 [Pa] 
+EAl3003 = 68.9 * giga           # Elastic modulus of Aluminum 3003-H14 [Pa] 
 EGrayCastIron = 67.0 * giga     # Elastic modulus of cast iron alloy Gray ASTM 20 [Pa] 
 EMalleableCastIron = 172 * giga # Elastic modulus of cast iron alloy Malleable ASTM A-197 [Pa] 
 ECopper = 117 * giga            # Elastic modulus of Copper [Pa] 
@@ -326,11 +374,14 @@ EDouglasFir = 13.1 * giga       # Elastic modulus of wood structural grade Dougl
 EWhiteSpruce = 9.65 * giga      # Elastic modulus of wood structural grade White Spruce [Pa] 
 
 GAl6061 = 26 * giga             # Shear modulus of Aluminum 6061 [Pa]
+GAl3003 = 25 * giga             # Shear modulus of Aluminum 3003 [Pa]
 GSteel = 80 * giga              # Shear modulus of Steel (general) [Pa]            
 
-SyAl6061 = 276 * mega           # Tensile yield strength of Aluminum 6061 [Pa]
+SyAl6061 = 276 * mega           # Tensile yield strength of Aluminum 6061-T6 [Pa]
+SyAl3003 = 145 * mega           # Tensile yield strength of Aluminum 3003-H14 [Pa]
 
 vAl6061 =  0.33                 # Poisson's ratio of Aluminum 6061 [unitless]
+vAl3003 =  0.33                 # Poisson's ratio of Aluminum 3003 [unitless]
 vSteel = 0.25                   # Poisson's ratio of Steel (general) [unitless]
 
 
@@ -356,12 +407,23 @@ Z_0, z0, z_0 = Z0, Z0, Z0
 Rbar, rbar, gasconst, gasconstant = R, R, R, R
 rt2 = sqrt2
 rt3 = sqrt3
-sigx, sigma1, sig1 = sigmax, sigmax, sigmax
-sigy, sigma2, sig2 = sigmay, sigmay, sigmay
-sigz, sigmaz, sigz = sigmaz, sigmaz, sigmaz
 a_0 = a0
 R_inf, Rinf, R_oo = Roo, Roo, Roo
 R_H = RH                                                # Warning: potential conflict with individual molar gas constant for hydrogen (not implemented)
+
+sigx, sigma1, sig1 = sigmax, sigmax, sigmax
+sigy, sigma2, sig2 = sigmay, sigmay, sigmay
+sigz, sigmaz, sigz = sigmaz, sigmaz, sigmaz
+H1 = H
+Cx, cx, cX, CNOT, Cnot, cnot = CX, CX, CX, CX, CX, CX
+Cy, cy, cY = CY, CY, CY
+Cz, cz, cZ = CZ, CZ, CZ
+ket0 = zp
+ket1 = zn
+sig0 = I2
+Swap, swap = SWAP, SWAP
+CSwap, Cswap, cswap, Fredkin, fredkin = CSWAP, CSWAP, CSWAP, CSWAP, CSWAP
+Ccnot, ccnot, CCnot, CCNot, Toffoli, toffoli = CCNOT, CCNOT, CCNOT, CCNOT, CCNOT, CCNOT 
 
 Zepto, zm, zs = zepto, zepto, zepto
 Atto, am = atto, atto                           # 'as' is reserved word in python
@@ -452,11 +514,13 @@ dyn, Dyne = dyne, dyne
 statC, statc, Fr, fr, franklin, esu = statcoulomb, statcoulomb, statcoulomb, statcoulomb, statcoulomb, statcoulomb
 gimp, gimperial, gcust, gcus, gcustomary = gft, gft, gft, gft, gft
 ginn, ginch, ginches, gIN, gIn = gin, gin, gin, gin, gin
-stories, floors = story, story
+stories, floors = story, story              # floor is also aliased as a callabeInt
 St, st = stoke, stoke
 NM, NMi, nmi = nauticalMile, nauticalMile, nauticalMile
 Knot, knots = knot, knot
 Thou, thous, mil, mils, Mils, Mil, MIL = thou, thou, thou, thou, thou, thou, thou
+IPM = ipm
+SFM = sfm
 
 bolt0  = screw0 
 bolt1  = screw1 
@@ -469,41 +533,48 @@ bolt8  = screw8
 bolt10 = screw10
 bolt12 = screw12
 
-RAir = Rair
-RWater, Rh2o, RH2o, RH2O, RH20, Rh20 = Rwater, Rwater, Rwater, Rwater, Rwater, Rwater
-RO2, Ro2, ROxygen = Roxygen, Roxygen, Roxygen
-RN2, RNitrogen = Rnitrogen, Rnitrogen
+Rair = RAir
+Rwater, Rh2o, RH2o, RH2O, RH20, Rh20 = RWater, RWater, RWater, RWater, RWater, RWater
+RO2, Ro2, Roxygen = ROxygen, ROxygen, ROxygen
+RN2, Rnitrogen = RNitrogen, RNitrogen
 RCarbonDioxide, RCarbon_Dioxide, RcarbonDioxide, Rcarbon_Dioxide, Rcarbondioxide, Rcarbon_dioxide, Rco2, RCo2, RC02, rc02 = RCO2, RCO2, RCO2, RCO2, RCO2, RCO2, RCO2, RCO2, RCO2, RCO2
 
-PAir, rhoair, rhoAir = pair, pair, pair
-pWater, ph2o, pH2o, pH2O, pH20, ph20, rhoWater, rhowater, rhoH2O, rhoH2o, rhoh2o = pwater, pwater, pwater, pwater, pwater, pwater, pwater, pwater, pwater, pwater, pwater
-pO2, po2, pOxygen, rhoO2, rhooxygen, rhoOxygen = poxygen, poxygen, poxygen, poxygen, poxygen, poxygen
-pN2, pNitrogen, rhoN2, rhoNitrogen, rhonitrogen = pnitrogen, pnitrogen, pnitrogen, pnitrogen, pnitrogen
-pCarbonDioxide, pCarbon_Dioxide, pcarbonDioxide, pcarbon_Dioxide, pcarbondioxide, pcarbon_dioxide, pco2, pCo2, pC02, rhoCO2, rhoCarbonDioxide, rhocarbondioxide, rhoCarbondioxide = pCO2, pCO2, pCO2, pCO2, pCO2, pCO2, pCO2, pCO2, pCO2, pCO2, pCO2, pCO2, pCO2
-pal6061, rhoAl6061, rhoal6061, pAl6, pAl60 = pAl6061, pAl6061, pAl6061, pAl6061, pAl6061
-pSt, rhoSteel, rhoSt, psteel = pSteel, pSteel, pSteel, pSteel
+densityAir, densAir, AirDensity, airDensity, airDens, PAir, pair, pAir, rhoAir = rhoAir, rhoAir, rhoAir, rhoAir, rhoAir, rhoAir, rhoAir, rhoAir, rhoAir
+densityWater, densWater, WaterDensity, pwater, pWater, ph2o, pH2o, pH2O, pH20, ph20, rhowater, rhoH2O, rhoH2o, rhoh2o = rhoWater, rhoWater, rhoWater, rhoWater, rhoWater, rhoWater, rhoWater, rhoWater, rhoWater, rhoWater, rhoWater, rhoWater, rhoWater, rhoWater
+densityO2, densO2, O2Density, pO2, po2, pOxygen, poxygen, rhoO2, rhooxygen = rhoOxygen, rhoOxygen, rhoOxygen, rhoOxygen, rhoOxygen, rhoOxygen, rhoOxygen, rhoOxygen, rhoOxygen
+densityN2, densN2, N2Density, pN2, pNitrogen, rhoN2, pnitrogen, rhonitrogen = rhoNitrogen, rhoNitrogen, rhoNitrogen, rhoNitrogen, rhoNitrogen, rhoNitrogen, rhoNitrogen, rhoNitrogen
+densityCarbonDioxide, densCarbonDioxide, CarbonDioxideDensity, pCarbonDioxide, pCarbon_Dioxide, pcarbonDioxide, pcarbon_Dioxide, pcarbondioxide, pcarbon_dioxide, pco2, pCo2, pC02, pCO2, rhoCarbonDioxide, rhocarbondioxide, rhoCarbondioxide = rhoCO2, rhoCO2, rhoCO2, rhoCO2, rhoCO2, rhoCO2, rhoCO2, rhoCO2, rhoCO2, rhoCO2, rhoCO2, rhoCO2, rhoCO2, rhoCO2, rhoCO2, rhoCO2
+densityAl6061, densal6061, al6061Density, density6061, dens6061, Al6061Density, pal6061, pAl6061, rhoal6061, pAl6, pAl60, p6061, rho6061 = rhoAl6061, rhoAl6061, rhoAl6061, rhoAl6061, rhoAl6061, rhoAl6061, rhoAl6061, rhoAl6061, rhoAl6061, rhoAl6061, rhoAl6061, rhoAl6061, rhoAl6061
+densityAl3003, densal3003, al3003Density, density3003, dens3003, Al3003Density, pal3003, pAl3003, rhoal3003, p3003, rho3003 = rhoAl3003, rhoAl3003, rhoAl3003, rhoAl3003, rhoAl3003, rhoAl3003, rhoAl3003, rhoAl3003, rhoAl3003, rhoAl3003, rhoAl3003
+densitySteel, densSteel, steelDensity, pSt, pSteel, rhoSt, psteel = rhoSteel, rhoSteel, rhoSteel, rhoSteel, rhoSteel, rhoSteel, rhoSteel
 
-cpAir = cpair
-cpWater, cph2o, cpH2o, cpH2O, cpH20, cph20 = cpwater, cpwater, cpwater, cpwater, cpwater, cpwater
-cpO2, cpo2, cpOxygen = cpoxygen, cpoxygen, cpoxygen
-cpN2, cpNitrogen = cpnitrogen, cpnitrogen
+cpair = cpAir
+cpwater, cph2o, cpH2o, cpH2O, cpH20, cph20 = cpWater, cpWater, cpWater, cpWater, cpWater, cpWater
+cpO2, cpo2, cpoxygen = cpOxygen, cpOxygen, cpOxygen
+cpN2, cpnitrogen = cpNitrogen, cpNitrogen
 cpCarbonDioxide, cpCarbon_Dioxide, cpcarbonDioxide, cpcarbon_Dioxide, cpcarbondioxide, cpcarbon_dioxide, cpco2, cpCo2, cpC02, = cpCO2, cpCO2, cpCO2, cpCO2, cpCO2, cpCO2, cpCO2, cpCO2, cpCO2
 
-cvAir = cvair
-cvWater, cvh2o, cvH2o, cvH2O, cvH20, cvh20 = cvwater, cvwater, cvwater, cvwater, cvwater, cvwater
-cvO2, cvo2, cvOxygen = cvoxygen, cvoxygen, cvoxygen
-cvN2, cvNitrogen = cvnitrogen, cvnitrogen
+cvair = cvAir
+cvwater, cvh2o, cvH2o, cvH2O, cvH20, cvh20 = cvWater, cvWater, cvWater, cvWater, cvWater, cvWater
+cvO2, cvo2, cvoxygen = cvOxygen, cvOxygen, cvOxygen
+cvN2, cvnitrogen = cvNitrogen, cvNitrogen
 cvCarbonDioxide, cvCarbon_Dioxide, cvcarbonDioxide, cvcarbon_Dioxide, cvcarbondioxide, cvcarbon_dioxide, cvco2, cvCo2, cvC02= cvCO2, cvCO2, cvCO2, cvCO2, cvCO2, cvCO2, cvCO2, cvCO2, cvCO2
 
-muAir, uair, uAir = muair, muair, muair
-muWater, uwater, uWater = muwater, muwater, muwater
+muair, uair, uAir = muAir, muAir, muAir
+muwater, uwater, uWater = muWater, muWater, muWater
 
-nuAir, vair, vAir = nuair, nuair, nuair
-nuWater, vwater, vWater = nuwater, nuwater, nuwater
+nuair, vair, vAir = nuAir, nuAir, nuAir
+nuwater, vwater, vWater = nuWater, nuWater, nuWater
+
+kair = kAir
+kwater = kWater
+
+Prair = PrAir
 
 EAl = EAluminum
 EAluminum2014 = EAl2014 
 EAluminum6061, E6061 = EAl6061, EAl6061
+EAluminum3003, E3003 = EAl3003, EAl3003
 ECastIronGray, EIronGray, EGrayIron = EGrayCastIron, EGrayCastIron, EGrayCastIron
 ECastIronMalleable, EIronMalleable, EMalleableIron = EMalleableCastIron, EMalleableCastIron, EMalleableCastIron
 ECu = ECopper
@@ -519,34 +590,36 @@ EHSConcrete = EHighStrengthConcrete
 EDouglasFir
 EWhiteSpruce
 
-GAl6061
+G6061 = GAl6061 
+G3003 = GAl3003 
 GSt = GSteel
 
 Sy6061 = SyAl6061 
+Sy3003 = SyAl3003 
 
-vAl6061
+v6061 = vAl6061
+v3003 = vAl3003
 vSt, nuSteel, nuSt = vSteel, vSteel, vSteel
 
-# Intra Program Variables:    ----------------------------------------------------------------------------------------------------------------------------------------
+# Intra Program Global Variables:    ----------------------------------------------------------------------------------------------------------------------------------------
 ans = [0]
 ans1 = 0
 ans2 = 0
-degreesFlag = False                         # Default in Radians Mode
-floatDeltaPercent = nano                           # Accepatable percent error for floating point number comparisions
-floatDeltaAbs = femto
-
-# end = time.time(); total += end - start; print(f"constants time = {end - start}")
-
-# start = time.time()
-
+degreesFlag = False                             # Default trig functions in Radians Mode
+expDegreesFlag = False                          # Default e^x in Radians Mode
+floatDeltaPercent = nano                        # Accepatable percent error for floating point number comparisions
+floatDeltaAbs = femto                           # Accepatable absolute error for floating point number comparisions
+suppressWarningsFlag = False                    # Global boolean designed to toggle whether functions will print warnings or not.
+warningTimer = Timer(0, lambda : "")            # Timer thread used for implementing temporary suppression of warnings.    
+decimalContext = decimal.Context(prec=15)
 
 # Class Definitions:    ----------------------------------------------------------------------------------------------------------------------------------------
 
-class callableInt(__builtins__.int):
-    """ Class designed to be able to be used as both an int and a function. 
+class callableInt(builtins.int):
+    """ The callableInt class is designed to be able to be used as both an int and a function. 
     I recognize that this is kinda stupid and terrible practice in the "real world", but for this script specifically it has some utility.
     
-    Example: min = callableInt(minute, __builtins__.min)        # min can be used as both an alias for minute and to find the minimum element in an arraylike
+    Example: min = callableInt(minute, builtins.min)        # min can be used as both an alias for minute and to find the minimum element in an arraylike
     """
     def __new__(cls, value, function):
         return super(callableInt, cls).__new__(cls, value)
@@ -557,14 +630,59 @@ class callableInt(__builtins__.int):
     def __call__(self, *args, **kwargs):
         return self.function(*args, **kwargs)
     
-
+# Class Aliases:    ----------------------------------------------------------------------------------------------------------------------------------------
+Int, integer, Integer, _int_, __int__ =  builtins.int, builtins.int,  builtins.int,  builtins.int,  builtins.int
 
 # Object Definitions:    ----------------------------------------------------------------------------------------------------------------------------------------
 
-min = callableInt(minute, __builtins__.min)         # min can be used as both an alias for minute and to find the minimum element in an arraylike
-
+min = callableInt(minute, builtins.min)         # min can be used as both an alias for minute and to find the minimum element in an arraylike
+floor = callableInt(story, math.floor)
 
 # Function Definitions:    ----------------------------------------------------------------------------------------------------------------------------------------
+
+def warn(warning):
+    """ Designed primarily to be a helper function for printing warning messages to the user in intra program functions.
+    Will print warning if the global boolean variable suppressWarningsFlag = False, else will do nothing.
+    
+    I decided not to use the python warnings module because of the way it printed in the terminal. 
+
+    Args:
+        warning (str): warning to be printed
+    """
+    if (suppressWarningsFlag):
+        return
+    print("Warning: ", warning)
+    print("\t[To suppress all warnings like this, use suppressWarnings()]")
+
+
+def suppressWarnings(val="", time = math.inf):
+    """ Sets the value of the global suppressWarningsFlag. If no value is provided, the current state will be toggled.
+    If suppressWarningsFlag = True, no warnings will be printed.
+    If a time is provided, then warnings will be suppressed for the specified duration (in seconds) and then toggled back on.
+    
+    Args:
+        val (bool, optional): Value to set suppressWarningsFlag to. Default behavior is to toggle current value.
+        time (float, optional): Duration used to temporarily turn off warning messages for a specified amount of time.
+    """
+    global suppressWarningsFlag, warningTimer
+    
+    if (0 <= time < math.inf):
+        warningTimer.cancel()
+        warningTimer = Timer(time, suppressWarnings, args=(False,))
+        warningTimer.start()
+        val = True
+    
+    if (val == ""):
+        suppressWarningsFlag = not suppressWarningsFlag
+    else:
+        suppressWarningsFlag = val
+    if (suppressWarningsFlag):
+        print(f'Suppressing all warning messages {("for " + str(time) + " seconds") if time < inf else "indefinitely"}.')
+    else:
+        print("No longer suppressing all warning messages.")
+        
+silence = lambda time=math.inf : suppresswarning(True, time)
+verbose = lambda time=math.inf : suppresswarning(False, time)
 
 # def floatComparision(float1, float2):
 #     """returns true if percent error between 2 floats is less than acceptable percent error (floatDelta)
@@ -583,9 +701,12 @@ min = callableInt(minute, __builtins__.min)         # min can be used as both an
 #     # edge case: float1 ~= float2 ~= 0 -> return true if absolute val of both less than floatDeltaAbs
 #     return (abs(float1) < floatDeltaAbs and abs(float2) < floatDeltaAbs)
 
-def floatComparision(float1, float2, rel_tol=floatDeltaPercent, abs_tol=floatDeltaAbs):
-    # global floatDeltaAbs
-    return math.isclose(float1, float2, rel_tol=rel_tol) or (abs(float1) < abs_tol and abs(float2) < abs_tol) 
+
+# Using the same function as math.isclose, but overriding the defualt parameters.
+def isclose(a, b, *, rel_tol=floatDeltaPercent, abs_tol=floatDeltaAbs):
+    return math.isclose(a, b, rel_tol=rel_tol, abs_tol=abs_tol) 
+
+isclose.__doc__ = math.isclose.__doc__
     
 def quad(a, b, c):
     """Quadratic formula find solutions to: a x^2 + b x + c = 0
@@ -627,6 +748,9 @@ def degrees(val = None):
     global degreesFlag 
     degreesFlag = True
     print("Now in Degrees Mode")
+    
+    if(expDegreesFlag):
+        print("Note, exp(1j * x) still will be computed as if x is measured in radians. To toggle this, use expDegrees()")
 
 # Converts a parameter from degrees to radians, or sets the default behavior of normal trig functions to be in radians if no paramaters passed
 def radians(val = None):
@@ -636,9 +760,20 @@ def radians(val = None):
     global degreesFlag
     degreesFlag = False
     print("Now in Radians Mode")
+    
+    if(not expDegreesFlag):
+        print("Note, exp(1j * x) still will be computed as if x is measured in degrees. To toggle this, use expRadians()")
 
-# Chase did this, don't entirely know how it works
-# sind, cosd, tand = map(lambda f: lambda x: f(radians(x)), (math.sin, math.cos, math.tan))
+def expDegrees():
+    global expDegreesFlag
+    expDegreesFlag = True
+    print("Now in Exponential Degrees Mode. ( exp(180 * 1j) == -1 )")
+
+def expRadians():
+    global expDegreesFlag
+    expDegreesFlag = False
+    print("Now in Exponential Radians Mode. (Default;  exp(pi * 1j) == -1 )")
+    
 
 # Degree based trig functions
 def sind(x):
@@ -677,54 +812,54 @@ def sin(x):
     # if x is a complex number, will calculate result in radians regardless
     if(isinstance(x, complex)):
         if(degreesFlag):
-            print("Warning: Complex number detected but in degree mode, sinr(z) calculated anyway. Use sind(z) if that is what you intended")
+            warn("Complex number detected but in degree mode, sinr(z) calculated anyway. Use sind(z) if that is what you intended")
         return sinr(x)
 
     if(degreesFlag):
         # Throws warning if in degree mode and x is near a multiple of pi/180
         if( (abs(x* 180/pi - round(x * 180/pi) ) / floatDeltaPercent < 1 ) ):
-            print("Warning: In Degree Mode but possible radian number detected. (sind(x) calculated anyway)")
+            warn("In Degree Mode but possible radian number detected. (sind(x) calculated anyway)")
         return sind(x)
     
     # Throws warning if in radian mode and x > 2pi and is not near a multiple of pi/180 
     if( (x > 2 * pi) and not (abs(( x * 180/pi) - round( x * 180 / pi ) )/ floatDeltaPercent < 1 ) ):
-        print("Warning: In Radian Mode but possible degree number detected. (sinr(x) calculated anyway)")
+        warn("In Radian Mode but possible degree number detected. (sinr(x) calculated anyway)")
     return sinr(x)
 
 def cos(x):
     # if x is a complex number, will calculate result in radians regardless
     if(isinstance(x, complex)):
         if(degreesFlag):
-            print("Warning: Complex number detected but in degree mode, cosr(z) calculated anyway. Use cosd(z) if that is what you intended")
+            warn("Complex number detected but in degree mode, cosr(z) calculated anyway. Use cosd(z) if that is what you intended")
         return cosr(x)
 
     if(degreesFlag):
         # Throws warning if in degree mode and x is near a multiple of pi/180
         if( (abs(x* 180/pi - round(x * 180/pi) ) / floatDeltaPercent < 1 ) ):
-            print("Warning: In Degree Mode but possible radian number detected. (cosd(x) calculated anyway)")
+            warn("In Degree Mode but possible radian number detected. (cosd(x) calculated anyway)")
         return cosd(x)
     
     # Throws warning if in radian mode and x > 2pi and is not near a multiple of pi/180
     if( (x > 2 * pi) and not (abs(( x * 180/pi) - round( x * 180 / pi ) )/ floatDeltaPercent < 1 ) ):
-        print("Warning: In Radian Mode but possible degree number detected. (cosr(x) calculated anyway)")
+        warn("In Radian Mode but possible degree number detected. (cosr(x) calculated anyway)")
     return cosr(x)
 
 def tan(x):
     # if x is a complex number, will calculate result in radians regardless
     if(isinstance(x, complex)):
         if(degreesFlag):
-            print("Warning: Complex number detected but in degree mode, tanr(z) calculated anyway. Use tand(z) if that is what you intended")
+            warn("Complex number detected but in degree mode, tanr(z) calculated anyway. Use tand(z) if that is what you intended")
         return tanr(x)
 
     if(degreesFlag):
         # Throws warning if in degree mode and x is near a multiple of pi/180
         if( (abs(x* 180/pi - round(x * 180/pi) ) / floatDeltaPercent < 1 ) ):
-            print("Warning: In Degree Mode but possible radian number detected. (tand(x) calculated anyway)")
+            warn("In Degree Mode but possible radian number detected. (tand(x) calculated anyway)")
         return tand(x)
     
     # Throws warning if in radian mode and x > 2pi and is not near a multiple of pi/180
     if( (x > 2 * pi) and not (abs(( x * 180/pi) - round( x * 180 / pi ) )/ floatDeltaPercent < 1 ) ):
-        print("Warning: In Radian Mode but possible degree number detected. (tanr(x) calculated anyway)")
+        warn("In Radian Mode but possible degree number detected. (tanr(x) calculated anyway)")
     return tanr(x)
 
 # returns arcsin(x), returns radian value if in radians mode or if complex number
@@ -768,7 +903,7 @@ def ln(x):
     return math.log(x)
     
 def exp(x=1):
-    """Returns e^x
+    """Returns e**x
     If x = 1j*theta, theta will be converted from degrees to radians if degreesFlag = true
     exp() will return exp(1) = 2.718281828459045
 
@@ -776,13 +911,13 @@ def exp(x=1):
         x (_type_, optional): Defaults to 1.
 
     Returns:
-        _type_: _description_
+        float or complex: e**x
     """
     if(isinstance(x, complex)):
         if(x.real == 0):
-            if(degreesFlag):
-               print("Degrees flag on, converting x from degrees to radians")
-            return cos(x.imag) + 1j * sin(x.imag)
+            if(expDegreesFlag):
+                warn("Exponential Degrees flag on, converting x from degrees to radians")
+                return cos(x.imag) + 1j * sin(x.imag)
         return cmath.exp(x)
     return math.exp(x)
 
@@ -791,9 +926,7 @@ def lg(x):
         return cmath.log2(x)
     return math.log(x) / cmath.log(2)
 
-E = lambda x : 10**x
-
-sci = lambda x : f"{x:.4e}"       # Formats input in scientiific notation with 4 decimal places
+sci = lambda x : f"{x:.4e}"       # Formats input in scientific notation with 4 decimal places
 
 # Temperature conversion functions
 
@@ -877,50 +1010,78 @@ def integral_f(f, initial_step_size):
     return accumulator
 """
 
-def mean(arr, weights=None):
-    if(weights == None):
-        return np.mean(arr)
-    return np.average(arr, weights= weights)
+def mean(arr, *args, **kwargs):
+    """Compute mean / averarge of arraylike. 
+    If weights parameter is provided, then the return value is returned value of np.average(), else the return value is the returned value of np.mean()
+    """
+    if("weights" in kwargs):
+        return np.average(arr, *args, **kwargs)
+    return np.mean(arr, *args, **kwargs)
 
+
+# TODO: Correct this to use *args, **kwargs
 # Returns sample standard deviation by default
-def std(arr, population=False, weights=None):
-    """Returns std dev of sample"""
+def std(arr, weights=None, population=False):
+    """Returns standard deviation of array. Weights array is optional, but cumsum should be normalized to 1.
+    If weight array is given, the standard deviation is calculated using the formula sig^2 = sum(x[i]**2 * p[i]) - mean(x, p)**2
+    Else will use np.std.
+
+    Args:
+        arr (arraylike): Data values
+        weights (arraylike, optional): Weights / probabilties for each value in arr. Must be normalized such that sum(weights) = 1. Defaults to None.
+        population (bool, optional): Boolean to specify whether to calculate population (True) or sample (False) standard deviation. Defaults to False.
+
+    Returns:
+        float: Standard deviation of arr
+    """
+    if(weights):
+        return sqrt( var(arr, weights))
     if(population):
         return np.std(arr)
     return np.std(arr,ddof=1)
 
-
-def popstd(arr):
-    """Returns population std dev"""
-    return np.std(arr)
-
+# TODO: Correct this to use *args, **kwargs
 # Returns sample variance by default
-def var(arr, population=False):
+def var(arr, weights=None, population=False):
+    """Returns variance of array. By default, the sample variance is returned unless population parameter is set to True.
+    Weights array is optional, but weights sum should be normalized to 1.
+    If weight array is given, the variance is calculated using the formula sig^2 = sum(x[i]**2 * p[i]) - mean(x, p)**2
+    Else will use np.var.
+
+    Args:
+        arr (arraylike): Data values
+        weights (arraylike, optional): Weights / probabilties for each value in arr. Must be normalized such that sum(weights) = 1. Defaults to None.
+        population (bool, optional): Boolean to specify whether to calculate population (True) or sample (False) variance. Defaults to False.
+
+    Returns:
+        float: Variance of arr
+    """
+    if (weights):
+        
+        var = 0
+        for x, p in zip(arr, weights):
+            var += x**2 * p
+        
+        return var - mean(arr, weights)**2
+
+        
     if(population):
-        return np.var(arr,ddof=1)
-    return np.var(arr)
+        return np.var(arr)
+    return np.var(arr,ddof=1)
 
-def popvar(arr):
-    return np.var(arr)
 
-# n choose r . Number of combinations (order doesn't matter) of r items chosen from n options
-def nCr(n, r):
-    return factorial(n) / (factorial(n-r) * factorial(r))
 
-# n permute r . Number of permutations (order matters) of r items from list of n options
-def nPr(n, r):
-    return factorial(n) / factorial(n-r)
-
-# Given an arbritrary number of days, returns the number of people required for Probability[two people share the same birthday] >= 0.5   
 def birthdayProblem(days=365):
+    """ Given an arbritrary number of days, returns the number of people required for Probability[two people share the same birthday] >= 0.5   
+
+    Args:
+        days (int, optional): _description_. Defaults to 365.
+
+    Returns:
+        int: smallest number of people required for Probability[two people share the same birthday] >= 0.5   
+    """
     return ceil( (3 - 2 * ln(2))/6 + sqrt(2*days*ln(2)) + (9 - 4*ln(2)**2 ) / (72 * sqrt(2*days*ln(2))) - 2 * ln(2)**2 / (135*days) )
 
-# def singularity(magnitude, start, degree):
-#     def fun(x):
-#         if(x < start or degree < 0):
-#             return 0
-#         return magnitude * (x-start)**degree
-#     return fun
 
 def singularity3(magnitude, input, degree):
     """Singularity helper function : magnitude * <x - start>**degree
@@ -939,11 +1100,16 @@ def singularity3(magnitude, input, degree):
 
 def singularity(*args):
     """Singularity function : magnitude * <x - start>**degree
+    magnitude argument is optional, and will default to 1 if only 2 arguments are given.
+    
+    Examples:
+        40 * singularity(x-2, 1)
+        singularity(40, x-2, 1)
 
     Args:
         args[0]     = magnitude (float): optional argument
-        args[0 / 1] = input (float): x - start
-        args[1 / 2] = degree (int): 
+        args[0 or 1] = input (float): x - start
+        args[1 or 2] = degree (int): 
 
     Returns:
         _type_: float
@@ -962,30 +1128,71 @@ def singularity(*args):
         return singularity3(magnitude, input, degree)
     else:
         raise Exception('Invalid number of parameters')
-    
-def printfunction(f, start, end, stepSize = nan, steps = 50, outputResolution = 4):
-    """Prints values of f with range [start : step : end]
+
+
+def step(x):
+    """ Step function
 
     Args:
-        f (function): _description_
+        x (float): input
+
+    Returns:
+        float: 1 if x >= 0, else 0
+    """
+    return singularity3(1, x, 0)
+
+# TODO: Fix printfun(lambda x: 10**x, -3, 10, stepSize=1)
+# TODO: Fix printfun(lambda x: x, -3, 3, stepSize = 1.5)
+def printfunction(f, start, end, stepSize = nan, steps = 50, outputResolution = 4, inputResolution = None, smallScientific=True):
+    """Prints values of function f with range [start : step : end]
+
+    Args:
+        f (callable): Single variable function
         start (float): start of range
         end (float): end of range
         stepSize (float, optional): distance between successive x values 
-        steps (int, optional): number of steps of function to print (100 by default if stepSize not also specified)
+        steps (int, optional): number of steps of function to print (50 by default if stepSize not also specified)
         outputResolution (int, optional): Number of decimal places to print output. Defaults to 4.
+        inputResolution (int, optional): Number of decimal places to print input. Defaults to automatically calculated based on start, end, and the magnitude of stepSize.
+        smallScientific (bool, optional): Determines whether small nonzero output numbers will be automatically formatted in scientific notation instead of the default format if they would have otherwise be printed as 0.0000 . Defaults to True.
     """
     
     if(isnan(stepSize)):
         stepSize = (end - start) / steps
+    
+    if (inputResolution == None):
+        # inputResolution = max(0, ceil(-log10(abs(stepSize))))     # resoultion = number of decimal places needed to format x, minimum of 0      // TODO: stepSize = 0.125 -> inputResolution = 1 (should be 3)
+        if ((stepSize - floor(stepSize) == 0) and (start - floor(start) == 0) and (end - floor(end) == 0)):
+            inputResolution = 0
+        else:
+            inputResolution = -2 + max( len(floatToStr(stepSize - floor(stepSize) ) ), len(floatToStr(start - floor(start) ) ), len(floatToStr(end - floor(end) ) ) )     # Maybe fixed - no
+        if (abs(stepSize) >= 1):
+            inputResolution = min(2, inputResolution)
+        elif (abs(stepSize) >= 0.01 ):
+            inputResolution = min(4, inputResolution)
+        else:
+            inputResolution = min(8, inputResolution)
+        
+    inputSize = (inputResolution > 0) + 1 + floor(max(log10(abs(start) + (start == 0)) + 2 * (start < 0), log10(abs(end) + (end == 0)) + 2 * (end < 0))) # maybe fixed?
+    inputFormat = f"{inputSize+inputResolution}.{inputResolution}f"
+    
+    print(f"{inputResolution = }, {inputSize = }, {inputFormat = }, {stepSize = }")
+    threshold = 0.5 * 10**(-outputResolution)
+    
     x = start
-    inputResolution = max(0, ceil(-log10(abs(stepSize))))     # resoultion = number of decimal places needed to format x, minimum of 0
-    inputSize = (inputResolution > 0) + 1 + floor(max(log10(abs(start) + (start == 0))+ (start < 0), log10(abs(end) + (end == 0)) + (end < 0)))
-    format = f"{inputSize+inputResolution}.{inputResolution}f"
-    while (x < end or floatComparision(x, end)):
+    while (x < end or floatComparison(x, end)):
         try:
-            print(f"{x :{format}}  :  { f(x) :9.{outputResolution}f} ")
+            temp = f(x)
+            # if(smallScientific and abs(temp) < threshold and temp != 0):
+            #     print(f"{x :{inputFormat}}  : {' ' if temp > 0 else ''}{ temp :9.{outputResolution}e} ")
+            # else:
+            #     print(f"{x :{inputFormat}}  : {' ' if temp > 0 else ''}{ temp :9.{outputResolution}f} ")
+            if(smallScientific and abs(temp) < threshold and temp != 0):
+                print(f"{x :{inputFormat}} : {temp :9.{outputResolution}e} ")
+            else:
+                print(f"{x :{inputFormat}} : {temp :9.{outputResolution}f} ")
         except (ZeroDivisionError):
-            print(f"{x :{format}}  :  {nan :9.{outputResolution}f} ")
+            print(f"{x :{inputFormat}}  :  {nan :9.{outputResolution}f} ")
         x += stepSize
 
 def eig(mat):
@@ -1016,7 +1223,7 @@ def represent(input, deltaPercent = 0.000_1, denom = 200, output=30, paramFuncti
         deltaPercent (_type_, optional): Minium percent error for a number to be flagged as a near match. Defaults to 0.000_1.
         denom (_type_, optional): Max denominator that function will check. Defaults to 200.
         output (int, optional): Max number of candidates to output. Defaults to 30
-        paramFunction (string, optional): 
+        paramFunction (string, optional): #TODO
     """
     exactPercent = 1e-18
     candidateList = []  # List of canditate tuples with near but not exact representations. candidate = (str representation, candidateValue, abs(inputValue - candiateValue) )
@@ -1108,7 +1315,7 @@ def props(prop1: str, val1, prop2: str, val2, fluid: str, molFlag=False):
     1-Butene, Acetone, Air, Ammonia, Argon, Benzene, CarbonDioxide, CarbonMonoxide, CarbonylSulfide, cis-2-Butene, CycloHexane, Cyclopentane, CycloPropane, D4, D5, D6, Deuterium, Dichloroethane, DiethylEther, DimethylCarbonate, DimethylEther, Ethane, Ethanol, EthylBenzene, Ethylene, EthyleneOxide, Fluorine, HeavyWater, Helium, HFE143m, Hydrogen, HydrogenChloride, HydrogenSulfide, IsoButane, IsoButene, Isohexane, Isopentane, Krypton, m-Xylene, MD2M, MD3M, MD4M, MDM, Methane, Methanol, MethylLinoleate, MethylLinolenate, MethylOleate, MethylPalmitate, MethylStearate, MM, n-Butane, n-Decane, n-Dodecane, n-Heptane, n-Hexane, n-Nonane, n-Octane, n-Pentane, n-Propane, n-Undecane, Neon, Neopentane, Nitrogen, NitrousOxide, Novec649, o-Xylene, OrthoDeuterium, OrthoHydrogen, Oxygen, p-Xylene, ParaDeuterium, ParaHydrogen, Propylene, Propyne, R11, R113, R114, R115, R116, R12, R123, R1233zd(E), R1234yf, R1234ze(E), R1234ze(Z), R124, R1243zf, R125, R13, R134a, R13I1, R14, R141b, R142b, R143a, R152A, R161, R21, R218, R22, R227EA, R23, R236EA, R236FA, R245ca, R245fa, R32, R365MFC, R40, R404A, R407C, R41, R410A, R507A, RC318, SES36, SulfurDioxide, SulfurHexafluoride, Toluene, trans-2-Butene, Water, Xenon  
     """
     # Checks if user put fluid before properties, and corrects the variables, ie. props("water", "T", 300, "P", 100_000) 
-    if(isinstance(val1, str) and isinstance(fluid, str)):
+    if(isinstance(val1, str) and not isinstance(fluid, str)):
         # prop1, val1, prop2, val2, fluid
         tempFluid =  prop1
         prop1 = val1
@@ -1391,13 +1598,15 @@ def thermoPlot(xAxis: str, xInitial: float, xFinal: float, yAxis: str, constPara
 
 
 def int(*args, **kwargs):
-    """Casts to int if given single input, computes integral if given multiple inputs 
+    """Casts to int if given single input, computes integral if given multiple inputs. 
+    
+    See integral(...) function for more details. 
     """
     if(len(args) == 1 and len(kwargs) == 0):
         x = args[0]
         if(isinstance(x, bool)):
             return 1 if x else 0
-        if(isinstance(x, __builtins__.int)):
+        if(isinstance(x, builtins.int)):
            return x
         if(isinstance(x, float)):
             return x.__int__()
@@ -1409,6 +1618,7 @@ def int(*args, **kwargs):
         try: 
             return x.__int__()
         except:
+            # Per the python standard, __index__() is used to cast to int when __int__() is not defined.
             return x.__index__()
         
     return integral(*args, **kwargs)
@@ -1417,159 +1627,6 @@ def int(*args, **kwargs):
 w2f = lambda w: w / tau 
 f2w = lambda f: f * tau 
 
-def bessel(order, arg, out=None):
-    """Bessel function of the first kind of real order and complex argument
-
-    Args:
-        order (array_like): 
-        arg (array_like): 
-        out (ndarray, optional): Optional output array for the function values
-    """
-    return sp.special.jv(order,arg,out)
-
-def j0(arg, out=None):    
-    """Bessel function of the first kind of order 0.
-
-    Args:
-        arg (array_like): 
-        out (ndarray, optional): optional output array for function values. Defaults to None.
-    """
-    return sp.special.j0(arg, out)
-        
-def j1(arg, out=None):    
-    """Bessel function of the first kind of order 1.
-
-    Args:
-        arg (array_like): 
-        out (ndarray, optional): optional output array for function values. Defaults to None.
-    """
-    return sp.special.j1(arg, out)
-
-# Complementary Error Function
-# erfc = lambda n: 1 - 2 / sqrt(pi) * int(lambda u: exp(-u**2), 0, n)
-def erf(arg, out=None):
-    """Returns the error function of complex argument.
-        It is defined as 2/sqrt(pi)*integral(exp(-t**2), t=0..z).
-         erf(x) = 2 / sqrt(pi) * integral_0 ^x exp(-t**2) dt
-        
-    Args:
-        arg (array_like): 
-        out (ndarray, optional): optional output array for function values. Defaults to None.
-    """
-    return sp.special.erf(arg, out)
-
-def erfc(arg, out=None):
-    """Returns the error function of complex argument.
-        It is defined as 1 - 2/sqrt(pi)*integral(exp(-t**2), t=0..z).
-         erfc(x) = 1 - 2 / sqrt(pi) * integral_0 ^x exp(-t**2) dt
-         erfc(x) = 1 - erf(x)
-        
-    Args:
-        arg (array_like): 
-        out (ndarray, optional): optional output array for function values. Defaults to None.
-    """
-    return sp.special.erfc(arg, out)
-      
-
-def fsolve(func, x0, args=(), fprime=None, full_output=0,
-           col_deriv=0, xtol=1.49012e-8, maxfev=0, band=None,
-           epsfcn=None, factor=100, diag=None):
-    """
-    Find root of a function given starting guess.
-    Return the roots of the (non-linear) equations defined by
-    ``func(x) = 0`` given a starting estimate.
-    
-    Parameters
-    ----------
-    func : callable ``f(x, *args)``
-        A function that takes at least one (possibly vector) argument,
-        and returns a value of the same length.
-    x0 : ndarray
-        The starting estimate for the roots of ``func(x) = 0``.
-    args : tuple, optional
-        Any extra arguments to `func`.
-    fprime : callable ``f(x, *args)``, optional
-        A function to compute the Jacobian of `func` with derivatives
-        across the rows. By default, the Jacobian will be estimated.
-    full_output : bool, optional
-        If True, return optional outputs.
-    col_deriv : bool, optional
-        Specify whether the Jacobian function computes derivatives down
-        the columns (faster, because there is no transpose operation).
-    xtol : float, optional
-        The calculation will terminate if the relative error between two
-        consecutive iterates is at most `xtol`.
-    maxfev : int, optional
-        The maximum number of calls to the function. If zero, then
-        ``100*(N+1)`` is the maximum where N is the number of elements
-        in `x0`.
-    band : tuple, optional
-        If set to a two-sequence containing the number of sub- and
-        super-diagonals within the band of the Jacobi matrix, the
-        Jacobi matrix is considered banded (only for ``fprime=None``).
-    epsfcn : float, optional
-        A suitable step length for the forward-difference
-        approximation of the Jacobian (for ``fprime=None``). If
-        `epsfcn` is less than the machine precision, it is assumed
-        that the relative errors in the functions are of the order of
-        the machine precision.
-    factor : float, optional
-        A parameter determining the initial step bound
-        (``factor * || diag * x||``). Should be in the interval
-        ``(0.1, 100)``.
-    diag : sequence, optional
-        N positive entries that serve as a scale factors for the
-        variables.
-    Returns
-    -------
-    x : ndarray
-        The solution (or the result of the last iteration for
-        an unsuccessful call).
-    infodict : dict
-        A dictionary of optional outputs with the keys:
-        ``nfev``
-            number of function calls
-        ``njev``
-            number of Jacobian calls
-        ``fvec``
-            function evaluated at the output
-        ``fjac``
-            the orthogonal matrix, q, produced by the QR
-            factorization of the final approximate Jacobian
-            matrix, stored column wise
-        ``r``
-            upper triangular matrix produced by QR factorization
-            of the same matrix
-        ``qtf``
-            the vector ``(transpose(q) * fvec)``
-    ier : int
-        An integer flag.  Set to 1 if a solution was found, otherwise refer
-        to `mesg` for more information.
-    mesg : str
-        If no solution is found, `mesg` details the cause of failure.
-    See Also
-    --------
-    root : Interface to root finding algorithms for multivariate
-           functions. See the ``method='hybr'`` in particular.
-    Notes
-    -----
-    ``fsolve`` is a wrapper around MINPACK's hybrd and hybrj algorithms.
-    Examples
-    --------
-    Find a solution to the system of equations:
-    ``x0*cos(x1) = 4,  x1*x0 - x1 = 5``.
-    >>> import numpy as np
-    >>> from scipy.optimize import fsolve
-    >>> def func(x):
-    ...     return [x[0] * np.cos(x[1]) - 4,
-    ...             x[1] * x[0] - x[1] - 5]
-    >>> root = fsolve(func, [1, 1])
-    >>> root
-    array([6.50409711, 0.90841421])
-    >>> np.isclose(func(root), [0.0, 0.0])  # func(root) should be almost 0.0.
-    array([ True,  True])
-    """
-    return opt.fsolve(func, x0, args, fprime, full_output, col_deriv, xtol, maxfev, band, epsfcn, factor, diag)
 
 def roots(func, leftBound=-10_000, rightBound=10_000, numberOfRoots = nan, iterations = 1_000, repetitions = 2, hardCodedFlag = True):
     """Finds all roots of a function within specified range using fsolve
@@ -1670,8 +1727,8 @@ def roots(func, leftBound=-10_000, rightBound=10_000, numberOfRoots = nan, itera
             # Remove duplicate by removing both values and generating a better guess from their average
             if(isClose(rootsFound[j], rootsFound[j+1], rel_tol=1e-7)):
                 r = (rootsFound[j] + rootsFound[j+1])/2
-                print(r)
-                print(rootsFound)
+                # print(r)
+                # print(rootsFound)
                 rootsFound.remove(rootsFound[j])
                 rootsFound[j] = fsolve(func, r)[0]
                 rootsFound.sort()
@@ -1724,43 +1781,272 @@ def boltChart():
     i = 1/4
     while (i < 1):
         print(f"{frac(i)}\t :  {i:.4f}")
-        i += 1/16
+        i += 1/32
     
-def printList(arr, decimals = 4, format=">{maxDigits}.{decimals}f"):
-    """Print arraylike of items. If the arraylike contains only ints and floats, then formatting will be done automatically by default.
+# TODO: Clean up this code. Possibly create helper function for pretty printing numbers.
+def printList(arr, decimals = 4, format=">{maxDigits}.{decimals}f", smallScientific=True, scientificDecimals = -2):
+    """Print arraylike of items and attempt to automatically handle formatting. 
     
-    Warning - uses python eval() on unsanitized string input for format parameter.
+    Currently implemented: 
+        - any 1D arraylike consisting of only ints or floats,
+        - any 2D np.ndarray consisting of only numbers
+    
+    If arr is not an implemented format, then every eleement of arr will be printed with default python print formatting.
+    
+    WARNING: uses python eval() on unsanitized string input for format parameter.
 
     Args:
         arr (arraylike): 
         decimals (int, optional): _description_. Defaults to 4.
-        format (str, optional): Format string for printing numbers if arr contains only ints and floats. maxDigits is automatically computed and is equal to the maximum string length of numbers in arr. Defaults to ">{maxDigits}.{decimals}f".
+        format (str, optional): Format string for printing numbers if arr contains only ints and floats. Defaults to ">{maxDigits}.{decimals}f" - maxDigits is automatically computed and is equal to the maximum string length of numbers in arr. 
+        smallScientific (bool, optional): Determines whether small numbers will be automatically formatted in scientific notation instead of the default format if they would have otherwise be printed as 0.0000 . Defaults to True.
+        scientificDecimals(int, optional): Determines number of decimals used to display small values in scientific when smallScientific=True. If a negative integer is given, then the number of decimals is calculated based on the number  
     """
     
-    # Test if all elements of list are numbers
-    if(all(isinstance(n, __builtins__.int) or isinstance(n, float) for n in arr)):
-        # If all the elements are ints, don't print any decimals
-        if ( all(isinstance(n, __builtins__.int) for n in arr)):
+    # Test if arr is 1 dimensional and all elements of arr are numbers
+    if(all(isinstance(n, builtins.int) or isinstance(n, float) for n in arr)):
+        # If all the element values are integers (type independent), don't print any decimals
+        if (all(isinstance(n, builtins.int) for n in arr)  or  all(float(n).is_integer() for n in arr)):
             decimals = 0
-        maxDigits = 1 + (decimals > 0) + decimals + max(0, floor(log10(abs(max(arr)))) + (max(arr) < 0), floor(log10(abs(min(arr)))) + (min(arr) < 0) ) 
+            smallScientific = False
+        minSize = 0 if abs(min(arr)) == 0 else floor(log10(abs(min(arr)))) + (min(arr) < 0)
+        maxSize = 0 if abs(max(arr)) == 0 else floor(log10(abs(max(arr)))) + (max(arr) < 0)
+        
+        # maxDigits = 1 + (decimal point) + (# of decimals) + (# of digits before decimal including negative sign)
+        maxDigits = 1 + (decimals > 0) + decimals + max(0, maxSize, minSize)        
+        sciFormat = ""
+        threshold = 0.5 * 10**(-decimals)
+        if (smallScientific):
+            smallestElement = min( [abs(arr[i,j]) for i,j in zip(np.nonzero(arr)[0], np.nonzero(arr)[1])] )
+            if (smallestElement < threshold):
+                # maxDigits = 1 + (decimal point) + (# of decimals) + len("e-05") + (negative sign)
+                maxDigits = max(maxDigits, 1 + 1 + decimals + 4 + (-smallestElement in arr) )
+            
         format = eval('f\"' + format + '\"')
+        sciFormat = format[:-1] + "e"
+        
         for i in arr:
+            if(smallScientific and abs(i) < threshold and i != 0):
+                print(f"{i:{sciFormat}}")   
+                continue
+            
             print(f"{i:{format}}")   
+            
+        return
+    
+    # Test if arr is a two dimensional np.ndarray of numbers
+    if (isinstance(arr, np.ndarray)  and  np.issubdtype(arr.dtype, np.number)  and  len(arr.shape) == 2 ):
+        if (np.issubdtype(arr.dtype, np.integer)  or  all(float(n).is_integer() for n in np.nditer(arr)) ):
+            decimals = 0
+            smallScientific = False
+        minSize = 0 if abs(np.min(arr)) == 0 else floor(log10(abs(np.min(arr)))) + (np.min(arr) < 0)
+        maxSize = 0 if abs(np.max(arr)) == 0 else floor(log10(abs(np.max(arr)))) + (np.max(arr) < 0)
+        
+        # maxDigits = 1 + (decimal point) + (# of decimals) + (# of digits before decimal including negative sign)
+        maxDigits = 1 + (decimals > 0) + decimals + max(0, maxSize, minSize)        
+        threshold = 0.5 * 10**(-decimals)
+        if (smallScientific):
+            smallestElement = min( [abs(arr[i,j]) for i,j in zip(np.nonzero(arr)[0], np.nonzero(arr)[1])] )
+            if (smallestElement < threshold):
+                # maxDigits = 1 + (decimal point) + (# of decimals) + (negative sign)
+                maxDigits = max(maxDigits, 1 + 1 + decimals + 4 + (-smallestElement in arr) )
+            
+        format = eval('f\"' + format + '\"')
+        sciFormat = format[:-1] + "e"
+        
+        for row in arr:
+            print("[", end="") 
+            for i in row:
+                if(smallScientific and abs(i) < threshold and i != 0):
+                    print(f"{i:{sciFormat}}",  end=", ")   
+                    continue
+            
+                print(f"{i:{format}}", end=", ")  
+            print("\b\b]")      # Using backspace character instead of coming up with a better and more elegant solution. \shrug
+        return
+                
+            
+    # If arr is not one of the hardcoded formats above, default to simply print each element in arr
     else:
         for i in arr:
             print(i)
 
 
+def expandWeightedList(data, weights):
+    """Returns expanded data set given a set of data points and the frequency of each data point
+
+    Args:
+        data (arraylike): list of unique data points
+        weights (arraylike): frequency list in same order as data list
+
+    Returns:
+        list: expanded data set
+    """
+    if (len(data) != len(weights)):
+        raise ValueError("Data length does not match weight length")
+    arr = []
+    for i,j in zip(data, weights):
+        arr += [i for _ in range(j)]
+        
+    return arr
+
+
+def stats(arr):
+    return pd.DataFrame(arr).describe()
+    
+    
+def derivative(f, x, step = 1e-6):
+    return (f(x+step) - f(x-step)) / (2 * step)     
+
+
+def binompdf(n, p, X):
+    """ Binomial probability mass function.
+
+    Args:
+        n (int): Number of trials
+        p (float): Probability of success
+        X (int): Number of successes
+
+    Raises:
+        ValueError: n and X should be integers such that n >= X
+        ValueError: Probabilty should be a decimal [0, 1]
+
+    Returns:
+        float: probability of having X success given n trials
+    """
+    if (X > n or not isinstance(X, Integer) or not isinstance(n, Integer)):
+        raise ValueError("n and X should be integers such that n >= X")
+    if (p > 1 or p < 0):
+        raise ValueError("Probabilty should be a decimal [0, 1]")
+    return nCx(n, X) * p**X * (1 - p)**(n-X)
+
+
+def binomcdf(n, p, X):
+    """ Binomial cumulative density function.
+
+    Args:
+        n (int): Number of trials
+        p (float): Probability of success
+        X (int): Number of successes
+
+    Raises:
+        ValueError: n and X should be integers such that n >= X
+        ValueError: Probabilty should be a decimal [0, 1]
+
+    Returns:
+        float: probability of having X successes or less given n trials
+    """
+    if (X > n or not isinstance(X, Integer) or not isinstance(n, Integer)):
+        raise ValueError("n and X should be integers such that n >= X")
+    if (p > 1 or p < 0):
+        raise ValueError("Probabilty should be a decimal [0, 1]")
+    sum = 0
+    for x in range(X + 1):
+        sum += nCx(n, x) * p**x * (1 - p)**(n-x)
+    return sum
+
+
+def poissonpdf(lam, t, x):
+    """ Poisson probability mass function.
+
+    Args:
+        lam (int): Number of events in unit time/space
+        t (float): Amount of sampled time/space 
+        X (int): Number of successes
+    
+    Returns:
+        float: probability of having X successes in t space
+    """
+    return exp(-lam * t) * (lam * t)**x / factorial(x)
+
+def poissoncdf(lam, t, X):
+    """ Poisson cumulative density function.
+
+    Args:
+        lam (int): Number of events in unit time/space
+        t (float): Amount of sampled time/space 
+        X (int): Number of successes
+    
+    Returns:
+        float: probability of having X or less successes in t space
+    """
+    sum = 0
+    for x in range(X + 1):
+        sum += exp(-lam * t) * (lam * t)**x / factorial(x)
+    return sum
+
+
+def normalpdf(x, xbar = 0, sigx = 1):
+    if (xbar != 0 or sigx != 1):
+        x = (x - xbar) / sigx
+
+    return exp(-x**2 / 2) / sqrt(2 * pi)
+
+def normalcdf(x, xbar = 0, sigx = 1):
+    if (xbar != 0 or sigx != 1):
+        x = (x - xbar) / sigx
+
+    return integral(lambda t: exp(-t**2 / 2) / sqrt(2 * pi), -100, x)
+
+def exponentialcdf(lam, t): 
+    return 1 - exp(-lam * t)
+
+def isInteger(n):
+    try:
+        float(n)
+    except ValueError:
+        return False
+    else:
+        return float(n).is_integer()
+
+
+def fun2arr(f, start, end, stepSize=nan):
+    if(isnan(stepSize)):
+        stepSize = (end - start) / 10_000
+
+    x = start
+    arr = np.zeros( 1 + ceil((end - start) / stepSize ))
+    i = 0
+    while (x <= end):
+        arr[i] = (f(x))
+        x += stepSize
+        i += 1
+    return arr
+
+def arr2fun(arr, start, end, stepSize=nan):
+    if(isnan(stepSize)):
+        stepSize = (end - start) / 10_000
+        
+    return lambda x: arr[round((x - start) / stepSize )]
+
+def floatToStr(f):
+    """Convert the given float to a string, without resorting to scientific notation
+    """
+    d1 = decimalContext.create_decimal(repr(f))
+    return format(d1, 'f')
 
 # Function Aliases:    ----------------------------------------------------------------------------------------------------------------------------------------
-minimum = __builtins__.min
-# root, roots = fsolve, fsolve
+minimum = builtins.min
+wait = sleep
+floatComparison, isClose, floatcomparison, floatcomp = isclose, isclose, isclose, isclose
+fact = factorial
+J0 = j0
+J1 = j1
+Jv, jn, Jn, bessel, bessel1, firstBessel = jv, jv, jv, jv, jv, jv
 outerProd, outerprod, outerProduct, outerproduct = outer, outer, outer, outer
 crossprod, crossProd, crossProduct, crossproduct = cross, cross, cross, cross
-isclose, isClose, floatcomparsion, floatcomp = floatComparision, floatComparision, floatComparision, floatComparision
-fact = factorial
+stdDev, stddev, StdDev, standardDeviation = std, std, std, std
+popstdDev, popstddev, popStdDev, populationStddev, populationStdDev, populationStd, populationstd, populationstandardDeviation, populationStandardDeviation = popstd, popstd, popstd, popstd, popstd, popstd, popstd, popstd, popstd
+# root, roots = fsolve, fsolve
+supressWarnings, suppresswarnings, supresswarnings, supressWarning, suppresswarning, supresswarning = suppressWarnings, suppressWarnings, suppressWarnings, suppressWarnings, suppressWarnings, suppressWarnings
+silentWarnings, silenceWarnings, silentwarnings, silencewarnings, silentWarning, silenceWarning, silentwarning, silencewarning, silent = silence, silence, silence, silence, silence, silence, silence, silence, silence
+verboseWarnings, verbosewarnings, verboseWarning, verbosewarning = verbose, verbose, verbose, verbose
+nCr, nCk, nCx, ncr, nck, ncx, combinations = math.comb, math.comb, math.comb, math.comb, math.comb, math.comb, math.comb
+nPr, nPk, nPx, npr, npk, npx, permutations = math.perm, math.perm, math.perm, math.perm, math.perm, math.perm, math.perm
 deg, Deg, Degrees, degreesMode, degreesmode, DegreesMode, DegreesMode, degMode, degmode = degrees, degrees, degrees, degrees, degrees, degrees, degrees, degrees, degrees
 rad, Rad, Radians, radiansMode, radiansmode, Radiansmode, RadiansMode, radMode, radmode = radians, radians, radians, radians, radians, radians, radians, radians, radians
+expdeg, expDeg, expdegrees, expdegreesMode, expdegreesmode, expDegreesMode, expDegreesMode, expdegMode, expdegmode = expDegrees, expDegrees, expDegrees, expDegrees, expDegrees, expDegrees, expDegrees, expDegrees, expDegrees
+exprad, expRad, expradians, expradiansMode, expradiansmode, expRadiansmode, expRadiansMode, expradMode, expradmode = expRadians, expRadians, expRadians, expRadians, expRadians, expRadians, expRadians, expRadians, expRadians
 arcsin, sininverse, sininv = asin, asin, asin
 arccos, cosinverse, cosinv = acos, acos, acos
 arctan, taninverse, taninv = atan, atan, atan
@@ -1776,12 +2062,10 @@ F2r, F2R, f2R = f2r, f2r, f2r
 R2k, R2K, r2K = r2k, r2k, r2k
 R2c, R2C, r2C = r2c, r2c, r2c
 R2f, R2F, r2F = r2f, r2f, r2f
-InnerProduct, innerproduct, Innerproduct, inprod, inproduct, braket, BraKet, Braket, dotproduct, dotProduct, dotprod, dotProd, dot = innerprod, innerprod, innerprod, innerprod, innerprod, innerprod, innerprod, innerprod, innerprod, innerprod, innerprod, innerprod, innerprod
+InnerProduct, innerproduct, Innerproduct, inprod, inproduct, braket, BraKet, Braket, dotproduct, dotProduct, dotprod, dotProd, dot, inner = innerprod, innerprod, innerprod, innerprod, innerprod, innerprod, innerprod, innerprod, innerprod, innerprod, innerprod, innerprod, innerprod, innerprod
 magnitude, mag = norm, norm
 integrate = integral            # int is also (sort of) aliased to integral - see int documentation
 average, avg = mean, mean
-stdDev, stddev, StdDev, standardDeviation = std, std, std, std
-popstdDev, popstddev, popStdDev, populationStddev, populationStdDev, populationStd, populationstd, populationstandardDeviation, populationStandardDeviation = popstd, popstd, popstd, popstd, popstd, popstd, popstd, popstd, popstd
 variance = var
 populationVariance, popvariance, popVariance = popvar, popvar, popvar
 birthdayproblem, birthdayparadox, birthdayParadox, generalizedBirthdayProblem = birthdayProblem, birthdayProblem, birthdayProblem, birthdayProblem
@@ -1790,11 +2074,14 @@ printFunction, printfun, printFun, plotFun, plotfun = printfunction, printfuncti
 eigen = eig
 representation = represent
 coolpropPlot, coolPropPlot, CoolPropPlot, CoolpropPlot, cpPlot, CPPlot, plot = thermoPlot, thermoPlot, thermoPlot, thermoPlot, thermoPlot, thermoPlot, thermoPlot
-jn, Jn, jv, Jv, bessel1, firstBessel = bessel, bessel, bessel, bessel, bessel, bessel
-J0 = j0
-J1 = j1
 printlist, printTable, printtable, printMatrix, printMat, printArr, printarr, printArray, printarray = printList, printList, printList, printList, printList, printList, printList, printList, printList
-
-# end = time.time(); total += end - start; print(f"functions time = {end - start}")
+boltchart, screwChart, screwchart, boltsizes, screwsizes, boltSizes, screwSizes = boltChart, boltChart, boltChart, boltChart, boltChart, boltChart, boltChart
+expandList, expandlist, expandArr, expandarr, weightedList, weightedlist, weightList, weightlist = expandWeightedList, expandWeightedList, expandWeightedList, expandWeightedList, expandWeightedList, expandWeightedList, expandWeightedList, expandWeightedList
+ddx, ddt, deriv, dydx, dydt, dfdx, dfdt = derivative, derivative, derivative, derivative, derivative, derivative, derivative
+binompmf, binpdf, binpmf = binompdf, binompdf,  binompdf
+binomcmf, bincdf, bincmf = binomcdf, binomcdf,  binomcdf
+normcdf = normalcdf
+normpdf = normalpdf
+isInt = isInteger
 
 # print(f"total time = {total}")
