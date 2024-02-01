@@ -33,4 +33,5 @@ I tried to comment everything clearly within pymath.py, so hopefully everything 
 
 ## Disclaimer
 This script was designed for my personal use, and as such all features were implemented as I personally considered them convenient and useful. This is public on github due to requests from friends. Feature requests and bug reports may be considered if I consider them personally useful.
+
 I grant permission to use this code for any purpose.
