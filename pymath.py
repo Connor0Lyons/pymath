@@ -26,6 +26,10 @@ from threading import Timer
 
 import decimal
 
+import sys
+
+import os
+
 try:
     import CoolProp.CoolProp as CP
 except(ModuleNotFoundError):
@@ -69,11 +73,16 @@ except(ModuleNotFoundError):
     outer = lambda *args, **kwargs: print("NumPy not imported properly, outer function not found")
     cross = lambda *args, **kwargs: print("NumPy not imported properly, cross function not found")
     sort = lambda *args, **kwargs: print("NumPy not imported properly, sort function not found. Maybe try list(arr).sort() instead.")
+    popstd = lambda *args, **kwargs: print("NumPy not imported properly, sort function not found. Maybe try list(arr).sort() instead.")
+    popvar = lambda *args, **kwargs: print("NumPy not imported properly, sort function not found. Maybe try list(arr).sort() instead.")
     def matrix(*args, **kwargs): 
         print("NumPy not imported properly, matrix constructor not found")
         return nan
     def kron(*args, **kwargs): 
         print("NumPy not imported properly, kron function not found")
+        return nan
+    def identity(*args, **kwargs): 
+        print("NumPy not imported properly, identity function not found")
         return nan
 
 try:
@@ -141,39 +150,40 @@ false = False
 
 
 # Matrices / Quantum Gates
-sigmax = matrix("0 1; 1 0")             # Pauli spin matrix x [unit-less]
-sigmay = matrix("0 -1j; 1j 0")          # Pauli spin matrix y [unit-less]
-sigmaz = matrix("1 0; 0 -1")            # Pauli spin matrix z [unit-less]
-H = matrix("1. 1.; 1. -1.") / sqrt(2)   # First Order Hadamard Matrix
-H2 = kron(H, H)                         # Second Order Hadamard Matrix
-H3 = kron(H, H2)                        # Third Order Hadamard Matrix
-CX = matrix([[1., 0., 0., 0.],          # Controlled X Gate
-             [0., 1., 0., 0.],
-             [0., 0., 0., 1.],
-             [0., 0., 1., 0.]])
-CY = matrix([[1., 0.,  0., 0.],         # Controlled Y Gate
-             [0., 1.,  0., 0.],
-             [0., 0.,  0, -1j],
-             [0., 0., +1j, 0.]])
-CZ = matrix([[1., 0., 0., 0.],          # Controlled Z Gate
-             [0., 1., 0., 0.],
-             [0., 0., 1., 0.],
-             [0., 0., 0, -1.]])
-zp = matrix("1. ; 0.")                  # Pauli +Z Basis Representation of Spin 1/2 +Z ket 
-zn = matrix("0. ; 1.")                  # Pauli +Z Basis Representation of Spin 1/2 -Z ket
-xp = matrix("1. ; 1.") / sqrt(2)        # Pauli +Z Basis Representation of Spin 1/2 +X ket
-xn = matrix("1. ; -1.") / sqrt(2)       # Pauli +Z Basis Representation of Spin 1/2 -X ket
-yp = matrix("1. ; 1j") / sqrt(2)        # Pauli +Z Basis Representation of Spin 1/2 +Y ket
-yn = matrix("1. ; -1j") / sqrt(2)       # Pauli +Z Basis Representation of Spin 1/2 -Y ket
-I2 = identity(2)                        # 2x2 Identity Matrix  - Note:Type = numpy.ndarray, which is compatible with but distinct from numpy.matrix
-I3 = identity(3)                        # 3x3 Identity Matrix  - Note:Type = numpy.ndarray, which is compatible with but distinct from numpy.matrix
-I4 = identity(4)                        # 4x4 Identity Matrix  - Note:Type = numpy.ndarray, which is compatible with but distinct from numpy.matrix
-SWAP = matrix([[1., 0., 0., 0.],        # Matrix representation of SWAP gate
-               [0., 0., 1., 0.],
-               [0., 1., 0., 0.],
-               [0., 0., 0., 1.]])
-CSWAP = identity(8); CSWAP[5,5] = 0; CSWAP[5,6] = 1; CSWAP[6,6] = 0; CSWAP[6,5] = 1      # Matrix representation of Controlled SWAP gate  - Note:Type = numpy.ndarray, which is compatible with but distinct from numpy.matrix
-CCNOT = identity(8); CCNOT[6,6] = 0; CCNOT[6,7] = 1; CCNOT[7,7] = 0; CCNOT[7,6] = 1      # Matrix representation of Controlled Controlled NOT gate (AKA Toffoli gate) - Note:Type = numpy.ndarray, which is compatible with but distinct from numpy.matrix
+if "NumPy" in sys.modules:
+    sigmax = matrix("0 1; 1 0")             # Pauli spin matrix x [unit-less]
+    sigmay = matrix("0 -1j; 1j 0")          # Pauli spin matrix y [unit-less]
+    sigmaz = matrix("1 0; 0 -1")            # Pauli spin matrix z [unit-less]
+    H = matrix("1. 1.; 1. -1.") / sqrt(2)   # First Order Hadamard Matrix
+    H2 = kron(H, H)                         # Second Order Hadamard Matrix
+    H3 = kron(H, H2)                        # Third Order Hadamard Matrix
+    CX = matrix([[1., 0., 0., 0.],          # Controlled X Gate
+                [0., 1., 0., 0.],
+                [0., 0., 0., 1.],
+                [0., 0., 1., 0.]])
+    CY = matrix([[1., 0.,  0., 0.],         # Controlled Y Gate
+                [0., 1.,  0., 0.],
+                [0., 0.,  0, -1j],
+                [0., 0., +1j, 0.]])
+    CZ = matrix([[1., 0., 0., 0.],          # Controlled Z Gate
+                [0., 1., 0., 0.],
+                [0., 0., 1., 0.],
+                [0., 0., 0, -1.]])
+    zp = matrix("1. ; 0.")                  # Pauli +Z Basis Representation of Spin 1/2 +Z ket 
+    zn = matrix("0. ; 1.")                  # Pauli +Z Basis Representation of Spin 1/2 -Z ket
+    xp = matrix("1. ; 1.") / sqrt(2)        # Pauli +Z Basis Representation of Spin 1/2 +X ket
+    xn = matrix("1. ; -1.") / sqrt(2)       # Pauli +Z Basis Representation of Spin 1/2 -X ket
+    yp = matrix("1. ; 1j") / sqrt(2)        # Pauli +Z Basis Representation of Spin 1/2 +Y ket
+    yn = matrix("1. ; -1j") / sqrt(2)       # Pauli +Z Basis Representation of Spin 1/2 -Y ket
+    I2 = identity(2)                        # 2x2 Identity Matrix  - Note:Type = numpy.ndarray, which is compatible with but distinct from numpy.matrix
+    I3 = identity(3)                        # 3x3 Identity Matrix  - Note:Type = numpy.ndarray, which is compatible with but distinct from numpy.matrix
+    I4 = identity(4)                        # 4x4 Identity Matrix  - Note:Type = numpy.ndarray, which is compatible with but distinct from numpy.matrix
+    SWAP = matrix([[1., 0., 0., 0.],        # Matrix representation of SWAP gate
+                [0., 0., 1., 0.],
+                [0., 1., 0., 0.],
+                [0., 0., 0., 1.]])
+    CSWAP = identity(8); CSWAP[5,5] = 0; CSWAP[5,6] = 1; CSWAP[6,6] = 0; CSWAP[6,5] = 1      # Matrix representation of Controlled SWAP gate  - Note:Type = numpy.ndarray, which is compatible with but distinct from numpy.matrix
+    CCNOT = identity(8); CCNOT[6,6] = 0; CCNOT[6,7] = 1; CCNOT[7,7] = 0; CCNOT[7,6] = 1      # Matrix representation of Controlled Controlled NOT gate (AKA Toffoli gate) - Note:Type = numpy.ndarray, which is compatible with but distinct from numpy.matrix
 
 # Conversion Factors:    ------------------------------------------------------------------------------------------
 zepto = 1e-21                   # SI Small Prefixes
@@ -416,19 +426,20 @@ a_0 = a0
 R_inf, Rinf, R_oo = Roo, Roo, Roo
 R_H = RH                                                # Warning: potential conflict with individual molar gas constant for hydrogen (not implemented)
 
-sigx, sigma1, sig1 = sigmax, sigmax, sigmax
-sigy, sigma2, sig2 = sigmay, sigmay, sigmay
-sigz, sigmaz, sigz = sigmaz, sigmaz, sigmaz
-H1 = H
-Cx, cx, cX, CNOT, Cnot, cnot = CX, CX, CX, CX, CX, CX
-Cy, cy, cY = CY, CY, CY
-Cz, cz, cZ = CZ, CZ, CZ
-ket0 = zp
-ket1 = zn
-sig0 = I2
-Swap, swap = SWAP, SWAP
-CSwap, Cswap, cswap, Fredkin, fredkin = CSWAP, CSWAP, CSWAP, CSWAP, CSWAP
-Ccnot, ccnot, CCnot, CCNot, Toffoli, toffoli = CCNOT, CCNOT, CCNOT, CCNOT, CCNOT, CCNOT 
+if "NumPy" in sys.modules:
+    sigx, sigma1, sig1 = sigmax, sigmax, sigmax
+    sigy, sigma2, sig2 = sigmay, sigmay, sigmay
+    sigz, sigmaz, sigz = sigmaz, sigmaz, sigmaz
+    H1 = H
+    Cx, cx, cX, CNOT, Cnot, cnot = CX, CX, CX, CX, CX, CX
+    Cy, cy, cY = CY, CY, CY
+    Cz, cz, cZ = CZ, CZ, CZ
+    ket0 = zp
+    ket1 = zn
+    sig0 = I2
+    Swap, swap = SWAP, SWAP
+    CSwap, Cswap, cswap, Fredkin, fredkin = CSWAP, CSWAP, CSWAP, CSWAP, CSWAP
+    Ccnot, ccnot, CCnot, CCNot, Toffoli, toffoli = CCNOT, CCNOT, CCNOT, CCNOT, CCNOT, CCNOT 
 
 Zepto, zm, zs = zepto, zepto, zepto
 Atto, am = atto, atto                           # 'as' is reserved word in python
