@@ -52,7 +52,10 @@ try:
 except(ModuleNotFoundError):
     print("Warning: Error importing SciPy. Some features may not work as intended")
     fsolve = lambda *args, **kwargs: print("SciPy not imported properly, fsolve function not found")
-
+    j0 = lambda *args, **kwargs: print("SciPy not imported properly, j0 function not found")
+    j1 = lambda *args, **kwargs: print("SciPy not imported properly, j1 function not found")
+    jv = lambda *args, **kwargs: print("SciPy not imported properly, jv function not found")
+    
 try:
     import numpy as np
     from numpy import matrix
