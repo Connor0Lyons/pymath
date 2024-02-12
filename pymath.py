@@ -46,8 +46,8 @@ try:
     from scipy.integrate import dblquad as iint
     from scipy.special import ndtri as invnorm
 except(ModuleNotFoundError):
-    fsolve = lambda *args: print("SciPy not imported properly, fsolve function not found")
     print("Warning: Error importing SciPy. Some features may not work as intended")
+    fsolve = lambda *args, **kwargs: print("SciPy not imported properly, fsolve function not found")
 
 try:
     import numpy as np
@@ -65,11 +65,13 @@ try:
     from numpy import median
     from numpy import identity
 except(ModuleNotFoundError):
-    outer = lambda *args: print("NumPy not imported properly, outer function not found")
-    cross = lambda *args: print("NumPy not imported properly, cross function not found")
-    matrix = lambda *args: print("NumPy not imported properly, matrix constructor not found")
-    sort = lambda *args: print("NumPy not imported properly, sort function not found. Maybe try list(arr).sort() instead.")
     print("Warning: Error importing NumPy. Some features may not work as intended")
+    outer = lambda *args, **kwargs: print("NumPy not imported properly, outer function not found")
+    cross = lambda *args, **kwargs: print("NumPy not imported properly, cross function not found")
+    sort = lambda *args, **kwargs: print("NumPy not imported properly, sort function not found. Maybe try list(arr).sort() instead.")
+    def matrix(*args, **kwargs): 
+        print("NumPy not imported properly, matrix constructor not found")
+        return nan
 
 try:
     import pandas as pd
@@ -546,7 +548,7 @@ densityN2, densN2, N2Density, pN2, pNitrogen, rhoN2, pnitrogen, rhonitrogen = rh
 densityCarbonDioxide, densCarbonDioxide, CarbonDioxideDensity, pCarbonDioxide, pCarbon_Dioxide, pcarbonDioxide, pcarbon_Dioxide, pcarbondioxide, pcarbon_dioxide, pco2, pCo2, pC02, pCO2, rhoCarbonDioxide, rhocarbondioxide, rhoCarbondioxide = rhoCO2, rhoCO2, rhoCO2, rhoCO2, rhoCO2, rhoCO2, rhoCO2, rhoCO2, rhoCO2, rhoCO2, rhoCO2, rhoCO2, rhoCO2, rhoCO2, rhoCO2, rhoCO2
 densityAl6061, densal6061, al6061Density, density6061, dens6061, Al6061Density, pal6061, pAl6061, rhoal6061, pAl6, pAl60, p6061, rho6061 = rhoAl6061, rhoAl6061, rhoAl6061, rhoAl6061, rhoAl6061, rhoAl6061, rhoAl6061, rhoAl6061, rhoAl6061, rhoAl6061, rhoAl6061, rhoAl6061, rhoAl6061
 densityAl3003, densal3003, al3003Density, density3003, dens3003, Al3003Density, pal3003, pAl3003, rhoal3003, p3003, rho3003 = rhoAl3003, rhoAl3003, rhoAl3003, rhoAl3003, rhoAl3003, rhoAl3003, rhoAl3003, rhoAl3003, rhoAl3003, rhoAl3003, rhoAl3003
-densitySteel, densSteel, steelDensity, pSt, pSteel, rhoSt, psteel = rhoSteel, rhoSteel, rhoSteel, rhoSteel, rhoSteel, rhoSteel, rhoSteel
+densitySteel, densSteel, steelDensity, pSt, pSteel, rhoSt, rhosteel, psteel =  rhoSteel, rhoSteel, rhoSteel, rhoSteel, rhoSteel, rhoSteel, rhoSteel, rhoSteel
 
 cpair = cpAir
 cpwater, cph2o, cpH2o, cpH2O, cpH20, cph20 = cpWater, cpWater, cpWater, cpWater, cpWater, cpWater
