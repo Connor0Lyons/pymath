@@ -72,6 +72,9 @@ except(ModuleNotFoundError):
     def matrix(*args, **kwargs): 
         print("NumPy not imported properly, matrix constructor not found")
         return nan
+    def kron(*args, **kwargs): 
+        print("NumPy not imported properly, kron function not found")
+        return nan
 
 try:
     import pandas as pd
