@@ -100,7 +100,7 @@ from math import *
 
 # Unless noted otherwise, units are in terms of official SI units: second [s], meter [m], kilogram [kg], ampere [A], kelvin [K], mole [mol], and candela [cd]
 
-# Universal constants:   ------------------------------------------------------------------------------------------
+## Universal constants:   ------------------------------------------------------------------------------------------
 pi = math.pi                    # Circle constant pi [unit-less]
 pi2 = pi**2                     # pi^2
 pi3 = pi**3                     # pi^3
@@ -132,8 +132,10 @@ g = 9.806_65                    # Acceleration due to gravity [m / s^2]
 uB = e * hbar / (2 * me)        # Bohr magneton mu_B [J / T]
 uN = e * hbar / (2 * mp)        # Nuclear magneton mu_N [J/T]
 H0 = 2.333_361e-18              # Hubble constant approx = 72 [km / s Mpc]  = _ [1 / s] - inexact
-msun = 1.988_47e30              # Mass of sun [kg]
-rsun = 6.95700e8                # Radius of sun [m]
+mSun = 1.988_47e30              # Mass of sun [kg]
+rSun = 6.95700e8                # Radius of sun [m]
+mEarth = 5.972_19e30            # Mass of Earth [kg]
+rEarth =  6.378_1e6             # Radius of Earth [m]
 F = Na * e                      # Faraday constant [C / mol]
 Z0 = u0 * c                     # Characteristic impedance of vacuum or Impedance of free space [Ohms]
 R = Na * kB                     # Molar gas constant AKA Universal gas constant [J / K mol]
@@ -152,7 +154,7 @@ true = True
 false = False
 
 
-# Matrices / Quantum Gates
+## Matrices / Quantum Gates
 if "NumPy" in sys.modules:
     sigmax = matrix("0 1; 1 0")             # Pauli spin matrix x [unit-less]
     sigmay = matrix("0 -1j; 1j 0")          # Pauli spin matrix y [unit-less]
@@ -188,7 +190,7 @@ if "NumPy" in sys.modules:
     CSWAP = identity(8); CSWAP[5,5] = 0; CSWAP[5,6] = 1; CSWAP[6,6] = 0; CSWAP[6,5] = 1      # Matrix representation of Controlled SWAP gate  - Note:Type = numpy.ndarray, which is compatible with but distinct from numpy.matrix
     CCNOT = identity(8); CCNOT[6,6] = 0; CCNOT[6,7] = 1; CCNOT[7,7] = 0; CCNOT[7,6] = 1      # Matrix representation of Controlled Controlled NOT gate (AKA Toffoli gate) - Note:Type = numpy.ndarray, which is compatible with but distinct from numpy.matrix
 
-# Conversion Factors:    ------------------------------------------------------------------------------------------
+## Conversion Factors:    ------------------------------------------------------------------------------------------
 zepto = 1e-21                   # SI Small Prefixes
 atto = 1e-18
 femto = 1e-15
@@ -302,6 +304,7 @@ barn = 1e-28                    # Barn to m^2 conversion [m^2 / b]
 fb = femto * barn               # Femto Barn to m^2 conversion [m^2 / fb]
 Torr = atm / 760                # Torr to pascal conversion [Pa / torr]
 mmHg = 133.322_387_415          # Millimeters of mercury to pascal conversion [Pa / mmHg]  - exact
+inHg = 3386.39                  # Inches of mercury to pascal conversion [Pa / mmHg]  - exact
 kgf = 9.806_65                  # kilogram force to newtons conversion [N / kgf]
 at = 98066.5                    # Technical atmosphere [= kgf / cm^2] to pascal conversion [Pa / at]
 dyne = 1e-5                     # Dyne to Newton conversion [N / dyn]
@@ -320,7 +323,7 @@ thou = IN / 1000                # Thousandth of an inch to meters conversion [m 
 ipm = IN / minute               # Inch per minute [ [m / s] / [in / min]]
 sfm = ft / minute               # Surface feet per minute [ [m / s] / [ft / min]]
 
-# Imperial Machine Screw Sizes [ANSI Units]
+## Imperial Machine Screw Sizes [ANSI Units]
 screw0  = 0.0600
 screw1  = 0.0730
 screw2  = 0.0860
@@ -332,7 +335,7 @@ screw8  = 0.1640
 screw10 = 0.1900
 screw12 = 0.2160
 
-# Material constants:    -------------------------------------------------------------------------------------------
+## Material constants:    -------------------------------------------------------------------------------------------
 RAir = 287.05                   # Individual Gas Constant of Air [J / K kg]
 RWater = 461.52                 # Individual Gas Constant of Water Vapor [J / K kg]
 ROxygen = 259.84                # Individual Gas Constant of Oxygen O2 [J / K kg]
@@ -402,8 +405,33 @@ vAl6061 =  0.33                 # Poisson's ratio of Aluminum 6061 [unitless]
 vAl3003 =  0.33                 # Poisson's ratio of Aluminum 3003 [unitless]
 vSteel = 0.25                   # Poisson's ratio of Steel (general) [unitless]
 
+## Dictionary Definitions:    ----------------------------------------------------------------------------------------------------------------------------------------
+## Gauge Size Dictionaries
+# Wire gauge and letter gauge drill size to inch diameter conversions [in] [ANSI Units]
+drillGaugeDict = { 107 : 0.0019, 106 : 0.0023, 105 : 0.0027, 104 : 0.0031, 103 : 0.0035, 102 : 0.0039, 101 : 0.0043, 100 : 0.0047, 99 : 0.0051, 98 : 0.0055, 97 : 0.0059, 96 : 0.0063, 95 : 0.0067, 94 : 0.0071, 93 : 0.0075, 92 : 0.0079, 91 : 0.0083, 90 : 0.0087, 89 : 0.0091, 88 : 0.0095, 87 : 0.0100, 86 : 0.0105, 85 : 0.0110, 84 : 0.0115, 83 : 0.0120, 82 : 0.0125, 81 : 0.0130, 80 : 0.0135, 79 : 0.0145, 78 : 0.0160, 77 : 0.0180, 76 : 0.0200, 75 : 0.0210, 74 : 0.0225, 73 : 0.0240, 72 : 0.0250, 71 : 0.0260, 70 : 0.0280, 69 : 0.0292, 68 : 0.0310, 67 : 0.0320, 66 : 0.0330, 65 : 0.0350, 64 : 0.0360, 63 : 0.0370, 62 : 0.0380, 61 : 0.0390, 60 : 0.0400, 59 : 0.0410, 58 : 0.0420, 57 : 0.0430, 56 : 0.0465, 55 : 0.0520, 54 : 0.0550, 53 : 0.0595, 52 : 0.0635, 51 : 0.0670, 50 : 0.0700, 49 : 0.0730, 48 : 0.0760, 47 : 0.0785, 46 : 0.0810, 45 : 0.0820, 44 : 0.0860, 43 : 0.0890, 42 : 0.0935, 41 : 0.0960, 40 : 0.0980, 39 : 0.0995, 38 : 0.1015, 37 : 0.1040, 36 : 0.1065, 35 : 0.1100, 34 : 0.1110, 33 : 0.1130, 32 : 0.1160, 31 : 0.1200, 30 : 0.1285, 29 : 0.1360, 28 : 0.1405, 27 : 0.1440, 26 : 0.1470, 25 : 0.1495, 24 : 0.1520, 23 : 0.1540, 22 : 0.1570, 21 : 0.1590, 20 : 0.1610, 19 : 0.1660, 18 : 0.1695, 17 : 0.1730, 16 : 0.1770, 15 : 0.1800, 14 : 0.1820, 13 : 0.1850, 12 : 0.1890, 11 : 0.1910, 10 : 0.1935, 9 : 0.1960, 8 : 0.1990, 7 : 0.2010, 6 : 0.2040, 5 : 0.2055, 4 : 0.2090, 3 : 0.2130, 2 : 0.2210, 1 : 0.2280, "A" : 0.2340, "B" : 0.2380, "C" : 0.2420, "D" : 0.2460, "E" : 0.2500, "F" : 0.2570, "G" : 0.2610, "H" : 0.2660, "I" : 0.2720, "J" : 0.2770, "K" : 0.2810, "L" : 0.2900, "M" : 0.2950, "N" : 0.3020, "O" : 0.3160, "P" : 0.3230, "Q" : 0.3320, "R" : 0.3390, "S" : 0.3480, "T" : 0.3580, "U" : 0.3680, "V" : 0.3770, "W" : 0.3860, "X" : 0.3970, "Y" : 0.4040, "Z" : 0.4130 }
 
-# Constant Aliases:    ----------------------------------------------------------------------------------------------------------------------------------------
+# American wire gauge to meter diameter conversion [m]
+AWGDict = {"4/0" : 0.011684, "0000" : 0.011684, "3/0" : 0.010404, "000" : 0.010404, "2/0" : 0.0092658, "00" : 0.0092658, "1/0" : 0.0082515, "0" : 0.0082515, 0 : 0.0082515, 1 : 0.0073481, 2 : 0.0065437, 3 : 0.0058273, 4 : 0.0051894, 5 : 0.0046213, 6 : 0.0041154, 7 : 0.0036649, 8 : 0.0032636, 9 : 0.0029064, 10 : 0.0025882, 11 : 0.0023048, 12 : 0.0020525, 13 : 0.0018278, 14 : 0.0016277, 15 : 0.0014495, 16 : 0.0012908, 17 : 0.0011495, 18 : 0.0010237, 19 : 0.0009116, 20 : 0.0008118, 21 : 0.0007229, 22 : 0.0006438, 23 : 0.0005733, 24 : 0.0005106, 25 : 0.0004547, 26 : 0.0004049, 27 : 0.0003606, 28 : 0.0003211, 29 : 0.0002859, 30 : 0.0002546, 31 : 0.0002268, 32 : 0.0002019, 33 : 0.0001798, 34 : 0.0001601, 35 : 0.0001426, 36 : 0.000127, 37 : 0.0001131, 38 : 0.0001007, 39 : 0.0000897, 40 : 0.0000799 }
+
+# Standard wire gauge to meter diameter conversion [m]. AKA British Standard Wire Gauge,  Imperial Wire Gauge,  British Standard Gauge
+SWGDict = {"0000000": 0.012700, "7/0": 0.012700, "000000": 0.011786, "6/0": 0.011786, "00000": 0.010973, "5/0": 0.010973, "0000": 0.010160, "4/0": 0.010160, "000": 0.009449, "3/0": 0.009449, "00": 0.008839, "2/0": 0.008839, "1/0": 0.008230, "0": 0.008230, 0: 0.008230, 1: 0.007620, 2: 0.007010, 3: 0.006401, 4: 0.005893, 5: 0.005385, 6: 0.004877, 7: 0.004470, 8: 0.004064, 9: 0.003658, 10: 0.003251, 11: 0.002946, 12: 0.002642, 13: 0.002337, 14: 0.002032, 15: 0.001829, 16: 0.001626, 17: 0.001422, 18: 0.001219, 19: 0.001016, 20: 0.000914, 21: 0.000813, 22: 0.000711, 23: 0.000610, 24: 0.000559, 25: 0.0005080, 26: 0.0004572, 27: 0.0004166, 28: 0.0003759, 29: 0.0003454, 30: 0.0003150, 31: 0.0002946, 32: 0.0002743, 33: 0.0002540, 34: 0.0002337, 35: 0.0002134, 36: 0.0001930, 37: 0.0001727, 38: 0.0001524, 39: 0.0001321, 40: 0.0001219, 41: 0.0001118, 42: 0.0001016, 43: 0.0000914, 44: 0.0000813, 45: 0.0000711, 46: 0.0000610, 47: 0.0000508, 48: 0.0000406, 49: 0.0000305, 50: 0.0000254}
+
+# U.S. Standard Gauge for Sheet and Plate Iron and Steel to meter conversion [m] 
+sheetMetalGaugeDict = {"7/0": 0.0127, "6/0": 0.0119126, "5/0": 0.0110744, "4/0": 0.0103124, "3/0": 0.009525, "2/0": 0.0087376, "1/0": 0.0079502, "0000000": 0.0127, "000000": 0.0119126, "00000": 0.0110744, "0000": 0.0103124, "000": 0.009525, "00": 0.0087376, 0: 0.0079502, 1: 0.0071374, 2: 0.0067564, 3: 0.00635, 4: 0.0059436, 5: 0.0055626, 6: 0.0051562, 7: 0.0047752, 8: 0.0045466, 9: 0.0039624, 10: 0.0035814, 11: 0.003175, 12: 0.0027686, 13: 0.0023876, 14: 0.0019812, 15: 0.00178562, 16: 0.0015875, 17: 0.00143002, 18: 0.00127, 19: 0.00111252, 20: 0.0009525, 21: 0.00087376, 22: 0.00079502, 23: 0.00071374, 24: 0.000635, 25: 0.00055626, 26: 0.00047752, 27: 0.00043688, 28: 0.00039624, 29: 0.00035814, 30: 0.0003175, 31: 0.00027686, 32: 0.00026924, 33: 0.00023876, 34: 0.00021844, 35: 0.00019812, 36: 0.0001778, 37: 0.00016764, 38: 0.00016002, 39: 0.00014986, 40: 0.0001397}
+
+# Stubs' Iron Wire Gauge to meters conversion [m]
+stubsIronGaugeDict = {"4/0" : 0.0115316, "3/0" : 0.010795, "2/0" : 0.009652, "1/0" : 0.008636, "0000" : 0.0115316, "000" : 0.010795, "00" : 0.009652, "0" : 0.008636, 0 : 0.008636, 1 : 0.00762, 2 : 0.0072136, 3 : 0.0065786, 4 : 0.0060452, 5 : 0.005588, 6 : 0.0051562, 7 : 0.004572, 8 : 0.004191, 9 : 0.0037592, 10 : 0.0034036, 11 : 0.003048, 12 : 0.0027686, 13 : 0.002413, 14 : 0.0021082, 15 : 0.0018288, 16 : 0.001651, 17 : 0.0014732, 18 : 0.0012446, 19 : 0.0010668, 20 : 0.000889, 21 : 0.0008128, 22 : 0.0007112, 23 : 0.000635, 24 : 0.0005588, 25 : 0.000508, 26 : 0.0004572, 27 : 0.0004064, 28 : 0.0003556, 29 : 0.0003302, 30 : 0.0003048, 31 : 0.000254, 32 : 0.0002286, 33 : 0.0002032, 34 : 0.0001778, 35 : 0.000127, 36 : 0.0001016 }
+
+# Stubs' Steel Wire Guage to meters conversion [m]
+stubsSteelGaugeDict = {1 : 0.0057658, 2 : 0.0055626, 3 : 0.0053848, 4 : 0.0052578, 5 : 0.0051816, 6 : 0.0051054, 7 : 0.0050546, 8 : 0.0050038, 9 : 0.0049276, 10 : 0.0048514, 11 : 0.0047752, 12 : 0.004699, 13 : 0.0046228, 14 : 0.004572, 15 : 0.0045212, 16 : 0.004445, 17 : 0.0043688, 18 : 0.0042672, 19 : 0.0041656, 20 : 0.0040894, 21 : 0.0039878, 22 : 0.003937, 23 : 0.0038862, 24 : 0.0038354, 25 : 0.0037592, 26 : 0.0037084, 27 : 0.0036322, 28 : 0.0035306, 29 : 0.0034036, 30 : 0.0032258, 31 : 0.003048, 32 : 0.002921, 33 : 0.0028448, 34 : 0.002794, 35 : 0.0027432, 36 : 0.0026924, 37 : 0.0026162, 38 : 0.0025654, 39 : 0.0025146, 40 : 0.0024638 }
+
+# Drill Fractions, wire gauge, and letter guage drill sizes to inch diameter conversions [in] [ANSI Units]
+drillSizeDict = {str(Fraction(i / 64)) : i / 64 for i in range(1,65)}
+drillSizeDict.update(drillGaugeDict)
+# sort dictionary by values for use in drillSize function
+drillSizeDict = {key: val for key, val in sorted(drillSizeDict.items(), key=lambda item: item[1]) }
+
+## Constant Aliases:    ----------------------------------------------------------------------------------------------------------------------------------------
 jpi, pii, pij = ipi, ipi, ipi 
 lightsec = c
 m_e = me
@@ -419,14 +447,16 @@ u_0, mu0, mu_0 = u0, u0, u0
 e_0, epsilon_not, epsilon_0, eps_0, eps0 = e0, e0, e0, e0, e0
 u_B, muB, mu_B = uB, uB, uB
 u_N, muN, mu_N = uN, uN, uN
-mSun, m_sun, m_Sun = msun, msun, msun
-rSun, r_sun, r_Sun, Rsun, RSun, R_sun, R_Sun = rsun, rsun, rsun, rsun, rsun, rsun, rsun
+msun, m_sun, m_Sun = mSun, mSun, mSun
+rsun, r_sun, r_Sun, Rsun, RSun, R_sun, R_Sun = rSun, rSun, rSun, rSun, rSun, rSun, rSun
+mearth, m_earth, m_Earth = mEarth, mEarth, mEarth
+rearth, r_earth, r_Earth, Rearth, REarth, R_earth, R_Earth = rEarth, rEarth, rEarth, rEarth, rEarth, rEarth, rEarth
 Z_0, z0, z_0 = Z0, Z0, Z0
 Rbar, rbar, gasconst, gasconstant = R, R, R, R
 rt2 = sqrt2
 rt3 = sqrt3
 a_0 = a0
-R_inf, Rinf, R_oo = Roo, Roo, Roo
+R_inf, Rinf, R_oo, R_infinity, Rinfinity = Roo, Roo, Roo, Roo, Roo
 R_H = RH                                                # Warning: potential conflict with individual molar gas constant for hydrogen (not implemented)
 
 if "NumPy" in sys.modules:
@@ -526,7 +556,8 @@ Kipin, Kipinn, kipinn, kipIn, kipIN, kipinch, inKip, inkip, innkip, Inkip = kipi
 Barn, b = barn, barn
 fB = fb
 torr = Torr
-mmhg = mmHg
+mmhg, mmMercury, inmercury = mmHg, mmHg, mmHg
+inhg, inMercury, inmercury = inHg, inHg, inHg
 mmh2o, mmH2o, mmH20, mmh20, mmwater, mmWater = mmH2O, mmH2O, mmH2O, mmH2O, mmH2O, mmH2O
 inh2o, inH2o, inH20, inh20, inwater, inWater, innh2o, innH2o, innH20, innh20, innwater, innWater = inH2O, inH2O, inH2O, inH2O, inH2O, inH2O, inH2O, inH2O, inH2O, inH2O, inH2O, inH2O
 dyn, Dyne = dyne, dyne
@@ -620,7 +651,7 @@ v6061 = vAl6061
 v3003 = vAl3003
 vSt, nuSteel, nuSt = vSteel, vSteel, vSteel
 
-# Intra Program Global Variables:    ----------------------------------------------------------------------------------------------------------------------------------------
+## Intra Program Global Variables:    ----------------------------------------------------------------------------------------------------------------------------------------
 ans = [0]
 ans1 = 0
 ans2 = 0
@@ -632,7 +663,7 @@ suppressWarningsFlag = False                    # Global boolean designed to tog
 warningTimer = Timer(0, lambda : "")            # Timer thread used for implementing temporary suppression of warnings.    
 decimalContext = decimal.Context(prec=15)
 
-# Class Definitions:    ----------------------------------------------------------------------------------------------------------------------------------------
+## Class Definitions:    ----------------------------------------------------------------------------------------------------------------------------------------
 
 class callableInt(builtins.int):
     """ The callableInt class is designed to be able to be used as both an int and a function. 
@@ -648,16 +679,31 @@ class callableInt(builtins.int):
     
     def __call__(self, *args, **kwargs):
         return self.function(*args, **kwargs)
+
+class callableFloat(builtins.float):
+    """ The callableFloat class is designed to be able to be used as both an float and a function. 
+    I recognize that this is kinda stupid and terrible practice in the "real world", but for this script specifically it has some utility.
     
-# Class Aliases:    ----------------------------------------------------------------------------------------------------------------------------------------
+    Example: min = callableInt(minute, builtins.min)        # min can be used as both an alias for minute and to find the minimum element in an arraylike
+    """
+    def __new__(cls, value, function):
+        return super(callableFloat, cls).__new__(cls, value)
+    
+    def __init__(self, value, function):
+        self.function = function
+    
+    def __call__(self, *args, **kwargs):
+        return self.function(*args, **kwargs)
+    
+## Class Aliases:    ----------------------------------------------------------------------------------------------------------------------------------------
 Int, integer, Integer, _int_, __int__ =  builtins.int, builtins.int,  builtins.int,  builtins.int,  builtins.int
 
-# Object Definitions:    ----------------------------------------------------------------------------------------------------------------------------------------
+## Object Definitions:    ----------------------------------------------------------------------------------------------------------------------------------------
 
 min = callableInt(minute, builtins.min)         # min can be used as both an alias for minute and to find the minimum element in an arraylike
-floor = callableInt(story, math.floor)
+floor = callableFloat(story, math.floor)        # floor can be used as both an alias for story  
 
-# Function Definitions:    ----------------------------------------------------------------------------------------------------------------------------------------
+## Function Definitions:    ----------------------------------------------------------------------------------------------------------------------------------------
 
 def warn(warning):
     """ Designed primarily to be a helper function for printing warning messages to the user in intra program functions.
@@ -1160,10 +1206,8 @@ def step(x):
     """
     return singularity3(1, x, 0)
 
-# TODO: Fix printfun(lambda x: 10**x, -3, 10, stepSize=1)
-# TODO: Fix printfun(lambda x: x, -3, 3, stepSize = 1.5)
 def printfunction(f, start, end, stepSize = nan, steps = 50, outputResolution = 4, inputResolution = None, smallScientific=True):
-    """Prints values of function f with range [start : step : end]
+    """Prints values of function f with range [start : stepSize : end]
 
     Args:
         f (callable): Single variable function
@@ -1184,35 +1228,57 @@ def printfunction(f, start, end, stepSize = nan, steps = 50, outputResolution = 
         if ((stepSize - floor(stepSize) == 0) and (start - floor(start) == 0) and (end - floor(end) == 0)):
             inputResolution = 0
         else:
-            inputResolution = -2 + max( len(floatToStr(stepSize - floor(stepSize) ) ), len(floatToStr(start - floor(start) ) ), len(floatToStr(end - floor(end) ) ) )     # Maybe fixed - no
+            inputResolution = -2 + max( len(floatToStr(stepSize - floor(stepSize) ) ), len(floatToStr(start - floor(start) ) ), len(floatToStr(end - floor(end) ) ) )     # Maybe fixed
         if (abs(stepSize) >= 1):
-            inputResolution = min(2, inputResolution)
+            inputResolution = min(3, inputResolution)
         elif (abs(stepSize) >= 0.01 ):
-            inputResolution = min(4, inputResolution)
+            inputResolution = min(5, inputResolution)
         else:
             inputResolution = min(8, inputResolution)
         
     inputSize = (inputResolution > 0) + 1 + floor(max(log10(abs(start) + (start == 0)) + 2 * (start < 0), log10(abs(end) + (end == 0)) + 2 * (end < 0))) # maybe fixed?
     inputFormat = f"{inputSize+inputResolution}.{inputResolution}f"
     
-    print(f"{inputResolution = }, {inputSize = }, {inputFormat = }, {stepSize = }")
+    # print(f"{inputResolution = }, {inputSize = }, {inputFormat = }, {stepSize = }")
     threshold = 0.5 * 10**(-outputResolution)
     
     x = start
+    yArr = []
     while (x < end or floatComparison(x, end)):
         try:
-            temp = f(x)
+            yArr.append(f(x))
             # if(smallScientific and abs(temp) < threshold and temp != 0):
             #     print(f"{x :{inputFormat}}  : {' ' if temp > 0 else ''}{ temp :9.{outputResolution}e} ")
             # else:
             #     print(f"{x :{inputFormat}}  : {' ' if temp > 0 else ''}{ temp :9.{outputResolution}f} ")
-            if(smallScientific and abs(temp) < threshold and temp != 0):
-                print(f"{x :{inputFormat}} : {temp :9.{outputResolution}e} ")
-            else:
-                print(f"{x :{inputFormat}} : {temp :9.{outputResolution}f} ")
         except (ZeroDivisionError):
-            print(f"{x :{inputFormat}}  :  {nan :9.{outputResolution}f} ")
+            yArr.append(nan)
+
         x += stepSize
+    
+    # minSize / maxSize are the calculated lengths of the min and max elements, not including the trailing decimal values
+    # If the magnitude of min and/or max << 1, cap the size to the desired number of decimals
+    minSize = 0 if abs(np.nanmin(yArr)) == 0 else abs(max(-outputResolution, floor(log10(abs(np.nanmin(yArr)))))) + (np.nanmin(yArr) < 0)
+    maxSize = 0 if abs(np.nanmax(yArr)) == 0 else abs(max(-outputResolution, floor(log10(abs(np.nanmax(yArr)))))) + (np.nanmax(yArr) < 0)
+        
+    # maxDigits = 1 + (decimal point) + (# of decimals) + (# of digits before decimal including negative sign)
+    maxDigits = 1 + (outputResolution > 0) + outputResolution + max(0, maxSize, minSize)        
+    sciFormat = ""
+    threshold = 0.5 * 10**(-outputResolution)
+    if (smallScientific):
+        smallestElement = min( [abs(yArr[i]) for i in np.nonzero(yArr)[0]] )
+        if (smallestElement < threshold):
+            # maxDigits = 1 + (decimal point) + (# of decimals) + len("e-05") + (negative sign)
+            maxDigits = max(maxDigits, 1 + 1 + outputResolution + 4 + (-smallestElement in yArr) )
+    
+    x = start
+    for y in yArr:
+        if(smallScientific and abs(y) < threshold and y != 0):
+            print(f"{x :{inputFormat}} : {y :{maxDigits}.{outputResolution}e} ")
+        else:
+            print(f"{x :{inputFormat}} : {y :{maxDigits}.{outputResolution}f} ")
+        x += stepSize
+
 
 def eig(mat):
     """np.linalg.eig redefinition - prints eigenvalues and eigenvectors in better format
@@ -1807,7 +1873,8 @@ def printList(arr, decimals = 4, format=">{maxDigits}.{decimals}f", smallScienti
     """Print arraylike of items and attempt to automatically handle formatting. 
     
     Currently implemented: 
-        - any 1D arraylike consisting of only ints or floats,
+        - any 1D arraylike consisting of only ints 
+        - any 1D arraylike consisting of floats and/or ints
         - any 2D np.ndarray consisting of only numbers
     
     If arr is not an implemented format, then every eleement of arr will be printed with default python print formatting.
@@ -1828,15 +1895,17 @@ def printList(arr, decimals = 4, format=">{maxDigits}.{decimals}f", smallScienti
         if (all(isinstance(n, builtins.int) for n in arr)  or  all(float(n).is_integer() for n in arr)):
             decimals = 0
             smallScientific = False
-        minSize = 0 if abs(min(arr)) == 0 else floor(log10(abs(min(arr)))) + (min(arr) < 0)
-        maxSize = 0 if abs(max(arr)) == 0 else floor(log10(abs(max(arr)))) + (max(arr) < 0)
+        # minSize / maxSize are the calculated lengths of the min and max elements, not including the trailing decimal values
+        # If the magnitude of min and/or max << 1, cap the size to the desired number of decimals
+        minSize = 0 if abs(np.nanmin(arr)) == 0 else abs(max(-decimals, floor(log10(abs(np.nanmin(arr)))))) + (np.nanmin(arr) < 0)
+        maxSize = 0 if abs(np.nanmax(arr)) == 0 else abs(max(-decimals, floor(log10(abs(np.nanmax(arr)))))) + (np.nanmax(arr) < 0)
         
         # maxDigits = 1 + (decimal point) + (# of decimals) + (# of digits before decimal including negative sign)
         maxDigits = 1 + (decimals > 0) + decimals + max(0, maxSize, minSize)        
         sciFormat = ""
         threshold = 0.5 * 10**(-decimals)
         if (smallScientific):
-            smallestElement = min( [abs(arr[i,j]) for i,j in zip(np.nonzero(arr)[0], np.nonzero(arr)[1])] )
+            smallestElement = min( [abs(arr[i]) for i in np.nonzero(arr)[0]] )
             if (smallestElement < threshold):
                 # maxDigits = 1 + (decimal point) + (# of decimals) + len("e-05") + (negative sign)
                 maxDigits = max(maxDigits, 1 + 1 + decimals + 4 + (-smallestElement in arr) )
@@ -2043,6 +2112,18 @@ def floatToStr(f):
     """
     d1 = decimalContext.create_decimal(repr(f))
     return format(d1, 'f')
+
+# TODO
+def drillSize(input):
+    if (isinstance(input, float) and 0 < input < 1):
+        i = 0
+        while (i < len(drillSizeDict.values())):
+            pass
+    else:
+        if (isinstance(input, str)):
+            input = input.upper()
+        return drillSizeDict[input]    
+    
 
 # Function Aliases:    ----------------------------------------------------------------------------------------------------------------------------------------
 minimum = builtins.min
