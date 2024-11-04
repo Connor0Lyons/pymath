@@ -76,8 +76,8 @@ except(ModuleNotFoundError):
     outer = lambda *args, **kwargs: print("NumPy not imported properly, outer function not found")
     cross = lambda *args, **kwargs: print("NumPy not imported properly, cross function not found")
     sort = lambda *args, **kwargs: print("NumPy not imported properly, sort function not found. Maybe try list(arr).sort() instead.")
-    popstd = lambda *args, **kwargs: print("NumPy not imported properly, sort function not found. Maybe try list(arr).sort() instead.")
-    popvar = lambda *args, **kwargs: print("NumPy not imported properly, sort function not found. Maybe try list(arr).sort() instead.")
+    popstd = lambda *args, **kwargs: print("NumPy not imported properly, popstd function not found.") 
+    popvar = lambda *args, **kwargs: print("NumPy not imported properly, popvar function not found.") 
     def matrix(*args, **kwargs): 
         print("NumPy not imported properly, matrix constructor not found")
         return nan
