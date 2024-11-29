@@ -2136,24 +2136,24 @@ def date(date:str, format = ""):
     if (format == ""):
         # Parsing date
         date = date.replace("/","-").replace("\\","-")
-        if (match := re.search("\d+-\d+-?\d*", date)):
+        if (match := re.search(r"\d+-\d+-?\d*", date)):
             format += "%m-%d"
             adjustedStr += match.group()
 
             # Check if year is in format YY, else assume YYYY*
-            if (re.search("\d+-\d+-\d\d(\D|\Z)", date)):
+            if (re.search(r"\d+-\d+-\d\d(\D|\Z)", date)):
                 format += "-%y"
-            elif (re.search("\d+-\d+-\d{4}", date)):
+            elif (re.search(r"\d+-\d+-\d{4}", date)):
                 format += "-%Y"
 
         # Parsing Time
-        if (match := re.search("\d+:\d+:?\d*", date)):
+        if (match := re.search(r"\d+:\d+:?\d*", date)):
             adjustedStr += " " + match.group()
             format += " %H:%M"
-            if (re.search("\d+:\d+:\d+", date)):
+            if (re.search(r"\d+:\d+:\d+", date)):
                 format += ":%S"
             # Check for am/pm signature, else assume 24 hr time
-            if (match := re.search("(A|P)\.?M", date.upper())):
+            if (match := re.search(r"(A|P)\.?M", date.upper())):
                 format = format.replace("%H", "%I")
                 format += " %p"
                 adjustedStr += " " + match.group().replace('.', '')
