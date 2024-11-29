@@ -30,6 +30,8 @@ import sys
 
 import os
 
+import re
+
 try:
     import CoolProp.CoolProp as CP
 except(ModuleNotFoundError):
@@ -96,6 +98,9 @@ except(ModuleNotFoundError):
 from cmath import *
 
 from math import *
+
+import datetime as dt
+from datetime import datetime
 
 
 # Unless noted otherwise, units are in terms of official SI units: second [s], meter [m], kilogram [kg], ampere [A], kelvin [K], mole [mol], and candela [cd]
@@ -324,6 +329,7 @@ ipm = IN / minute               # Inch per minute [ [m / s] / [in / min]]
 sfm = ft / minute               # Surface feet per minute [ [m / s] / [ft / min]]
 
 ## Imperial Machine Screw Sizes [ANSI Units]
+#! ANSI UNITS
 screw0  = 0.0600
 screw1  = 0.0730
 screw2  = 0.0860
@@ -2123,6 +2129,94 @@ def drillSize(input):
         if (isinstance(input, str)):
             input = input.upper()
         return drillSizeDict[input]    
+
+
+def date(date:str, format = ""):
+    adjustedStr = ""
+    if (format == ""):
+        # Parsing date
+        date = date.replace("/","-").replace("\\","-")
+        if (match := re.search("\d+-\d+-?\d*", date)):
+            format += "%m-%d"
+            adjustedStr += match.group()
+
+            # Check if year is in format YY, else assume YYYY*
+            if (re.search("\d+-\d+-\d\d(\D|\Z)", date)):
+                format += "-%y"
+            elif (re.search("\d+-\d+-\d{4}", date)):
+                format += "-%Y"
+
+        # Parsing Time
+        if (match := re.search("\d+:\d+:?\d*", date)):
+            adjustedStr += " " + match.group()
+            format += " %H:%M"
+            if (re.search("\d+:\d+:\d+", date)):
+                format += ":%S"
+            # Check for am/pm signature, else assume 24 hr time
+            if (match := re.search("(A|P)\.?M", date.upper())):
+                format = format.replace("%H", "%I")
+                format += " %p"
+                adjustedStr += " " + match.group().replace('.', '')
+        
+    if (format == ""):
+        raise ValueError("Unknown date format")
+
+    print(f"Parsed: {adjustedStr}")
+    return datetime.strptime(adjustedStr, format)
+
+def dateDifference(date1, date2 = "", format=""):
+    if (isinstance(date1, dt.timedelta)):
+        diff = abs(date1)
+        # The duration in months can't be calulated without the original dates 
+        monthFlag = False
+    else:
+        if (not isinstance(date1, datetime)):
+            date1 = date(date1, format)
+        if (not isinstance(date2, datetime)):
+            date2 = date(date2, format)
+        
+        if (date1 < date2):
+            date1, date2 = date2, date1
+        
+        leapYearFlag = (not (date1.year % 400)) or ((date1.year % 100) and not (date1.year % 4))
+        
+        daysInMonths = [31, 28 + leapYearFlag, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+        
+        monthFlag = True
+        diff = date1 - date2
+        monthDiff = date1.month - date2.month 
+        dayDiff = date1.day - date2.day
+        
+        if (dayDiff < 0):
+            # Add days from previous month, and reduce month count by 1
+            dayDiff += daysInMonths[date1.month - 2] 
+            monthDiff -= 1
+        if (monthDiff < 0):
+            monthDiff += 12
+    
+    secondStr = ""
+    if (diff.seconds != 0):
+        secondStr = f", {diff.seconds // 3600} hours, {diff.seconds % 3600 // 60} minutes, {diff.seconds % 60} seconds"
+    
+    output = ""
+    if (diff.days > 0):
+        # TODO is // 365 correct?
+        output += f"{diff.days // 365} years, {monthDiff} months, {dayDiff // 7} weeks, {dayDiff % 7} days{secondStr}\n" if (monthFlag and (diff.days > 364)) else ""
+        output += f"{diff.days // 365} years, {monthDiff} months, {dayDiff} days{secondStr}\n" if (monthFlag and (diff.days > 364)) else ""
+        output += f"{diff.days // 365} years, {(diff.days % 365) // 7} weeks, {(diff.days % 365) % 7 } days{secondStr}\n" if (diff.days > 364) else ""
+        output += f"{diff.days // 365} years, {(diff.days % 365) } days{secondStr}\n" if (diff.days > 364) else ""
+        output += f"{diff.days // 365 * 12 + monthDiff} months, {dayDiff} days{secondStr}\n" if (monthFlag and (monthDiff or diff.days > 31)) else ""
+        output += f"{diff.days // 7} weeks, {diff.days % 7} days{secondStr}\n" if (diff.days > 7) else ""
+        output += f"{diff.days} days{secondStr}\n" if (diff.days) else ""
+    
+    output += f"{diff.days * 24 + diff.seconds // 3600} hours, {diff.seconds % 3600 // 60} minutes, {diff.seconds % 60} seconds\n" if (diff.days > 0 or diff.seconds > 3600) else ""
+    output += f"{diff.days * 24 * 60 + diff.seconds // 60} minutes, {diff.seconds % 60} seconds\n" if (diff.days > 0 or diff.seconds > 60) else ""
+    output += f"{diff.total_seconds()} seconds"
+
+    print(output)
+
+    return diff.total_seconds()
+    
     
 
 # Function Aliases:    ----------------------------------------------------------------------------------------------------------------------------------------
@@ -2183,5 +2277,7 @@ binomcmf, bincdf, bincmf = binomcdf, binomcdf,  binomcdf
 normcdf = normalcdf
 normpdf = normalpdf
 isInt = isInteger
+Date, DATE, dateParser, dateParse, parseDate, Time, TIME, timeParser, timeParse, parseTime = date, date, date, date, date, date, date, date, date, date
+dateDiff, timeDifference, timeDiff, timediff, datediff = dateDifference, dateDifference, dateDifference, dateDifference, dateDifference
 
 # print(f"total time = {total}")
