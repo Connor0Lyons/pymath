@@ -160,7 +160,7 @@ false = False
 
 
 ## Matrices / Quantum Gates
-if "NumPy" in sys.modules:
+if "numpy" in sys.modules:
     sigmax = matrix("0 1; 1 0")             # Pauli spin matrix x [unit-less]
     sigmay = matrix("0 -1j; 1j 0")          # Pauli spin matrix y [unit-less]
     sigmaz = matrix("1 0; 0 -1")            # Pauli spin matrix z [unit-less]
@@ -465,7 +465,7 @@ a_0 = a0
 R_inf, Rinf, R_oo, R_infinity, Rinfinity = Roo, Roo, Roo, Roo, Roo
 R_H = RH                                                # Warning: potential conflict with individual molar gas constant for hydrogen (not implemented)
 
-if "NumPy" in sys.modules:
+if "numpy" in sys.modules:
     sigx, sigma1, sig1 = sigmax, sigmax, sigmax
     sigy, sigma2, sig2 = sigmay, sigmay, sigmay
     sigz, sigmaz, sigz = sigmaz, sigmaz, sigmaz
@@ -1875,6 +1875,7 @@ def boltChart():
         i += 1/32
     
 # TODO: Clean up this code. Possibly create helper function for pretty printing numbers.
+# TODO: Improve support for when numpy not installed
 def printList(arr, decimals = 4, format=">{maxDigits}.{decimals}f", smallScientific=True, scientificDecimals = -2):
     """Print arraylike of items and attempt to automatically handle formatting. 
     
@@ -1929,7 +1930,7 @@ def printList(arr, decimals = 4, format=">{maxDigits}.{decimals}f", smallScienti
         return
     
     # Test if arr is a two dimensional np.ndarray of numbers
-    if (isinstance(arr, np.ndarray)  and  np.issubdtype(arr.dtype, np.number)  and  len(arr.shape) == 2 ):
+    if ("numpy" in sys.modules and isinstance(arr, np.ndarray)  and  np.issubdtype(arr.dtype, np.number)  and  len(arr.shape) == 2 ):
         if (np.issubdtype(arr.dtype, np.integer)  or  all(float(n).is_integer() for n in np.nditer(arr)) ):
             decimals = 0
             smallScientific = False
@@ -2132,6 +2133,9 @@ def drillSize(input):
 
 
 def date(date:str, format = ""):
+    if (date.lower() == "today" or date.lower() == "now"):
+        return datetime.now()
+    
     adjustedStr = ""
     if (format == ""):
         # Parsing date
@@ -2165,16 +2169,20 @@ def date(date:str, format = ""):
     return datetime.strptime(adjustedStr, format)
 
 def dateDifference(date1, date2 = "", format=""):
+    # Check if the input parameter is already a dt.timedelta object which represents a duration
     if (isinstance(date1, dt.timedelta)):
         diff = abs(date1)
-        # The duration in months can't be calulated without the original dates 
+        # The duration in months or weekdays can't be calulated without the original dates 
         monthFlag = False
+        weekdayFlag = False
+    
     else:
         if (not isinstance(date1, datetime)):
             date1 = date(date1, format)
         if (not isinstance(date2, datetime)):
             date2 = date(date2, format)
         
+        # Ensure that date1 is greater than (after) date2
         if (date1 < date2):
             date1, date2 = date2, date1
         
@@ -2183,6 +2191,7 @@ def dateDifference(date1, date2 = "", format=""):
         daysInMonths = [31, 28 + leapYearFlag, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
         
         monthFlag = True
+        weekdayFlag = True
         diff = date1 - date2
         monthDiff = date1.month - date2.month 
         dayDiff = date1.day - date2.day
@@ -2193,7 +2202,20 @@ def dateDifference(date1, date2 = "", format=""):
             monthDiff -= 1
         if (monthDiff < 0):
             monthDiff += 12
-    
+            
+        weekdayDiff = (diff.days // 7) * 5 + (min(date1.weekday(), 5) - min(date2.weekday(), 5)) % 5
+        
+        # Edge case 1: Mon through Sat/Sun = 5 % 5 -> 0. Add 5 to fix.
+        if (date2.weekday() == 0):
+            if (date1.weekday() > 4):
+                weekdayDiff += 5
+        
+        # Edge case 2: Sunday through Saturday = 0. Add 5 to fix.
+        elif (date2.weekday() == 6):
+            if (date1.weekday() == 5):
+                weekdayDiff += 5
+                
+            
     secondStr = ""
     if (diff.seconds != 0):
         secondStr = f", {diff.seconds // 3600} hours, {diff.seconds % 3600 // 60} minutes, {diff.seconds % 60} seconds"
@@ -2206,8 +2228,10 @@ def dateDifference(date1, date2 = "", format=""):
         output += f"{diff.days // 365} years, {(diff.days % 365) // 7} weeks, {(diff.days % 365) % 7 } days{secondStr}\n" if (diff.days > 364) else ""
         output += f"{diff.days // 365} years, {(diff.days % 365) } days{secondStr}\n" if (diff.days > 364) else ""
         output += f"{diff.days // 365 * 12 + monthDiff} months, {dayDiff} days{secondStr}\n" if (monthFlag and (monthDiff or diff.days > 31)) else ""
-        output += f"{diff.days // 7} weeks, {diff.days % 7} days{secondStr}\n" if (diff.days > 7) else ""
-        output += f"{diff.days} days{secondStr}\n" if (diff.days) else ""
+        output += f"{diff.days // 7} weeks, {diff.days % 7} days{secondStr}\n" if (diff.days > 6) else ""
+        output += f"{diff.days} days{secondStr}\n" 
+        # TODO fix weekdays
+        output += f"{weekdayDiff} weekdays{secondStr}\n" if weekdayFlag else ""
     
     output += f"{diff.days * 24 + diff.seconds // 3600} hours, {diff.seconds % 3600 // 60} minutes, {diff.seconds % 60} seconds\n" if (diff.days > 0 or diff.seconds > 3600) else ""
     output += f"{diff.days * 24 * 60 + diff.seconds // 60} minutes, {diff.seconds % 60} seconds\n" if (diff.days > 0 or diff.seconds > 60) else ""
